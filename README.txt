@@ -34,6 +34,16 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 
 Have a look at the GUIDE[link://files/GUIDE_txt.html].
 
+== Installation
+
+Using RubyGems[http://www.rubygems.org]:
+
+* sudo gem install spreadsheet
+
+If you don't like RubyGems[http://www.rubygems.org], let me know which
+installation solution you prefer and I'll include it in the future.
+
+
 == Authors
 
 Original Code:
