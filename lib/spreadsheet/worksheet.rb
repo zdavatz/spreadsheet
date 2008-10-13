@@ -7,13 +7,13 @@ module Spreadsheet
   # The Worksheet class. Contains most of the Spreadsheet data in Rows.
   #
   # Interesting Attributes
-  # * #name           - The Name of this Worksheet.
-  # * #default_format - The default format used for all cells in this Workhseet
-  #                     that have no format set explicitly or in
-  #                     Row#default_format.
-  # * #rows           - The Rows in this Worksheet. It is not recommended to
-  #                     Manipulate this Array directly. If you do, call
-  #                     #updated_from with the smallest modified index.
+  # #name          :: The Name of this Worksheet.
+  # #default_format:: The default format used for all cells in this Workhseet
+  #                   that have no format set explicitly or in
+  #                   Row#default_format.
+  # #rows          :: The Rows in this Worksheet. It is not recommended to
+  #                   Manipulate this Array directly. If you do, call
+  #                   #updated_from with the smallest modified index.
   class Worksheet
     include Encodings
     attr_accessor :name, :workbook
@@ -63,17 +63,18 @@ module Spreadsheet
       format
     end
     ##
-    # Dimensions: [ first used row, first unused row,
-    #               first used column, first unused column ]
-    #             ( First used means that all rows or columns before that are
-    #               empty. First unused means that this and all following rows
-    #               or columns are empty. )
+    # Dimensions:: [ first used row, first unused row,
+    #              first used column, first unused column ]
+    #              ( First used means that all rows or columns before that are
+    #              empty. First unused means that this and all following rows
+    #              or columns are empty. )
     def dimensions
       @dimensions || recalculate_dimensions
     end
     ##
     # If no argument is given, #each iterates over all used Rows (from the first
     # used Row until but omitting the first unused Row, see also #dimensions).
+    #
     # If the argument skip is given, #each iterates from that row until but
     # omitting the first unused Row, effectively skipping the first _skip_ Rows
     # from the top of the Worksheet.

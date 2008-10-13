@@ -17,11 +17,11 @@
 #
 #   Contact Information:
 #
-#   E-Mail: hannes.wyss@gmail.com
-#   P-Mail: ywesee GmbH
-#           Hannes Wyss
-#           Winterthurerstrasse 52
-#           8006 Zürich
-###         Switzerland
+#     E-Mail: hannes.wyss@gmail.com
+#     P-Mail: ywesee GmbH
+#             Hannes Wyss
+#             Winterthurerstrasse 52
+#             8006 Zürich
+###           Switzerland
 
 require 'parseexcel/parseexcel'

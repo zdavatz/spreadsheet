@@ -8,10 +8,11 @@ warn <<-EOS
              will be removed in Spreadsheet version 1.0.0
 EOS
 
-##
-# The ParseExcel module is provided as a drop-in replacement for the ParseExcel
-# library. This code is deprecated and will be removed in Spreadsheet version 1.0.0
 module Spreadsheet
+  ##
+  # The ParseExcel module is provided as a drop-in replacement for the
+  # ParseExcel library. This code is deprecated and will be removed in
+  # Spreadsheet version 1.0.0
   module ParseExcel
 def ParseExcel.parse path
   Spreadsheet.open path

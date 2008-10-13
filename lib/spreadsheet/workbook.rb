@@ -7,9 +7,9 @@ module Spreadsheet
   # for all Spreadsheet manipulation.
   #
   # Interesting Attributes:
-  # * #default_format - The default format used for all cells in this Workbook.
-  #                     that have no format set explicitly or in
-  #                     Row#default_format or Worksheet#default_format.
+  # #default_format:: The default format used for all cells in this Workbook.
+  #                   that have no format set explicitly or in
+  #                   Row#default_format or Worksheet#default_format.
   class Workbook
     include Encodings
     attr_reader :io, :worksheets, :formats, :fonts
@@ -47,6 +47,7 @@ module Spreadsheet
     # Create a new Worksheet in this Workbook.
     # Used without options this creates a Worksheet with the name 'WorksheetN'
     # where the new Worksheet is the Nth Worksheet in this Workbook.
+    #
     # Use the option <em>:name => 'My pretty Name'</em> to override this
     # behavior.
     def create_worksheet opts = {}

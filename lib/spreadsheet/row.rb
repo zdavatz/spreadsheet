@@ -8,12 +8,12 @@ module Spreadsheet
   # DateTime-handling in Excel::Row#[]
   #
   # Useful Attributes are:
-  # * #idx             The 0-based index of this Row in its Worksheet.
-  # * #formats         A parallel array containing Formatting information for
-  #                    all cells stored in a Row.
-  # * #default_format  The default Format used when writing a Cell if no explicit
-  #                    Format is stored in #formats for the cell.
-  # * #height          The height of this Row in points (defaults to 12).
+  # #idx::            The 0-based index of this Row in its Worksheet.
+  # #formats::        A parallel array containing Formatting information for
+  #                   all cells stored in a Row.
+  # #default_format:: The default Format used when writing a Cell if no explicit
+  #                   Format is stored in #formats for the cell.
+  # #height::         The height of this Row in points (defaults to 12).
   class Row < Array
     class << self
       def updater *keys
@@ -52,7 +52,7 @@ module Spreadsheet
     end
     ##
     # #first_unused (really last used + 1) - the 0-based index of the first of
-    #               all remaining contiguous blank Cells.
+    # all remaining contiguous blank Cells.
     alias :first_unused :size
     ##
     # #first_used the 0-based index of the first non-blank Cell.

@@ -2,7 +2,7 @@
 
   http://spreadsheet.rubyforge.org
 
-== DESCRIPTION
+== Description
 
 The Spreadsheet Library is designed to read and write Spreadsheet Documents.
 As of version 0.6.0, only Microsoft Excel compatible spreadsheets are
@@ -16,13 +16,13 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 * Improved handling of String Encodings
 
 == Roadmap
-0.7.0: Improved Format support/Styles
-0.7.1: Document Modification: Formats/Styles
-0.8.0: Formula Support
-0.8.1: Document Modification: Formulas
-0.9.0: Write-Support: BIFF5
-1.0.0: Ruby 1.9 Support
-       Remove backward compatibility code
+0.7.0:: Improved Format support/Styles
+0.7.1:: Document Modification: Formats/Styles
+0.8.0:: Formula Support
+0.8.1:: Document Modification: Formulas
+0.9.0:: Write-Support: BIFF5
+1.0.0:: Ruby 1.9 Support;
+        Remove backward compatibility code
 
 == Dependencies
 

@@ -10,6 +10,10 @@ module Spreadsheet
     attr_accessor :name
     ##
     # You can set the following boolean Font attributes
+    # * #italic
+    # * #strikeout
+    # * #outline
+    # * #shadow
     boolean :italic, :strikeout, :outline, :shadow
     ##
     # Font color
@@ -17,11 +21,12 @@ module Spreadsheet
     ##
     # Font weight
     # Valid values: :normal, :bold or any positive Integer.
-    # In Excel:     100 <= weight <= 1000
-    #               :bold   => 700
-    #               :normal => 400
+    # In Excel:
+    #  100 <= weight <= 1000
+    #  :bold   => 700
+    #  :normal => 400
     # Default:      :normal
-    enum :weight, :normal, :bold, Integer, :bold   => :b
+    enum :weight, :normal, :bold, Integer, :bold => :b
     ##
     # Escapement
     # Valid values: :normal, :superscript or :subscript.

@@ -3,7 +3,6 @@ require 'spreadsheet/encodings'
 require 'spreadsheet/font'
 
 module Spreadsheet
-  class FormatError < StandardError; end
   ##
   # Formatting data
   class Format
@@ -11,22 +10,23 @@ module Spreadsheet
     include Datatypes
     ##
     # You can set the following boolean attributes:
-    # * cross_down:       Draws a Line from the top-left to the bottom-right
+    # #cross_down::       Draws a Line from the top-left to the bottom-right
     #                     corner of a cell.
-    # * cross_up:         Draws a Line from the bottom-left to the top-right
+    # #cross_up::         Draws a Line from the bottom-left to the top-right
     #                     corner of a cell.
-    # * hidden:           The cell is hidden.
-    # * locked:           The cell is locked.
-    # * merge_range:      The cell is in a merged range.
-    # * shrink:           Shrink the contents to fit the cell.
-    # * text_justlast:    Force the last line of a cell to be justified. This
+    # #hidden::           The cell is hidden.
+    # #locked::           The cell is locked.
+    # #merge_range::      The cell is in a merged range.
+    # #shrink::           Shrink the contents to fit the cell.
+    # #text_justlast::    Force the last line of a cell to be justified. This
     #                     probably makes sense if horizontal_align = :justify
-    # * left:             Draw a border to the left of the cell.
-    # * right:            Draw a border to the right of the cell.
-    # * top:              Draw a border at the top of the cell.
-    # * bottom:           Draw a border at the bottom of the cell.
-    # * rotation_stacked: Characters in the cell are stacked on top of each other.
-    #                     Excel will ignore other rotation values if this is set.
+    # #left::             Draw a border to the left of the cell.
+    # #right::            Draw a border to the right of the cell.
+    # #top::              Draw a border at the top of the cell.
+    # #bottom::           Draw a border at the bottom of the cell.
+    # #rotation_stacked:: Characters in the cell are stacked on top of each
+    #                     other. Excel will ignore other rotation values if
+    #                     this is set.
     boolean :cross_down, :cross_up, :hidden, :locked,
             :merge_range, :shrink, :text_justlast, :text_wrap, :left, :right,
             :top, :bottom, :rotation_stacked
@@ -101,6 +101,7 @@ module Spreadsheet
     # first valid value (e.g. Format#align = :justify only sets the horizontal
     # alignment. Use one of the aliases prefixed with :v if you need to
     # disambiguate.)
+    #
     # This is essentially a backward-compatibility method and may be removed at
     # some point in the future.
     def align= location
@@ -134,7 +135,7 @@ module Spreadsheet
     ##
     # Set the Text rotation
     # Valid values: Integers from -90 to 90,
-    #               or :stacked (sets #rotation_stacked to true)
+    # or :stacked (sets #rotation_stacked to true)
     def rotation=(rot)
       if rot.to_s.downcase == 'stacked'
         @rotation_stacked = true

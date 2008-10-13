@@ -50,7 +50,7 @@ To access the values stored in a Row, treat the Row like an Array.
 
   row[0]
 
-=> this will return a String, a Float, an Integer, a Formula or a Date or
+-> this will return a String, a Float, an Integer, a Formula or a Date or
 DateTime object - or nil if the cell is empty.
 
 More information about the formatting of a cell can be found in the Format
@@ -124,6 +124,8 @@ Limitations:
   Date if its Format was set correctly prior to the change.
 * Although it is theoretically possible, it is not recommended to write the
   resulting Document back to the same File/IO that it was read from.
+
+And here's how it works:
 
   book = Spreadsheet.open '/path/to/an/excel-file.xls'
   sheet = book.worksheet 0
