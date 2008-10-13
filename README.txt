@@ -1,6 +1,13 @@
+Last Update: 13.10.2008, 19.45 - zdavatz
+
 = Spreadsheet
 
   http://spreadsheet.rubyforge.org
+  http://scm.ywesee.com/spreadsheet
+
+For a viewable directory of all recent changes, please see:
+
+  http://scm.ywesee.com/?p=spreadsheet;a=summary
 
 == Description
 
