@@ -1,0 +1,8 @@
+=== 0.6.0 / 2008-10-13
+
+* 1 major enhancement
+
+  * Initial upload of the shiny new Spreadsheet Gem after three weeks of
+    grueling labor in the dark binary mines of Little-Endian Biff and long
+    hours spent polishing the surfaces of documentation.
+

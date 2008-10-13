@@ -1,0 +1,54 @@
+= Spreadsheet
+
+  http://spreadsheet.rubyforge.org
+
+== DESCRIPTION
+
+The Spreadsheet Library is designed to read and write Spreadsheet Documents.
+As of version 0.6.0, only Microsoft Excel compatible spreadsheets are
+supported. Spreadsheet is a combination/complete rewrite of the
+Spreadsheet::Excel Library by Daniel J. Berger and the ParseExcel Library by
+Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
+
+== What's new?
+* Significantly improved memory-efficiency when reading large Excel Files
+* Limited Spreadsheet modification support
+* Improved handling of String Encodings
+
+== Roadmap
+0.7.0: Improved Format support/Styles
+0.7.1: Document Modification: Formats/Styles
+0.8.0: Formula Support
+0.8.1: Document Modification: Formulas
+0.9.0: Write-Support: BIFF5
+1.0.0: Ruby 1.9 Support
+       Remove backward compatibility code
+
+== Dependencies
+
+* ruby 1.8
+* Iconv
+* ruby-ole[http://code.google.com/p/ruby-ole/]
+
+== Examples
+
+Have a look at the GUIDE[link://files/GUIDE_txt.html].
+
+== Authors
+
+Original Code:
+
+Spreadsheet::Excel:
+Copyright (c) 2005 by Daniel J. Berger (djberg96@gmail.com)
+
+ParseExcel:
+Copyright (c) 2003 by Hannes Wyss (hannes.wyss@gmail.com)
+
+New Code:
+Copyright (c) 2008 by Hannes Wyss (hannes.wyss@gmail.com)
+
+== License
+
+This library is distributed under the GPL. 
+Please see the LICENSE[link://files/LICENSE_txt.html] file.
+
