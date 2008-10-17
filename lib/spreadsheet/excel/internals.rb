@@ -94,6 +94,7 @@ module Internals
   BINARY_FORMATS = {
     :blank      => 'v3',
     :boolerr    => 'v3C2',
+    :colinfo    => 'v5x2',
     :font       => 'v5C3x',
     :labelsst   => 'v3V',
     :number     => "v3#{EIGHT_BYTE_DOUBLE}",
@@ -107,7 +108,7 @@ module Internals
   # default in a US-English environment. All indexes from 0 to 163 are
   # reserved for built-in formats.
   BUILTIN_FORMATS = { # TODO: locale support
-     0 => 'General',
+     0 => 'GENERAL',
      1 => '0',
      2 => '0.00',
      3 => '#,##0',
@@ -196,34 +197,35 @@ module Internals
   }
   LEAP_ERROR = Date.new 1900, 2, 28
   OPCODES = {
-    :blank        => 0x0201,
-    :boolerr      => 0x0205,
-    :boundsheet   => 0x0085,
-    :codepage     => 0x0042,
-    :continue     => 0x003c,
-    :datemode     => 0x0022,
-    :dbcell       => 0x0a0b,
-    :dimensions   => 0x0200,
-    :eof          => 0x000a,
-    :extsst       => 0x00ff,
-    :font         => 0x0031,
-    :format       => 0x041e,
-    :formula      => 0x0006,
-    :index        => 0x020b,
-    :label        => 0x0204,
-    :labelsst     => 0x00fd,
-    :mulblank     => 0x00be,
-    :mulrk        => 0x00bd,
-    :number       => 0x0203,
-    :rk           => 0x027e,
-    :row          => 0x0208,
-    :rstring      => 0x00d6,
-    :sst          => 0x00fc,
-    :string       => 0x0207,
-    :style        => 0x0293,
-    :uncalced     => 0x005e,
-    :xf           => 0x00e0,
+    :blank        => 0x0201, #    BLANK ➜ 6.7
+    :boolerr      => 0x0205, #    BOOLERR ➜ 6.10
+    :boundsheet   => 0x0085, # ●● BOUNDSHEET ➜ 6.12
+    :codepage     => 0x0042, # ○  CODEPAGE ➜ 6.17
+    :colinfo      => 0x007d, # ○○ COLINFO ➜ 6.18
+    :continue     => 0x003c, # ○  CONTINUE ➜ 6.22
+    :datemode     => 0x0022, # ○  DATEMODE ➜ 6.25
+    :dbcell       => 0x0a0b, # ○  DBCELL
+    :dimensions   => 0x0200, # ●  DIMENSIONS ➜ 6.31
+    :eof          => 0x000a, # ●  EOF ➜ 6.36
+    :font         => 0x0031, # ●● FONT ➜ 6.43
+    :format       => 0x041e, # ○○ FORMAT (Number Format) ➜ 6.45
+    :formula      => 0x0006, #    FORMULA ➜ 6.46
+    :label        => 0x0204, #    LABEL ➜ 6.59 (BIFF2-BIFF7)
+    :labelsst     => 0x00fd, #    LABELSST ➜ 6.61 (BIFF8 only)
+    :mulblank     => 0x00be, #    MULBLANK ➜ 6.64 (BIFF5-BIFF8)
+    :mulrk        => 0x00bd, #    MULRK ➜ 6.65 (BIFF5-BIFF8)
+    :number       => 0x0203, #    NUMBER ➜ 6.68
+    :rk           => 0x027e, #    RK ➜ 6.82 (BIFF3-BIFF8)
+    :row          => 0x0208, # ●  ROW ➜ 6.83
+    :rstring      => 0x00d6, #    RSTRING ➜ 6.84 (BIFF5/BIFF7)
+    :sst          => 0x00fc, # ●  SST ➜ 6.96
+    :string       => 0x0207, #    STRING ➜ 6.98
+    :style        => 0x0293, # ●● STYLE ➜ 6.99
+    :xf           => 0x00e0, # ●● XF ➜ 6.115
     ########################## Unhandled Opcodes ################################
+    :extsst       => 0x00ff, # ●  EXTSST ➜ 6.40
+    :index        => 0x020b, # ○  INDEX ➜ 5.7 (Row Blocks), ➜ 6.55
+    :uncalced     => 0x005e, # ○  UNCALCED ➜ 6.104
     ########################## ○  Calculation Settings Block ➜ 5.3
     :calccount    => 0x000c, # ○  CALCCOUNT ➜ 6.14
     :calcmode     => 0x000d, # ○  CALCMODE ➜ 6.15
@@ -296,7 +298,6 @@ module Internals
     :defrowheight => 0x0225, # ○  DEFAULTROWHEIGHT ➜ 6.28
     :wsbool       => 0x0081, # ○  WSBOOL ➜ 6.113
     :defcolwidth  => 0x0055, # ○  DEFCOLWIDTH ➜ 6.29
-    :colinfo      => 0x007d, # ○○ COLINFO ➜ 6.18
     :sort         => 0x0090, # ○  SORT ➜ 6.95
   }
 =begin ## unknown opcodes
@@ -311,6 +312,31 @@ module Internals
     0x0022 => :double_accounting,
   }
   SEPYT_ENILREDNU = UNDERLINE_TYPES.invert
+  XF_H_ALIGN = {
+    :default       => 0,
+    :left          => 1,
+    :center        => 2,
+    :right         => 3,
+    :fill          => 4,
+    :justify       => 5,
+    :merge         => 6,
+    :distributed   => 7,
+  }
+  NGILA_H_FX = XF_H_ALIGN.invert
+  XF_TEXT_DIRECTION = {
+    :context       => 0,
+    :left_to_right => 1,
+    :right_to_left => 2,
+  }
+  NOITCERID_TXET_FX = XF_TEXT_DIRECTION.invert
+  XF_V_ALIGN = {
+    :top         => 0,
+    :middle      => 1,
+    :bottom      => 2,
+    :justify     => 3,
+    :distributed => 4,
+  }
+  NGILA_V_FX = XF_V_ALIGN.invert
   def binfmt key
     BINARY_FORMATS[key]
   end

@@ -66,6 +66,6 @@ Copyright (c) 2008 by Hannes Wyss (hannes.wyss@gmail.com)
 
 == License
 
-This library is distributed under the GPL. 
+This library is distributed under the GPL.
 Please see the LICENSE[link://files/LICENSE_txt.html] file.
 

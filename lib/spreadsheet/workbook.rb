@@ -27,13 +27,14 @@ module Spreadsheet
     # Add a Font to the Workbook. Used by the parser. You should not need to
     # use this Method.
     def add_font font
-      @fonts.push font
+      @fonts.push(font).uniq! if font
+      font
     end
     ##
     # Add a Format to the Workbook. If you use Row#set_format, you should not
     # need to use this Method.
     def add_format format
-      @formats.push(format).uniq!
+      @formats.push(format) if format && !@formats.include?(format)
       format
     end
     ##

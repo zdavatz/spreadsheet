@@ -59,9 +59,12 @@ module Spreadsheet
                     :korean_hangul, :korean_johab, :chinese_simplified,
                     :chinese_traditional, :greek, :turkish, :vietnamese,
                     :hebrew, :arabic, :cyrillic, :thai, :iso_latin2, :oem_latin1
-    def initialize name
+    def initialize name, opts={}
       self.name = name
       @color = :text
+      opts.each do |key, val|
+        self.send "#{key}=", val
+      end
     end
     ##
     # Sets #weight to :bold if(_bool_), :normal otherwise.

@@ -37,7 +37,7 @@ module Spreadsheet
       book = Spreadsheet.open path
       assert_instance_of Excel::Workbook, book
       assert_equal 8, book.biff_version
-      assert_equal @@iconv.iconv('Microsoft Excel 97/2000/XP'), 
+      assert_equal @@iconv.iconv('Microsoft Excel 97/2000/XP'),
                    book.version_string
       enc = 'UTF-16LE'
       if defined? Encoding
@@ -532,13 +532,13 @@ module Spreadsheet
         end
       end
       assert_equal long, str4
-      sheet = book.worksheet 0 
+      sheet = book.worksheet 0
       sheet[0,0] = 4
       row = sheet.row 1
       row[0] = 3
       book.write path
       assert_nothing_raised do book = Spreadsheet.open path end
-      sheet = book.worksheet 0 
+      sheet = book.worksheet 0
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
@@ -635,7 +635,7 @@ module Spreadsheet
         end
       end
       assert_equal long, str4
-      sheet = book.worksheet 0 
+      sheet = book.worksheet 0
       sheet[0,0] = 4
       str5 = 'A completely different String'
       sheet[0,1] = str5
@@ -647,7 +647,7 @@ module Spreadsheet
       assert_equal str2, book.shared_string(1)
       assert_equal str3, book.shared_string(2)
       assert_equal str4, book.shared_string(3)
-      sheet = book.worksheet 0 
+      sheet = book.worksheet 0
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
@@ -719,6 +719,13 @@ module Spreadsheet
       str2 = 'Another Shared String'
       str3 = '1234567890 ' * 1000
       str4 = '9876543210 ' * 1000
+      fmt1 = Format.new :italic => true, :color => :blue
+      sheet1.format_column 1, fmt1, :width => 20
+      fmt2 = Format.new(:weight => :bold, :color => :yellow)
+      sheet1.format_column 2, fmt2
+      sheet1.format_column 3, Format.new(:weight => :bold, :color => :red)
+      sheet1.format_column 6..9, fmt1
+      sheet1.format_column [4,5,7], fmt2
       sheet1[0,0] = str1
       sheet1.row(0).push str1
       sheet1.row(1).concat [str2, str2]
@@ -797,10 +804,15 @@ module Spreadsheet
       assert_equal 2, book.worksheets.size
       sheet = book.worksheets.first
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
-      assert_equal "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000", 
+      assert_equal "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000",
                    sheet.name
       assert_not_nil sheet.offset
+      assert_not_nil col = sheet.column(1)
+      assert_equal true, col.default_format.font.italic?
+      assert_equal :blue, col.default_format.font.color
+      assert_equal 20, col.width
       row = sheet.row 0
+      assert_equal col.default_format, row.format(1)
       assert_equal str1, row[0]
       assert_equal str1, sheet[0,0]
       assert_equal str1, sheet.cell(0,0)
@@ -880,7 +892,7 @@ module Spreadsheet
       assert_equal 1.00005, sheet1[10,4]
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
-      assert_equal "m\000y\000 \000n\000a\000m\000e\000", 
+      assert_equal "m\000y\000 \000n\000a\000m\000e\000",
                    sheet.name
       assert_not_nil sheet.offset
     end
@@ -893,6 +905,8 @@ module Spreadsheet
       str2 = @@iconv.iconv 'Another Shared String'
       str3 = @@iconv.iconv('1234567890 ' * 1000)
       str4 = @@iconv.iconv('9876543210 ' * 1000)
+      fmt = Format.new :italic => true, :color => :blue
+      sheet1.format_column 1, fmt, :width => 20
       sheet1[0,0] = str1
       sheet1.row(0).push str1
       sheet1.row(1).concat [str2, str2]
@@ -948,7 +962,11 @@ module Spreadsheet
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       assert_equal "Worksheet1", sheet.name
       assert_not_nil sheet.offset
+      assert_not_nil col = sheet.column(1)
+      assert_equal true, col.default_format.font.italic?
+      assert_equal :blue, col.default_format.font.color
       row = sheet.row 0
+      assert_equal col.default_format, row.format(1)
       assert_equal str1, row[0]
       assert_equal str1, sheet[0,0]
       assert_equal str1, sheet.cell(0,0)
@@ -1008,14 +1026,9 @@ module Spreadsheet
       assert_equal [1,2,3,4,5,6,7,8,9,0], sheet.cell(7,1..10)
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
-      assert_equal "my name", 
+      assert_equal "my name",
                    sheet.name
       assert_not_nil sheet.offset
-    end
-    def test_read_bsv
-      book = Spreadsheet.open '/home/hwyss/cogito/oddb.org/data/xls/BSV_per_2008.10.01.xls'
-      sheet = book.worksheet 0
-      assert_equal Date.new(2000), sheet[1,6]
     end
   end
 end

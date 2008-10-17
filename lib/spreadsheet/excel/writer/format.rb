@@ -21,28 +21,6 @@ class Format < DelegateClass(Format)
       color_code(@format.send(key) || default)
     end
   end
-  XF_H_ALIGN = {
-    :default       => 0,
-    :left          => 1,
-    :center        => 2,
-    :right         => 3,
-    :fill          => 4,
-    :justify       => 5,
-    :merge         => 6,
-    :distributed   => 7,
-  }
-  XF_TEXT_DIRECTION = {
-    :context       => 0,
-    :left_to_right => 1,
-    :right_to_left => 2,
-  }
-  XF_V_ALIGN = {
-    :top         => 0,
-    :middle      => 1,
-    :bottom      => 2,
-    :justify     => 3,
-    :distributed => 4,
-  }
   boolean :hidden, :locked, :merge_range, :shrink, :text_justlast, :text_wrap,
           :cross_down, :cross_up, :left, :right, :top, :bottom
   color :left_color,       :border
@@ -54,7 +32,7 @@ class Format < DelegateClass(Format)
   color :pattern_bg_color, :pattern_bg
   attr_accessor :xf_index
   attr_reader :format
-  def initialize writer, workbook, format, type=:style
+  def initialize writer, workbook, format=workbook.default_format, type=:format
     @type = type.to_s.downcase
     @format = format
     @writer = writer
@@ -219,7 +197,7 @@ class Format < DelegateClass(Format)
   end
   def xf_pattern
     ptrn  = pattern_fg_color
-    ptrn |= pattern_bg_color
+    ptrn |= pattern_bg_color << 7
     ptrn
   end
   def xf_rotation
@@ -235,7 +213,7 @@ class Format < DelegateClass(Format)
     rot
   end
   def xf_type_prot type
-    type = type.to_s.downcase == 'style' ? 0xfff4 : 0x0000
+    type = type.to_s.downcase == 'style' ? 0xfff5 : 0x0000
     type |= locked
     type |= hidden << 1
     type
@@ -243,6 +221,7 @@ class Format < DelegateClass(Format)
   def xf_used_attr
     atr_num = num_format & 1
     atr_fnt = font_index & 1
+    atr_fnt = 1 unless @format.font.color == :text
     atr_alc = 0
     if horizontal_align != 0 \
       || vertical_align != 2 \
@@ -252,9 +231,13 @@ class Format < DelegateClass(Format)
       atr_alc = 1
     end
     atr_bdr = [top, bottom, left, right, cross_up, cross_down].max
-    atr_pat = @format.font.color != :text \
-      || @format.bg_color != :pattern_bg \
-      || pattern != 0x00 ? 1 : 0
+    atr_pat = 0
+    if  @format.pattern_fg_color != :border \
+      || @format.pattern_bg_color != :pattern_bg \
+      || pattern != 0x00
+    then
+      atr_pat = 1
+    end
     atr_prot = hidden? || locked? ? 1 : 0
     attrs  = atr_num
     attrs |= atr_fnt << 1
@@ -262,7 +245,7 @@ class Format < DelegateClass(Format)
     attrs |= atr_bdr << 3
     attrs |= atr_pat << 4
     attrs |= atr_prot << 5
-    attrs
+    attrs << 2
   end
 end
     end

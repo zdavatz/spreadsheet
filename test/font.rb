@@ -77,11 +77,11 @@ module Spreadsheet
       assert_equal true, @font.shadow
     end
     def test_size
-      assert_equal 10, @font.size  
+      assert_equal 10, @font.size
       @font.size = 12
-      assert_equal 12, @font.size  
+      assert_equal 12, @font.size
       @font.size = 11.2
-      assert_equal 11.2, @font.size  
+      assert_equal 11.2, @font.size
       assert_raises ArgumentError do @font.size = "123" end
     end
     def test_strikeout

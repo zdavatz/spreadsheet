@@ -107,6 +107,7 @@ class Reader
     extend_reader biff
     extend_internals biff
     read_workbook
+    @workbook.default_format = @workbook.format 0
     @workbook
   end
   def read_blank worksheet, addr, work
@@ -180,6 +181,31 @@ class Reader
   def read_codepage work, pos, len
     codepage, _ = work.unpack 'v'
     @workbook.set_encoding encoding(codepage), pos, len
+  end
+  def read_colinfo worksheet, work, pos, len
+    # Offset  Size  Contents
+    #      0     2  Index to first column in the range
+    #      2     2  Index to last column in the range
+    #      4     2  Width of the columns in 1/256 of the width of the zero
+    #               character, using default font (first FONT record in the
+    #               file)
+    #      6     2  Index to XF record (➜ 6.115) for default column formatting
+    #      8     2  Option flags:
+    #               Bits  Mask    Contents
+    #                  0  0x0001  1 = Columns are hidden
+    #               10-8  0x0700  Outline level of the columns (0 = no outline)
+    #                 12  0x1000  1 = Columns are collapsed
+    #     10     2  Not used
+    first, last, width, xf, opts = work.unpack binfmt(:colinfo)[0..-2]
+    first.upto last do |col|
+      column = Column.new col, @workbook.format(xf),
+                          :width         => width.to_f / 256,
+                          :hidden        => (opts & 0x0001) > 0,
+                          :collapsed     => (opts & 0x1000) > 0,
+                          :outline_level => (opts & 0x0700)
+      column.worksheet = worksheet
+      worksheet.columns[col] = column
+    end
   end
   def read_dimensions worksheet, work, pos, len
     # Offset  Size  Contents
@@ -550,7 +576,7 @@ class Reader
         read_style work, pos, len
       when :format     # ○○ FORMAT (Number Format) ➜ 6.45
         read_format work, pos, len
-      when :font
+      when :font       # ●● FONT ➜ 6.43
         read_font work, pos, len
       end
       previous_op = op unless op == :continue
@@ -577,6 +603,8 @@ class Reader
       #when :index      # ○  INDEX ➜ 5.7 (Row Blocks), ➜ 6.55
         # TODO: if there are changes in rows, omit index when writing
         #read_index worksheet, work, pos, len
+      when :colinfo    # ○○ COLINFO ➜ 6.18
+        read_colinfo worksheet, work, pos, len
       when :dimensions # ●  DIMENSIONS ➜ 6.31
         read_dimensions worksheet, work, pos, len
       when :row        # ○○ Row Blocks ➜ 5.7
@@ -729,12 +757,42 @@ class Reader
     font_idx, numfmt, xf_type, xf_align, xf_rotation, xf_indent, xf_used_attr,
       xf_borders, xf_brdcolors, xf_pattern = work.unpack binfmt(:xf)
     fmt.number_format = @formats[numfmt]
-    fmt.font = @workbook.font font_idx
+    ## this appears to be undocumented: the first 4 fonts seem to be accessed
+    #  with a 0-based index, but all subsequent font indices are 1-based.
+    fmt.font = @workbook.font(font_idx > 3 ? font_idx - 1 : font_idx)
+    fmt.horizontal_align = NGILA_H_FX[xf_align & 0x07]
+    fmt.text_wrap = xf_align & 0x08 > 0
+    fmt.vertical_align = NGILA_V_FX[xf_align & 0x70]
+    fmt.rotation = if xf_rotation == 255
+                     :stacked
+                   elsif xf_rotation > 90
+                     90 - xf_rotation
+                   else
+                     xf_rotation
+                   end
+    fmt.indent_level = xf_indent & 0x0f
+    fmt.shrink = xf_indent & 0x10 > 0
+    fmt.text_direction = NOITCERID_TXET_FX[xf_indent & 0xc0]
+    fmt.left   = xf_borders & 0x0000000f > 0
+    fmt.right  = xf_borders & 0x000000f0 > 0
+    fmt.top    = xf_borders & 0x00000f00 > 0
+    fmt.bottom = xf_borders & 0x0000f000 > 0
+    fmt.left_color     = COLOR_CODES[xf_borders & 0x007f0000] || :border
+    fmt.right_color    = COLOR_CODES[xf_borders & 0x3f800000] || :border
+    fmt.cross_down     = xf_borders & 0x40000000 > 0
+    fmt.cross_up       = xf_borders & 0x80000000 > 0
+    fmt.top_color      = COLOR_CODES[xf_brdcolors & 0x0000007f] || :border
+    fmt.bottom_color   = COLOR_CODES[xf_brdcolors & 0x00003f80] || :border
+    fmt.diagonal_color = COLOR_CODES[xf_brdcolors & 0x001fc000] || :border
+    #fmt.diagonal_style = COLOR_CODES[xf_brdcolors & 0x01e00000]
+    fmt.pattern = xf_brdcolors & 0xfc000000
+    fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
+    fmt.pattern_bg_color = COLOR_CODES[xf_pattern & 0x3f80] || :pattern_bg
     @workbook.add_format fmt
   end
   def set_cell worksheet, row, column, xf, value=nil
     cells = @current_row_block[row] ||= Row.new(nil, row)
-    cells.formats[column] = @workbook.format(xf)
+    cells.formats[column] = @workbook.format(xf) unless xf == 0
     cells[column] = value
   end
   def set_row_address worksheet, work, pos, len
@@ -758,21 +816,27 @@ class Reader
     @current_row_block_offset ||= [pos]
     index, first_used, first_unused, flags,
       hasdefaults, offset = work.unpack binfmt(:row)
+    format = nil
     # TODO: read attributes from work[13,3], read flags
-    if hasdefaults > 0
-      # TODO: read row default XF
+    if hasdefaults > 0 && work.size > 13
+      xf, = work[-2..-1].unpack 'v'
+      format = @workbook.format(xf)
     end
-    worksheet.set_row_address index, :first_used   => first_used,
-                                     :first_unused => first_unused,
-                                     :index        => index,
-                                     :row_block    => @current_row_block_offset,
-                                     :offset       => @current_row_block_offset[0]
-                                     #:first_cell   => offset
+    worksheet.set_row_address index,
+                              :default_format => format,
+                              :first_used     => first_used,
+                              :first_unused   => first_unused,
+                              :index        => index,
+                              :row_block    => @current_row_block_offset,
+                              :offset       => @current_row_block_offset[0]
+                              #:first_cell   => offset
   end
   private
   def extend_internals version
     require 'spreadsheet/excel/internals/biff%i' % version
     extend Internals.const_get('Biff%i' % version)
+    ## spreadsheets may not include a codepage record.
+    @workbook.encoding = encoding 850 if version < 8
   rescue LoadError
   end
   def extend_reader version

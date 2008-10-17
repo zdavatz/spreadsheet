@@ -1,4 +1,5 @@
 require 'date'
+require 'spreadsheet/column'
 require 'spreadsheet/encodings'
 require 'spreadsheet/row'
 
@@ -14,28 +15,38 @@ module Spreadsheet
   # #rows          :: The Rows in this Worksheet. It is not recommended to
   #                   Manipulate this Array directly. If you do, call
   #                   #updated_from with the smallest modified index.
+  # #columns       :: The Column formatting in this Worksheet. Column
+  #                   instances may appear at more than one position in #columns.
+  #                   If you modify a Column directly, your changes will be
+  #                   reflected in all those positions.
   class Worksheet
     include Encodings
-    attr_accessor :name, :workbook
-    attr_reader :rows
     include Enumerable
+    attr_accessor :name, :workbook
+    attr_reader :rows, :columns
     def initialize opts={}
       @dimensions = [0,0,0,0]
       @name = opts[:name] || 'Worksheet'
       @workbook = opts[:workbook]
       @rows = []
+      @columns = []
     end
     ##
     # Add a Format to the Workbook. If you use Row#set_format, you should not
     # need to use this Method.
     def add_format fmt
-      @workbook.add_format fmt
+      @workbook.add_format fmt if fmt
     end
     ##
     # Get the enriched value of the Cell at _row_, _column_.
     # See also Worksheet#[], Row#[].
     def cell row, column
       row(row)[column]
+    end
+    ##
+    # Returns the Column at _idx_.
+    def column idx
+      @columns[idx] || Column.new(idx, default_format, :worksheet => self)
     end
     ##
     # The number of columns in this Worksheet which contain data.
@@ -59,7 +70,7 @@ module Spreadsheet
     # Set the default Format of this Worksheet.
     def default_format= format
       @default_format = format
-      add_format format if format
+      add_format format
       format
     end
     ##
@@ -85,6 +96,31 @@ module Spreadsheet
     end
     def encoding # :nodoc:
       @workbook.encoding
+    end
+    ##
+    # Sets the default Format of the column at _idx_.
+    #
+    # _idx_ may be an Integer, or an Enumerable that iterates over a number of
+    # Integers.
+    #
+    # _format_ is a Format, or nil if you want to remove the Formatting at _idx_
+    #
+    # Returns an instance of Column if _idx_ is an Integer, an Array of Columns
+    # otherwise.
+    def format_column idx, format=nil, opts={}
+      opts[:worksheet] = self
+      res = case idx
+            when Integer
+              column = nil
+              if format
+                column = Column.new(idx, format, opts)
+              end
+              @columns[idx] = column
+            else
+              idx.collect do |col| format_column col, format, opts end
+            end
+      shorten @columns
+      res
     end
     ##
     # Insert a Row at _idx_ (0-based) containing _cells_

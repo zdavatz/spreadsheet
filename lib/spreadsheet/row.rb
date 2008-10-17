@@ -47,7 +47,7 @@ module Spreadsheet
     # Set the default Format used when writing a Cell if no explicit Format is
     # stored for the cell.
     def default_format= format
-      @worksheet.add_format format
+      @worksheet.add_format format if @worksheet
       @default_format = format
     end
     ##
@@ -60,10 +60,11 @@ module Spreadsheet
       index_of_first self
     end
     ##
-    # The Format for the Cell at _idx_ (0-based), or default_format
-    # if no Format is set.
+    # The Format for the Cell at _idx_ (0-based), or the first valid Format in
+    # Row#default_format, Column#default_format and Worksheet#default_format.
     def format idx
-      @formats[idx] || @default_format
+      @formats[idx] || @default_format \
+        || @worksheet.column(idx).default_format if @worksheet
     end
     ##
     # Set the Format for the Cell at _idx_ (0-based).

@@ -48,16 +48,23 @@ class Workbook < Spreadsheet::Writer
     @number_formats.delete workbook
     @worksheets.delete workbook
   end
-  def collect_formats workbook
+  def collect_formats workbook, opts={}
     # The default cell format is always present in an Excel file, described by
     # the XF record with the fixed index 15 (0-based). By default, it uses the
     # worksheet/workbook default cell style, described by the very first XF
     # record (index 0).
     formats = []
+    unless opts[:existing_document]
+      15.times do
+        formats.push Format.new(self, workbook, workbook.default_format, :style)
+      end
+      formats.push Format.new(self, workbook)
+    end
     workbook.formats.each do |fmt|
-      format = Format.new self, workbook, fmt
-      format.xf_index = formats.size
-      formats.push format
+      formats.push Format.new(self, workbook, fmt)
+    end
+    formats.each_with_index do |fmt, idx|
+      fmt.xf_index = idx
     end
     @formats[workbook] = formats
   end
@@ -68,6 +75,7 @@ class Workbook < Spreadsheet::Writer
     end
     total = current.size
     current.uniq!
+    current.delete ''
     if (stored - current).empty?
       ## if all previously stored strings are still needed, we don't have to
       #  rewrite all cells because the sst-index of such string does not change.
@@ -78,7 +86,10 @@ class Workbook < Spreadsheet::Writer
     end
   end
   def font_index workbook, font_key
-    @fonts[workbook][font_key] || 0
+    idx = @fonts[workbook][font_key] || 0
+    ## this appears to be undocumented: the first 4 fonts seem to be accessed
+    #  with a 0-based index, but all subsequent font indices are 1-based.
+    idx > 3 ? idx.next : idx
   end
   def number_format_index workbook, format
     @number_formats[workbook][format] || 0
@@ -135,7 +146,7 @@ class Workbook < Spreadsheet::Writer
   # Copy unchanged data verbatim, adjust offsets and write new records for
   # changed data.
   def write_changes workbook, io
-    collect_formats workbook
+    collect_formats workbook, :existing_document => true
     reader = workbook.ole
     sheet_data = {}
     sst_status, sst_total, sst_strings = complete_sst_update? workbook
@@ -299,7 +310,7 @@ class Workbook < Spreadsheet::Writer
   end
   def write_fonts workbook, writer
     fonts = @fonts[workbook] = {}
-    workbook.formats.each do |format|
+    @formats[workbook].each do |format|
       if(font = format.font) && !fonts.include?(font.key)
         fonts.store font.key, fonts.size
         write_font workbook, writer, font
@@ -317,6 +328,8 @@ class Workbook < Spreadsheet::Writer
     BUILTIN_FORMATS.each do |idx, str|
       formats.store client(str, 'UTF8'), idx
     end
+    ## Ensure at least a 'GENERAL' format is written
+    formats.delete client('GENERAL', 'UTF8')
     idx = 0xa4
     workbook.formats.each do |fmt|
       str = fmt.number_format
@@ -342,6 +355,7 @@ class Workbook < Spreadsheet::Writer
     # ○  DSF ➜ 6.32
     write_dsf workbook, buffer1
     # ○  TABID
+    write_tabid workbook, buffer1
     # ○  FNGROUPCOUNT
     # ○  Workbook Protection Block ➜ 5.18
     write_protect workbook, buffer1
@@ -505,6 +519,9 @@ class Workbook < Spreadsheet::Writer
     ]
     write_op writer, 0x0293, data.pack('vC2')
   end
+  def write_tabid workbook, writer
+    write_op writer, 0x013d, [1].pack('v')
+  end
   def write_window1 workbook, writer
     data = [
       0x0000, # Horizontal position of the document window
@@ -555,20 +572,7 @@ class Workbook < Spreadsheet::Writer
     # the XF record with the fixed index 15 (0-based). By default, it uses the
     # worksheet/workbook default cell style, described by the very first XF
     # record (index 0).
-    formats = @formats[workbook].dup
-    default = formats.first
-    ## First 15 formats, or dummy/default styles if there are fewer formats
-    fmts1 = formats.slice!(0,15)
-    while fmts1.size < 15 do
-      fmt = Format.new self, workbook, workbook.default_format, writer
-      fmt.xf_index = fmts1.size
-      fmts1.push fmt
-    end
-    fmts1.each do |fmt| fmt.write_xf writer end
-    ## Default cell format
-    default.write_xf writer, :format
-    ## remaining formats
-    formats.each do |fmt| fmt.write_xf writer end
+    @formats[workbook].each do |fmt| fmt.write_xf writer end
   end
   def sst_index worksheet, str
     @sst[worksheet][str]

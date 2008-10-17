@@ -17,6 +17,10 @@ class Worksheet < Spreadsheet::Worksheet
     @offset, @ole, @reader = opts[:offset], opts[:ole], opts[:reader]
     @dimensions = nil
   end
+  def column idx
+    ensure_rows_read
+    super
+  end
   def date_base
     @workbook.date_base
   end
@@ -35,6 +39,7 @@ class Worksheet < Spreadsheet::Worksheet
     @rows.fetch idx do
       if addr = @row_addresses[idx]
         row = @reader.read_row self, addr
+        row.default_format = addr[:default_format]
         row.worksheet = self
         row
       else
@@ -73,10 +78,12 @@ class Worksheet < Spreadsheet::Worksheet
     @dimensions[1] = [ @rows.size, @row_addresses.size ].compact.max
     compact = @rows.compact
     first_rows = compact.collect do |row| index_of_first row end.compact.min
-    first_addrs = @row_addresses.collect do |addr| addr[:first_used] end.min
+    first_addrs = @row_addresses.compact.collect do |addr|
+      addr[:first_used] end.min
     @dimensions[2] = [ first_rows, first_addrs ].compact.min
     last_rows = compact.collect do |row| row.size end.max
-    last_addrs = @row_addresses.collect do |addr| addr[:first_unused] end.max
+    last_addrs = @row_addresses.compact.collect do |addr|
+      addr[:first_unused] end.max
     @dimensions[3] = [last_rows, last_addrs].compact.max
     @dimensions
   end

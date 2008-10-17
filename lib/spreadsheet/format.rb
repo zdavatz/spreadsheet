@@ -33,7 +33,7 @@ module Spreadsheet
     ##
     # Color attributes
     colors  :bottom_color, :top_color, :left_color, :right_color,
-            :bg_color, :pattern_fg_color, :pattern_bg_color,
+            :pattern_fg_color, :pattern_bg_color,
             :diagonal_color
     ##
     # Text direction
@@ -72,16 +72,15 @@ module Spreadsheet
     # Text rotation
     attr_reader :rotation
     def initialize opts={}
-      @font             = Font.new client("Arial", 'UTF8')
-      @number_format    = client 'General', 'UTF8'
+      @font             = Font.new client("Arial", 'UTF8'), :family => :swiss
+      @number_format    = client 'GENERAL', 'UTF8'
       @rotation         = 0
-      @bg_color         = :pattern_bg
       @pattern          = 0
-      @bottom_color     = :border
-      @top_color        = :border
-      @left_color       = :border
-      @right_color      = :border
-      @diagonal_color   = :border
+      @bottom_color     = :builtin_black
+      @top_color        = :builtin_black
+      @left_color       = :builtin_black
+      @right_color      = :builtin_black
+      @diagonal_color   = :builtin_black
       @pattern_fg_color = :border
       @pattern_bg_color = :pattern_bg
       # Temp code to prevent merged formats in non-merged cells.

@@ -100,7 +100,7 @@ class Worksheet
   end
   def strings
     @worksheet.inject [] do |memo, row|
-      strings = row.select do |cell| cell.is_a? String end
+      strings = row.select do |cell| cell.is_a?(String) && !cell.empty? end
       memo.concat strings
     end
   end
@@ -171,8 +171,9 @@ class Worksheet
     # RSTRING ➜ 6.84 (BIFF5/BIFF7)
     multiples, first_idx = nil
     row.each_with_index do |cell, idx|
-      if multiples && (!multiples.last.is_a?(cell.class) \
-                       || (cell.is_a?(Numeric) && cell.abs < 0.1))
+      cell = nil if cell == ''
+      number = cell.is_a?(Float) && cell.to_s.length > 5
+      if multiples && (!multiples.last.is_a?(cell.class) || number)
         write_multiples row, first_idx, multiples
         multiples, first_idx = nil
       end
@@ -196,7 +197,7 @@ class Worksheet
         #  10^9. Not sure what is a good rule of thumb here, but it seems that
         #  Decimal Numbers with more than 4 significant digits are not represented
         #  with sufficient precision by RK
-        if cell.is_a?(Float) && cell.to_s.length > 5
+        if number
           write_number row, idx
         elsif multiples
           multiples.push cell
@@ -240,6 +241,43 @@ class Worksheet
     end
     @io.write reader.read(endpos - lastpos)
   end
+  def write_colinfo bunch
+    col = bunch.first
+    width = col.width.to_f * 256
+    xf_idx = @workbook.xf_index @worksheet.workbook, col.default_format
+    opts =  0
+    opts |= 0x0001 if col.hidden?
+    opts |= col.outline_level.to_i << 8
+    opts |= 0x1000 if col.collapsed?
+    data = [
+      col.idx,        # Index to first column in the range
+      bunch.last.idx, # Index to last column in the range
+      width.to_i,     # Width of the columns in 1/256 of the width of the zero
+                      # character, using default font (first FONT record in the
+                      # file)
+      xf_idx.to_i,    # Index to XF record (➜ 6.115) for default column formatting
+      opts,           # Option flags:
+                      # Bits  Mask    Contents
+                      #    0  0x0001  1 = Columns are hidden
+                      # 10-8  0x0700  Outline level of the columns
+                      #               (0 = no outline)
+                      #   12  0x1000  1 = Columns are collapsed
+    ]
+    write_op opcode(:colinfo), data.pack(binfmt(:colinfo))
+  end
+  def write_colinfos
+    cols = @worksheet.columns
+    bunch = []
+    cols.each_with_index do |column, idx|
+      if column
+        bunch << column
+        if cols[idx.next] != column
+          write_colinfo bunch
+          bunch.clear
+        end
+      end
+    end
+  end
   def write_defaultrowheight
     data = [
       0x00, # Option flags:
@@ -251,6 +289,20 @@ class Worksheet
       0xf2, #   Default height for unused rows, in twips = 1/20 of a point
     ]
     write_op 0x0225, data.pack('v2')
+  end
+  def write_defcolwidth
+    # Offset  Size  Contents
+    #      0     2  Column width in characters, using the width of the zero
+    #               character from default font (first FONT record in the
+    #               file). Excel adds some extra space to the default width,
+    #               depending on the default font and default font size. The
+    #               algorithm how to exactly calculate the resulting column
+    #               width is not known.
+    #
+    #               Example: The default width of 8 set in this record results
+    #               in a column width of 8.43 using Arial font with a size of
+    #               10 points.
+    write_op 0x0055, [8].pack('v')
   end
   def write_dimensions
     # Offset  Size  Contents
@@ -268,11 +320,12 @@ class Worksheet
   # Write a cell with a Formula. May write an additional String record depending
   # on the stored result of the Formula.
   def write_formula row, idx
+    xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx)
     cell = row[idx]
     data1 = [
       row.idx,      # Index to row
       idx,          # Index to column
-      0,            # Index to XF record (➜ 6.115)
+      xf_idx,       # Index to XF record (➜ 6.115)
     ].pack 'v3'
     data2 = nil
     case value = cell.value
@@ -345,7 +398,9 @@ class Worksheet
     # ○  Page Settings Block ➜ 5.4
     # ○  Worksheet Protection Block ➜ 5.18
     # ○  DEFCOLWIDTH ➜ 6.29
+    write_defcolwidth
     # ○○ COLINFO ➜ 6.18
+    write_colinfos
     # ○  SORT ➜ 6.95
     # ●  DIMENSIONS ➜ 6.31
     write_dimensions
@@ -400,9 +455,9 @@ class Worksheet
       idx, # Index to first column (fc)
     ]
     # List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
-    multiples.each do |cell|
-      # TODO: XF indices
-      data.push 0, encode_rk(cell)
+    multiples.each_with_index do |cell, cell_idx|
+      xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx + cell_idx)
+      data.push xf_idx, encode_rk(cell)
       fmt << 'vV'
     end
     # Index to last column (lc)
@@ -477,9 +532,12 @@ class Worksheet
       0, # Not used
       has_defaults,
       0, # OOffice does not set this - ignore until someone complains
+      1,
+      15,
+      0,
     ]
     # OpenOffice apparently can't read Rows with a length other than 16 Bytes
-    fmt = binfmt(:row) + 'x3'
+    fmt = binfmt(:row) + 'C3'
 =begin
     if format = row.default_format
       fmt = fmt + 'xv'

@@ -34,6 +34,16 @@ module Spreadsheet
     end
   end
   class Worksheet
+    unless instance_methods.include? "new_format_column"
+      alias :new_format_column :format_column
+      def format_column column, width=nil, format=nil
+        if width.is_a? Format
+          new_format_column column, width, format
+        else
+          new_format_column column, format, :width => width
+        end
+      end
+    end
     def write row, col, data=nil, format=nil
       if data.is_a? Array
         write_row row, col, data, format
