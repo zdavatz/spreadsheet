@@ -5,7 +5,7 @@ module Spreadsheet
   module Excel
 ##
 # Excel-specific Row methods
-class Row < Row
+class Row < Spreadsheet::Row
   ##
   # The Excel date calculation erroneously assumes that 1900 is a leap-year. All
   # Dates after 28.2.1900 are off by one.

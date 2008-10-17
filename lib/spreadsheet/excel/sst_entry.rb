@@ -5,7 +5,7 @@ module Spreadsheet
 ##
 # Shared String Table Entry
 class SstEntry
-  include Encodings
+  include Spreadsheet::Encodings
   attr_accessor :chars, :phonetic, :richtext, :flags, :available,
                 :continued_chars, :wide
   def initialize opts = {}

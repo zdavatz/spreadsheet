@@ -11,7 +11,7 @@ module Spreadsheet
   #                   that have no format set explicitly or in
   #                   Row#default_format or Worksheet#default_format.
   class Workbook
-    include Encodings
+    include Spreadsheet::Encodings
     attr_reader :io, :worksheets, :formats, :fonts
     attr_accessor :encoding, :version, :default_format
     def initialize io = nil, opts={:default_format => Format.new}

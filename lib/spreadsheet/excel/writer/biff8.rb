@@ -8,7 +8,7 @@ module Spreadsheet
 # to Biff8. This Module is likely to be expanded as Support for older Versions
 # of Excel grows and methods get moved here for disambiguation.
 module Biff8
-  include Encodings
+  include Spreadsheet::Encodings
   ##
   # Check whether the string _data_ can be compressed (i.e. every second byte
   # is a Null-byte) and perform compression.

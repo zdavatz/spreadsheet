@@ -10,9 +10,9 @@ module Spreadsheet
 # Excel-Record/Opcode. You should not need to call any of its methods directly.
 # If you think you do, look at #write_worksheet
 class Worksheet
-  include Biff8
-  include Internals
-  include Internals::Biff8
+  include Spreadsheet::Excel::Writer::Biff8
+  include Spreadsheet::Excel::Internals
+  include Spreadsheet::Excel::Internals::Biff8
   attr_reader :worksheet
   def initialize workbook, worksheet
     @workbook = workbook

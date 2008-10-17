@@ -15,8 +15,8 @@ module Spreadsheet
 # doesn't mean it shouldn't be possible ;). You should not need to call any of
 # its methods directly. If you think you do, look at #write_workbook
 class Workbook < Spreadsheet::Writer
-  include Biff8
-  include Internals
+  include Spreadsheet::Excel::Writer::Biff8
+  include Spreadsheet::Excel::Internals
   attr_reader :fonts
   def initialize *args
     super

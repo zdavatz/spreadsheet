@@ -13,8 +13,8 @@ module Spreadsheet
 # Excel-Record/Opcode. You should not need to call any of its methods
 # directly. If you think you do, look at #read
 class Reader
-  include Encodings
-  include Internals
+  include Spreadsheet::Encodings
+  include Spreadsheet::Excel::Internals
   OPCODE_SIZE = 4
   ROW_BLOCK_OPS = [
     :blank, :boolerr, :dbcell, :formula, :label, :labelsst, :mulblank, :mulrk,

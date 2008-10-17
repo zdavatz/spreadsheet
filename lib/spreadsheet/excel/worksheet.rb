@@ -9,7 +9,7 @@ module Spreadsheet
 # reader, and to recording changes to the Worksheet. You should have no reason
 # to use any of these.
 class Worksheet < Spreadsheet::Worksheet
-  include Offset
+  include Spreadsheet::Excel::Offset
   offset :dimensions
   attr_reader :offset, :ole
   def initialize opts = {}

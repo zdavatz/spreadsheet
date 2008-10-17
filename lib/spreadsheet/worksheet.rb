@@ -20,7 +20,7 @@ module Spreadsheet
   #                   If you modify a Column directly, your changes will be
   #                   reflected in all those positions.
   class Worksheet
-    include Encodings
+    include Spreadsheet::Encodings
     include Enumerable
     attr_accessor :name, :workbook
     attr_reader :rows, :columns

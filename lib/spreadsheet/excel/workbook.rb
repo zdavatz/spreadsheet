@@ -9,8 +9,8 @@ module Spreadsheet
 # Excel-specific Workbook methods. These are mostly pertinent to the Excel
 # reader. You should have no reason to use any of these.
 class Workbook < Spreadsheet::Workbook
-  include Encodings
-  include Offset
+  include Spreadsheet::Encodings
+  include Spreadsheet::Excel::Offset
   BIFF_VERSIONS = {
     0x000 => 2,
     0x007 => 2,
