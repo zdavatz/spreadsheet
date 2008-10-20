@@ -1,3 +1,9 @@
+=== 0.6.1.1 / 2008-10-20
+
+* 1 Bugfix
+
+  * Corrected the Manifest - included column.rb
+
 === 0.6.1 / 2008-10-17
 
 * 3 minor enhancements
