@@ -163,6 +163,7 @@ module Internals
   }
   SEPYT_TNEMEPACSE = ESCAPEMENT_TYPES.invert
   FONT_ENCODINGS = {
+    0x00 => :iso_latin1,
     0x01 => :default,
     0x02 => :symbol,
     0x4d => :apple_roman,
@@ -179,7 +180,7 @@ module Internals
     0xba => :baltic,
     0xcc => :cyrillic,
     0xde => :thai,
-    0xee => :latin2,
+    0xee => :iso_latin2,
     0xff => :oem_latin1,
   }
   SGNIDOCNE_TNOF = FONT_ENCODINGS.invert

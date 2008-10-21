@@ -1,3 +1,13 @@
+=== 0.6.1.2 / 2008-10-20
+
+* 2 Bugfixes
+
+  * Corrected the Font-Encoding values in Excel::Internals
+    (Thanks to Bjorn Hjelle for the Bugreport)
+  * Spreadsheet now skips Richtext-Formatting runs and Asian Phonetic 
+    Settings when reading the SST, fixing a problem where the presence of
+    Richtext could lead to an incomplete SST.
+
 === 0.6.1.1 / 2008-10-20
 
 * 1 Bugfix

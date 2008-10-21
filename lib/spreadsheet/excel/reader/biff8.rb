@@ -99,7 +99,7 @@ module Biff8
     #                   List of rt formatting runs (➜ 3.2)
     #   [var.]      sz  (optional, only if phonetic=1)
     #                   Asian Phonetic Settings Block (➜ 3.4.2)
-    chars, offset, wide, phonetic, richtext, available, owing \
+    chars, offset, wide, phonetic, richtext, available, owing, skip \
       = read_string_header work, count_length
     string, data = read_string_body work, offset, available, wide > 0
     if owing > 0
@@ -132,11 +132,20 @@ module Biff8
     phonetic  = (opts >> 2) & 1
     richtext  = (opts >> 3) & 1
     size      = chars * (wide + 1)
+    skip = 0
+    if richtext > 0
+      runs, = work[offset + 1 + count_length, 2].unpack 'v'
+      skip = 4 * runs
+    end
+    if phonetic > 0
+      psize, = work[offset + 1 + count_length + richtext * 2, 4].unpack 'V'
+      skip += psize
+    end
     flagsize  = 1 + count_length + richtext * 2 + phonetic * 4
     avbl      = [work.size - offset, flagsize + size].min
     have_chrs = (avbl - flagsize) / (1 + wide)
     owing     = chars - have_chrs
-    [chars, flagsize, wide, phonetic, richtext, avbl, owing]
+    [chars, flagsize, wide, phonetic, richtext, avbl, owing, skip]
   end
   ##
   # Insert null-characters into a compressed UTF-16 string
@@ -153,13 +162,13 @@ module Biff8
                          :ole    => @data,
                          :reader => self
       sst.chars, sst.flags, wide, sst.phonetic, sst.richtext, sst.available,
-        sst.continued_chars = read_string_header work, 2, pos
+        sst.continued_chars, skip = read_string_header work, 2, pos
       sst.wide = wide > 0
       if sst.continued?
         @incomplete_sst = sst
       end
       @workbook.add_shared_string sst
-      pos += sst.available
+      pos += sst.available + skip
     end
   end
 end
