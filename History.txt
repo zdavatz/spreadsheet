@@ -3,7 +3,7 @@
 * 2 Bugfixes
 
   * Corrected the Font-Encoding values in Excel::Internals
-    (Thanks to Bjorn Hjelle for the Bugreport)
+    (Thanks to Bjørn Hjelle for the Bugreport)
   * Spreadsheet now skips Richtext-Formatting runs and Asian Phonetic 
     Settings when reading the SST, fixing a problem where the presence of
     Richtext could lead to an incomplete SST.
