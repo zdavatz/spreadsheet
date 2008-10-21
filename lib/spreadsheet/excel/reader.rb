@@ -18,7 +18,7 @@ class Reader
   OPCODE_SIZE = 4
   ROW_BLOCK_OPS = [
     :blank, :boolerr, :dbcell, :formula, :label, :labelsst, :mulblank, :mulrk,
-    :number, :rk, :row, :rstring,
+    :number, :rk, :rstring,
   ]
   def initialize opts = {}
     @pos = 0
@@ -75,8 +75,12 @@ class Reader
       name
     end
   end
-  def in_row_block? op
-    ROW_BLOCK_OPS.include?(op)
+  def in_row_block? op, previous
+    if op == :row
+      previous == op
+    else
+      ROW_BLOCK_OPS.include?(op)
+    end
   end
   def memoize?
     @opts[:memoization]
@@ -584,9 +588,10 @@ class Reader
   end
   def read_worksheet worksheet, offset
     @pos = offset
+    previous = nil
     while tuple = get_next_chunk
       pos, op, len, work = tuple
-      if((offset = @current_row_block_offset) && !in_row_block?(op))
+      if((offset = @current_row_block_offset) && !in_row_block?(op, previous))
         @current_row_block_offset = nil
         offset[1] = pos - offset[0]
       end
@@ -611,6 +616,7 @@ class Reader
                        # ●  ROW ➜ 6.83
         set_row_address worksheet, work, pos, len
       end
+      previous = op
     end
   end
   def read_style work, pos, len
