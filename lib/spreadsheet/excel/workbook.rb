@@ -69,7 +69,7 @@ class Workbook < Spreadsheet::Workbook
     super.push '@sst', '@offsets', '@changes'
   end
   def version_string
-    client VERSION_STRINGS.fetch(@version, "Unknown"), 'UTF8'
+    client VERSION_STRINGS.fetch(@version, "Unknown"), 'UTF-8'
   end
 end
   end

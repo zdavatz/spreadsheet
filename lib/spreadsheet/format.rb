@@ -72,8 +72,8 @@ module Spreadsheet
     # Text rotation
     attr_reader :rotation
     def initialize opts={}
-      @font             = Font.new client("Arial", 'UTF8'), :family => :swiss
-      @number_format    = client 'GENERAL', 'UTF8'
+      @font             = Font.new client("Arial", 'UTF-8'), :family => :swiss
+      @number_format    = client 'GENERAL', 'UTF-8'
       @rotation         = 0
       @pattern          = 0
       @bottom_color     = :builtin_black

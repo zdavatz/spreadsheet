@@ -48,7 +48,7 @@ module Spreadsheet
   # Default client Encoding. Change this value if your application uses a
   # different Encoding:
   # Spreadsheet.client_encoding = 'ISO-LATIN-1//TRANSLIT//IGNORE'
-  @client_encoding = 'UTF8'
+  @client_encoding = 'UTF-8'
 
   class << self
 

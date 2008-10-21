@@ -28,7 +28,7 @@ class Reader
     @opts = opts
     @current_row_block = {}
     @formats = {}
-    BUILTIN_FORMATS.each do |key, fmt| @formats.store key, client(fmt, 'UTF8') end
+    BUILTIN_FORMATS.each do |key, fmt| @formats.store key, client(fmt, 'UTF-8') end
   end
   def decode_rk work
     #  Bit  Mask        Contents
@@ -652,7 +652,7 @@ class Reader
       id, level = work.unpack 'x2C2'
       if name = BUILTIN_STYLES[id]
         name.sub '_lv', "_#{level.to_s}"
-        xf.name = client name, 'UTF8'
+        xf.name = client name, 'UTF-8'
       end
     end
   end

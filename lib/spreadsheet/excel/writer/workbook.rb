@@ -326,10 +326,10 @@ class Workbook < Spreadsheet::Writer
     # The first user-defined format starts at 164 (0xa4).
     formats = @number_formats[workbook] = {}
     BUILTIN_FORMATS.each do |idx, str|
-      formats.store client(str, 'UTF8'), idx
+      formats.store client(str, 'UTF-8'), idx
     end
     ## Ensure at least a 'GENERAL' format is written
-    formats.delete client('GENERAL', 'UTF8')
+    formats.delete client('GENERAL', 'UTF-8')
     idx = 0xa4
     workbook.formats.each do |fmt|
       str = fmt.number_format

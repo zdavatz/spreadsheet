@@ -52,7 +52,7 @@ module Spreadsheet
     # Use the option <em>:name => 'My pretty Name'</em> to override this
     # behavior.
     def create_worksheet opts = {}
-      opts[:name] ||= client("Worksheet#{@worksheets.size.next}", 'UTF8')
+      opts[:name] ||= client("Worksheet#{@worksheets.size.next}", 'UTF-8')
       add_worksheet Worksheet.new(opts)
     end
     ##

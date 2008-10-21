@@ -214,10 +214,10 @@ module Spreadsheet
           case value
           when Date
             format = @workbook.formats.find do |fmt| fmt.date? end
-            format ||= Format.new :number_format => client('M/D/YY', 'UTF8')
+            format ||= Format.new :number_format => client('M/D/YY', 'UTF-8')
           when DateTime, Time
             format = @workbook.formats.find do |fmt| fmt.datetime? end
-            format ||= Format.new :number_format => client('M/D/YY h:mm', 'UTF8')
+            format ||= Format.new :number_format => client('M/D/YY h:mm', 'UTF-8')
           end
           if format
             row.formats[idx] = format

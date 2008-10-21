@@ -9,7 +9,7 @@ require 'fileutils'
 
 module Spreadsheet
   class TestIntegration < Test::Unit::TestCase
-    @@iconv = Iconv.new('UTF-16LE', 'UTF8')
+    @@iconv = Iconv.new('UTF-16LE', 'UTF-8')
     def setup
       @var = File.expand_path 'var', File.dirname(__FILE__)
       FileUtils.mkdir_p @var
@@ -17,7 +17,7 @@ module Spreadsheet
       FileUtils.mkdir_p @data
     end
     def teardown
-      Spreadsheet.client_encoding = 'UTF8'
+      Spreadsheet.client_encoding = 'UTF-8'
       FileUtils.rm_r @var
     end
     def test_copy__identical__file_paths
@@ -928,7 +928,7 @@ module Spreadsheet
       sheet1.update_row 7, nil, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
       sheet2 = book.create_worksheet :name => "m\0y\0 \0n\0a\0m\0e\0"
       book.write path
-      Spreadsheet.client_encoding = 'UTF8'
+      Spreadsheet.client_encoding = 'UTF-8'
       str1 = 'Shared String'
       str2 = 'Another Shared String'
       str3 = '1234567890 ' * 1000
