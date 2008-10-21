@@ -14,9 +14,9 @@ module Spreadsheet
       end
     else
       require 'iconv'
-      @@utf8_utf16 = Iconv.new('UTF-16LE', 'UTF8')
+      @@utf8_utf16 = Iconv.new('UTF-16LE', 'UTF-8')
       @@utf16_ascii = Iconv.new('ASCII//TRANSLIT//IGNORE', 'UTF-16LE')
-      @@utf16_utf8 = Iconv.new('UTF8//TRANSLIT//IGNORE', 'UTF-16LE')
+      @@utf16_utf8 = Iconv.new('UTF-8//TRANSLIT//IGNORE', 'UTF-16LE')
       @@iconvs = {}
       def ascii string
         @@utf16_ascii.iconv string
