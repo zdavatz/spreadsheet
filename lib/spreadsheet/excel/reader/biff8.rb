@@ -150,7 +150,9 @@ module Biff8
   ##
   # Insert null-characters into a compressed UTF-16 string
   def wide string
-    string.split('').zip(Array.new(string.size, 0.chr)).join
+    data = ''
+    string.each_byte do |byte| data << byte.chr << 0.chr end
+    data
   end
   private
   ##
