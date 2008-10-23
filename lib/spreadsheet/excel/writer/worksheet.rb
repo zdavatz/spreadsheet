@@ -413,12 +413,92 @@ class Worksheet
     # ○  PHONETIC ➜ 6.73
     # ○  Conditional Formatting Table ➜ 5.12
     # ○  Hyperlink Table ➜ 5.13
+    write_hyperlink_table
     # ○  Data Validity Table ➜ 5.14
     # ○  SHEETLAYOUT ➜ 6.91 (BIFF8X only)
     # ○  SHEETPROTECTION Additional protection, ➜ 6.92 (BIFF8X only)
     # ○  RANGEPROTECTION Additional protection, ➜ 6.79 (BIFF8X only)
     # ●  EOF ➜ 6.36
     write_eof
+  end
+  def write_hlink row, col, link
+    # FIXME: only Hyperlinks are supported at present.
+    cell_range = [
+      row, row, # Cell range address of all cells containing this hyperlink
+      col, col, # (➜ 3.13.1)
+    ].pack 'v4'
+    guid = [
+      # GUID of StdLink:
+      # D0 C9 EA 79 F9 BA CE 11 8C 82 00 AA 00 4B A9 0B
+      # (79EAC9D0-BAF9-11CE-8C82-00AA004BA90B)
+      "d0c9ea79f9bace118c8200aa004ba90b",
+    ].pack 'H32'
+    opts  = 0x01
+    opts |= 0x02
+    opts |= 0x14 unless link == link.url
+    opts |= 0x08 if link.fragment
+    opts |= 0x80 if link.target_frame
+    # TODO: UNC support
+    options = [
+      2,        # Unknown value: 0x00000002
+      opts,     # Option flags
+                #     Bit  Mask        Contents
+                #       0  0x00000001  0 = No link extant
+                #                      1 = File link or URL
+                #       1  0x00000002  0 = Relative file path
+                #                      1 = Absolute path or URL
+                # 2 and 4  0x00000014  0 = No description
+                #                      1 (both bits) = Description
+                #       3  0x00000008  0 = No text mark
+                #                      1 = Text mark
+                #       7  0x00000080  0 = No target frame
+                #                      1 = Target frame
+                #       8  0x00000100  0 = File link or URL
+                #                      1 = UNC path (incl. server name)
+
+    ].pack('V2')
+    tail = []
+    unless link == link.url
+      desc = internal(link).dup << "\000\000"
+      tail.push [desc.size / 2].pack('V'), desc
+    end
+    if link.target_frame
+      frme = internal(link.target_frame).dup << "\000\000"
+      tail.push [frme.size / 2].pack('V'), frme
+    end
+    url = internal(link.url).dup << "\000\000"
+    tail.push [
+      # 6.53.2 Hyperlink containing a URL (Uniform Resource Locator)
+      # These data fields occur for links which are not local files or files
+      # in the local network (for instance HTTP and FTP links and e-mail
+      # addresses). The lower 9 bits of the option flags field must be
+      # 0.x00x.xx112 (x means optional, depending on hyperlink content). The
+      # GUID could be used to distinguish a URL from a file link.
+      # GUID of URL Moniker:
+      # E0 C9 EA 79 F9 BA CE 11 8C 82 00 AA 00 4B A9 0B
+      # (79EAC9E0-BAF9-11CE-8C82-00AA004BA90B)
+      'e0c9ea79f9bace118c8200aa004ba90b',
+      url.size  # Size of character array of the URL, including trailing zero
+                # word (us). There are us/2-1 characters in the following
+                # string.
+    ].pack('H32V'), url
+    if link.fragment
+      frag = internal(link.fragment).dup << "\000\000"
+      tail.push [frag.size / 2].pack('V'), frag
+    end
+    write_op opcode(:hlink), cell_range, guid, options, *tail
+  end
+  def write_hyperlink_table
+    # TODO: theoretically it's possible to write fewer records by combining
+    #       identical neighboring links in cell-ranges
+    links = []
+    @worksheet.each do |row|
+      row.each_with_index do |cell, idx|
+        if cell.is_a? Link
+          write_hlink row.idx, idx, cell
+        end
+      end
+    end
   end
   def write_iteration
     its = 0 # 0 = Iterations off; 1 = Iterations on

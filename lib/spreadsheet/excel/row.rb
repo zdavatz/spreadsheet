@@ -53,7 +53,9 @@ class Row < Spreadsheet::Row
   end
   def enriched_data idx, data # :nodoc:
     res = nil
-    if fmt = format(idx)
+    if link = @worksheet.links[[@idx, idx]]
+      res = link
+    elsif fmt = format(idx)
       res = if fmt.datetime? || fmt.time?
               _datetime data
             elsif fmt.date?

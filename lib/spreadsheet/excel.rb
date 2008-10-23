@@ -81,5 +81,8 @@ module Spreadsheet
         write row, col, data, format
       end
     end
+    def write_url row, col, url, string=url, format=nil
+      row(row)[col] = Link.new url, string
+    end
   end
 end

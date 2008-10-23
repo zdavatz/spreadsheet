@@ -30,6 +30,7 @@ module Spreadsheet
       @workbook = opts[:workbook]
       @rows = []
       @columns = []
+      @links = {}
     end
     ##
     # Add a Format to the Workbook. If you use Row#set_format, you should not
@@ -138,6 +139,14 @@ module Spreadsheet
       end.join(' ')
       sprintf "#<%s:0x%014x %s @rows[%i]>", self.class, object_id,
                                             variables, row_count
+    end
+    ## The last Row containing any data
+    def last_row
+      row(last_row_index)
+    end
+    ## The index of the last Row containing any data
+    def last_row_index
+      [dimensions[1] - 1, 0].max
     end
     ##
     # Replace the Row at _idx_ with the following arguments. Like #update_row,

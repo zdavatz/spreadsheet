@@ -44,8 +44,8 @@ module Spreadsheet
         enc = Encoding.find enc
       end
       assert_equal enc, book.encoding
-      assert_equal 23, book.formats.size
-      assert_equal 4, book.fonts.size
+      assert_equal 24, book.formats.size
+      assert_equal 5, book.fonts.size
       str1 = book.shared_string 0
       assert_equal @@iconv.iconv('Shared String'), str1
       str2 = book.shared_string 1
@@ -76,7 +76,7 @@ module Spreadsheet
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,1]
+      unuseds = [2,2,1,1,1,2,1,11,1,2]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -147,8 +147,8 @@ module Spreadsheet
         enc = Encoding.find enc
       end
       assert_equal enc, book.encoding
-      assert_equal 23, book.formats.size
-      assert_equal 4, book.fonts.size
+      assert_equal 24, book.formats.size
+      assert_equal 5, book.fonts.size
       str1 = book.shared_string 0
       assert_equal 'Shared String', str1
       str2 = book.shared_string 1
@@ -179,7 +179,7 @@ module Spreadsheet
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,1]
+      unuseds = [2,2,1,1,1,2,1,11,1,2]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -238,6 +238,11 @@ module Spreadsheet
       assert_equal 0.0001, row[0]
       row = sheet.row 9
       assert_equal 0.00009, row[0]
+      link = row[1]
+      assert_instance_of Link, link
+      assert_equal 'Link-Text', link
+      assert_equal 'http://scm.ywesee.com/spreadsheet', link.url
+      assert_equal 'http://scm.ywesee.com/spreadsheet', link.href
     end
     def test_version_excel95__ooffice__utf16
       Spreadsheet.client_encoding = 'UTF-16LE'
@@ -542,7 +547,7 @@ module Spreadsheet
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,1]
+      unuseds = [2,2,1,1,1,2,1,11,1,2]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -651,7 +656,7 @@ module Spreadsheet
       assert_equal 10, sheet.row_count
       assert_equal 11, sheet.column_count
       useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,1]
+      unuseds = [2,2,1,1,1,2,1,11,1,2]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -737,6 +742,9 @@ module Spreadsheet
       fmt = Format.new :color => 'aqua'
       sheet1[5,0] = 0.75
       sheet1.row(5).set_format 0, fmt
+      link = Link.new 'http://scm.ywesee.com/?p=spreadsheet;a=summary',
+                      'The Spreadsheet GitWeb'
+      sheet1[5,1] = link
       sheet1[6,0] = 1
       fmt = Format.new :color => 'green'
       sheet1.row(6).set_format 0, fmt
@@ -850,6 +858,11 @@ module Spreadsheet
       assert_equal 0.75, row[0]
       assert_equal 0.75, sheet[5,0]
       assert_equal 0.75, sheet.cell(5,0)
+      link = row[1]
+      assert_instance_of Link, link
+      url = @@iconv.iconv 'http://scm.ywesee.com/?p=spreadsheet;a=summary'
+      assert_equal @@iconv.iconv('The Spreadsheet GitWeb'), link
+      assert_equal url, link.url
       row = sheet.row 6
       assert_equal :green, row.format(0).font.color
       assert_equal 1, row[0]

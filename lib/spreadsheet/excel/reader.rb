@@ -1,6 +1,7 @@
 require 'spreadsheet/encodings'
 require 'spreadsheet/font'
 require 'spreadsheet/formula'
+require 'spreadsheet/link'
 require 'spreadsheet/excel/error'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/sst_entry'
@@ -384,6 +385,176 @@ class Reader
       # leave the Formula value blank
     end
   end
+  def read_hlink worksheet, work, pos, len
+    # 6.53.1 Common Record Contents
+    # Offset  Size  Contents
+    #      0     8  Cell range address of all cells containing this hyperlink
+    #               (➜ 3.13.1)
+    #      8    16  GUID of StdLink:
+    #               D0 C9 EA 79 F9 BA CE 11 8C 82 00 AA 00 4B A9 0B
+    #               (79EAC9D0-BAF9-11CE-8C82-00AA004BA90B)
+    #     24     4  Unknown value: 0x00000002
+    #     28     4  Option flags (see below)
+    #               Bit  Mask        Contents
+    #                 0  0x00000001  0 = No link extant
+    #                                1 = File link or URL
+    #                 1  0x00000002  0 = Relative file path
+    #                                1 = Absolute path or URL
+    #           2 and 4  0x00000014  0 = No description
+    #                                1 (both bits) = Description
+    #                 3  0x00000008  0 = No text mark
+    #                                1 = Text mark
+    #                 7  0x00000080  0 = No target frame
+    #                                1 = Target frame
+    #                 8  0x00000100  0 = File link or URL
+    #                                1 = UNC path (incl. server name)
+    #--------------------------------------------------------------------------
+    #   [32]     4  (optional, see option flags) Character count of description
+    #               text, including trailing zero word (dl)
+    #   [36]  2∙dl  (optional, see option flags) Character array of description
+    #               text, no Unicode string header, always 16-bit characters,
+    #               zero-terminated
+    #--------------------------------------------------------------------------
+    # [var.]     4  (optional, see option flags) Character count of target
+    #               frame, including trailing zero word (fl)
+    # [var.]  2∙fl  (optional, see option flags) Character array of target
+    #               frame, no Unicode string header, always 16-bit characters,
+    #               zero-terminated
+    #--------------------------------------------------------------------------
+    #   var.  var.  Special data (➜ 6.53.2 and following)
+    #--------------------------------------------------------------------------
+    # [var.]     4  (optional, see option flags) Character count of the text
+    #               mark, including trailing zero word (tl)
+    # [var.]  2∙tl  (optional, see option flags) Character array of the text
+    #               mark without “#” sign, no Unicode string header, always
+    #               16-bit characters, zero-terminated
+    firstrow, lastrow, firstcol, lastcol, guid, opts = work.unpack 'v4H32x4V'
+    has_link = opts & 0x0001
+    absolute = opts & 0x0002
+    desc     = opts & 0x0014
+    textmark = opts & 0x0008
+    target   = opts & 0x0080
+    unc      = opts & 0x0100
+    link = Link.new
+    url, description = nil
+    pos = 32
+    if desc > 0
+      description, pos = read_hlink_string work, pos
+      link << description
+    end
+    if target > 0
+      link.target_frame, pos = read_hlink_string work, pos
+    end
+    if unc > 0
+      # 6.53.4 Hyperlink to a File with UNC (Universal Naming Convention) Path
+      # These data fields are for UNC paths containing a server name (for
+      # instance “\\server\path\file.xls”). The lower 9 bits of the option
+      # flags field must be 1.x00x.xx112.
+      # Offset  Size  Contents
+      #      0     4  Character count of the UNC,
+      #               including trailing zero word (fl)
+      #      4  2∙fl  Character array of the UNC, no Unicode string header,
+      #               always 16-bit characters, zeroterminated.
+      link.url, pos = read_hlink_string work, pos
+    elsif has_link > 0
+      uid, = work.unpack "x#{pos}H32"
+      pos += 16
+      if uid == "e0c9ea79f9bace118c8200aa004ba90b"
+        # 6.53.2 Hyperlink containing a URL (Uniform Resource Locator)
+        # These data fields occur for links which are not local files or files
+        # in the local network (for instance HTTP and FTP links and e-mail
+        # addresses). The lower 9 bits of the option flags field must be
+        # 0.x00x.xx112 (x means optional, depending on hyperlink content). The
+        # GUID could be used to distinguish a URL from a file link.
+        # Offset  Size  Contents
+        #      0    16  GUID of URL Moniker:
+        #               E0 C9 EA 79 F9 BA CE 11 8C 82 00 AA 00 4B A9 0B
+        #               (79EAC9E0-BAF9-11CE-8C82-00AA004BA90B)
+        #     16     4  Size of character array of the URL, including trailing
+        #               zero word (us). There are us/2-1 characters in the
+        #               following string.
+        #     20    us  Character array of the URL, no Unicode string header,
+        #               always 16-bit characters, zeroterminated
+        size, = work.unpack "x#{pos}V"
+        pos += 4
+        data = work[pos, size].chomp "\000\000"
+        link.url = client data, 'UTF-16LE'
+        pos += size
+      else
+        # 6.53.3 Hyperlink to a Local File
+        # These data fields are for links to files on local drives. The path of
+        # the file can be complete with drive letter (absolute) or relative to
+        # the location of the workbook. The lower 9 bits of the option flags
+        # field must be 0.x00x.xxx12. The GUID could be used to distinguish a
+        # URL from a file link.
+        # Offset  Size  Contents
+        #      0    16  GUID of File Moniker:
+        #               03 03 00 00 00 00 00 00 C0 00 00 00 00 00 00 46
+        #               (00000303-0000-0000-C000-000000000046)
+        #     16     2  Directory up-level count. Each leading “..\” in the
+        #               file link is deleted and increases this counter.
+        #     18     4  Character count of the shortened file path and name,
+        #               including trailing zero byte (sl)
+        #     22    sl  Character array of the shortened file path and name in
+        #               8.3-DOS-format. This field can be filled with a long
+        #               file name too. No Unicode string header, always 8-bit
+        #               characters, zeroterminated.
+        #  22+sl    24  Unknown byte sequence:
+        #               FF FF AD DE 00 00 00 00
+        #               00 00 00 00 00 00 00 00
+        #               00 00 00 00 00 00 00 00
+        #  46+sl     4  Size of the following file link field including string
+        #               length field and additional data field (sz). If sz is
+        #               zero, nothing will follow (except a text mark).
+        # [50+sl]    4  (optional) Size of character array of the extended file
+        #               path and name (xl). There are xl/2 characters in the
+        #               following string.
+        # [54+sl]    2  (optional) Unknown byte sequence: 03 00
+        # [56+sl]   xl  (optional) Character array of the extended file path
+        #               and name (xl), no Unicode string header, always 16-bit
+        #               characters, not zero-terminated
+        uplevel, count = work.unpack "x#{pos}vV"
+        pos += 6
+        # TODO: short file path may have any of the OEM encodings. Find out which
+        #       and use the #client method to convert the encoding.
+        prefix = internal('..\\', 'UTF-8') * uplevel
+        link.dos = link.url = prefix << work[pos, count].chomp("\000")
+        pos += count + 24
+        total, size = work.unpack "x#{pos}V2"
+        pos += 10
+        if total > 0
+          link.url = client work[pos, size], 'UTF-16LE'
+          pos += size
+        end
+      end
+    else
+      # 6.53.5 Hyperlink to the Current Workbook
+      # In this case only the text mark field is present (optional with
+      # description).
+      # Example: The URL “#Sheet2!B1:C2” refers to the given range in the
+      # current workbook.
+      # The lower 9 bits of the option flags field must be 0.x00x.1x002.
+    end
+    if textmark > 0
+      link.fragment, _ = read_hlink_string work, pos
+    end
+    if link.empty?
+      link << link.href
+    end
+    firstrow.upto lastrow do |row|
+      firstcol.upto lastcol do |col|
+        worksheet.add_link row, col, link
+      end
+    end
+  end
+  def read_hlink_string work, pos
+    count, = work.unpack "x#{pos}V"
+    len = count * 2
+    pos += 4
+    data = work[pos, len].chomp "\000\000"
+    pos += len
+    [client(data, 'UTF-16LE'), pos]
+  end
   def read_index worksheet, work, pos, len
     # Offset  Size  Contents
     #      0     4  Not used
@@ -615,6 +786,8 @@ class Reader
       when :row        # ○○ Row Blocks ➜ 5.7
                        # ●  ROW ➜ 6.83
         set_row_address worksheet, work, pos, len
+      when :hlink
+        read_hlink worksheet, work, pos, len
       end
       previous = op
     end

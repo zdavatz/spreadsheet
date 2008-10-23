@@ -50,8 +50,8 @@ To access the values stored in a Row, treat the Row like an Array.
 
   row[0]
 
--> this will return a String, a Float, an Integer, a Formula or a Date or
-DateTime object - or nil if the cell is empty.
+-> this will return a String, a Float, an Integer, a Formula, a Link or a Date
+or DateTime object - or nil if the cell is empty.
 
 More information about the formatting of a cell can be found in the Format
 with the equivalent index

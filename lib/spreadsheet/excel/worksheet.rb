@@ -11,11 +11,15 @@ module Spreadsheet
 class Worksheet < Spreadsheet::Worksheet
   include Spreadsheet::Excel::Offset
   offset :dimensions
-  attr_reader :offset, :ole
+  attr_reader :offset, :ole, :links
   def initialize opts = {}
     super
     @offset, @ole, @reader = opts[:offset], opts[:ole], opts[:reader]
     @dimensions = nil
+    @links = {}
+  end
+  def add_link row, column, link
+    @links.store [row, column], link
   end
   def column idx
     ensure_rows_read

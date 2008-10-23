@@ -32,6 +32,7 @@ lib/spreadsheet/excel/writer/worksheet.rb
 lib/spreadsheet/font.rb
 lib/spreadsheet/format.rb
 lib/spreadsheet/formula.rb
+lib/spreadsheet/link.rb
 lib/spreadsheet/row.rb
 lib/spreadsheet/workbook.rb
 lib/spreadsheet/worksheet.rb
