@@ -242,11 +242,11 @@ module Spreadsheet
     def recalculate_dimensions # :nodoc:
       shorten @rows
       @dimensions = []
-      @dimensions[0] = index_of_first @rows
+      @dimensions[0] = index_of_first(@rows) || 0
       @dimensions[1] = @rows.size
       compact = @rows.compact
-      @dimensions[2] = compact.collect do |row| index_of_first row end.compact.min
-      @dimensions[3] = compact.collect do |row| row.size end.max
+      @dimensions[2] = compact.collect do |row| index_of_first row end.compact.min || 0
+      @dimensions[3] = compact.collect do |row| row.size end.max || 0
       @dimensions
     end
     def shorten ary # :nodoc:

@@ -78,17 +78,17 @@ class Worksheet < Spreadsheet::Worksheet
     shorten @rows
     @dimensions = []
     @dimensions[0] = [ index_of_first(@rows),
-                       index_of_first(@row_addresses) ].compact.min
-    @dimensions[1] = [ @rows.size, @row_addresses.size ].compact.max
+                       index_of_first(@row_addresses) ].compact.min || 0
+    @dimensions[1] = [ @rows.size, @row_addresses.size ].compact.max || 0
     compact = @rows.compact
     first_rows = compact.collect do |row| index_of_first row end.compact.min
     first_addrs = @row_addresses.compact.collect do |addr|
       addr[:first_used] end.min
-    @dimensions[2] = [ first_rows, first_addrs ].compact.min
+    @dimensions[2] = [ first_rows, first_addrs ].compact.min || 0
     last_rows = compact.collect do |row| row.size end.max
     last_addrs = @row_addresses.compact.collect do |addr|
       addr[:first_unused] end.max
-    @dimensions[3] = [last_rows, last_addrs].compact.max
+    @dimensions[3] = [last_rows, last_addrs].compact.max || 0
     @dimensions
   end
 end

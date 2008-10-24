@@ -30,6 +30,25 @@ module Spreadsheet
     ensure
       File.delete copy if File.exist? copy
     end
+    def test_empty_workbook
+      path = File.join @data, 'test_empty.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      assert_equal 8, book.biff_version
+      assert_equal 'Microsoft Excel 97/2000/XP', book.version_string
+      enc = 'UTF-16LE'
+      if defined? Encoding
+        enc = Encoding.find enc
+      end
+      assert_equal enc, book.encoding
+      assert_equal 21, book.formats.size
+      assert_equal 4, book.fonts.size
+      assert_equal 0, book.sst.size
+      sheet = book.worksheet 0
+      assert_equal 0, sheet.row_count
+      assert_equal 0, sheet.column_count
+      assert_nothing_raised do sheet.inspect end
+    end
     def test_version_excel97__ooffice__utf16
       Spreadsheet.client_encoding = 'UTF-16LE'
       assert_equal 'UTF-16LE', Spreadsheet.client_encoding

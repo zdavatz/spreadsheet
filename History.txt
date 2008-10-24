@@ -1,3 +1,13 @@
+=== 0.6.1.4 / 2008-10-24
+
+* 2 Bugfixes
+
+  * Removed obsolete code which triggered Iconv::InvalidEncoding
+    on Systems with non-gnu Iconv:
+    http://rubyforge.org/tracker/index.php?func=detail&aid=22541&group_id=678&atid=2677
+  * Handle empty Worksheets
+    (Thanks to Charles Lowe for the Patches)
+
 === 0.6.1.4 / 2008-10-23
 
 * 1 Bugfix
