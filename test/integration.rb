@@ -1062,5 +1062,24 @@ module Spreadsheet
                    sheet.name
       assert_not_nil sheet.offset
     end
+    def test_bignum
+      smallnum = 0x500000
+      bignum = smallnum + 1
+      book = Spreadsheet::Workbook.new
+      sheet = book.create_worksheet
+      sheet[0,0] = bignum
+      sheet[1,0] = -bignum
+      sheet[0,1] = smallnum
+      sheet[1,1] = -smallnum
+      path = File.join @var, 'test_big-number.xls'
+      book.write path
+      assert_nothing_raised do
+        book = Spreadsheet.open path
+      end
+      assert_equal bignum, book.worksheet(0)[0,0]
+      assert_equal -bignum, book.worksheet(0)[1,0]
+      assert_equal smallnum, book.worksheet(0)[0,1]
+      assert_equal -smallnum, book.worksheet(0)[1,1]
+    end
   end
 end

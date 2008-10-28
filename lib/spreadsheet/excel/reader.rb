@@ -54,13 +54,12 @@ class Reader
       integer &= 0xfffffffc
       value, = ("\0\0\0\0" << [integer].pack('V')).unpack EIGHT_BYTE_DOUBLE
     else
+      ## I can't find a format for unpacking a little endian signed integer.
+      #  'V' works for packing, but not for unpacking. But the following works
+      #  fine afaics:
+      unsigned, = (@bigendian ? work.reverse : work).unpack 'l'
       ## remove two bits
-      unsigned, = work.unpack 'V'
-      unsigned = unsigned >> 2
-      shifted = [unsigned].pack 'V'
-      ## I can't find a format for unpacking a little endian signed integer
-      shifted.reverse! if @bigendian
-      value, = shifted.unpack 'l'
+      value = unsigned >> 2
     end
     if cent == 1
       value /= 100.0
@@ -621,11 +620,7 @@ class Reader
     #      2     2  Index to column
     #      4     2  Index to XF record (➜ 6.115)
     #      6     8  IEEE 754 floating-point value (64-bit double precision)
-    row, column, xf, value = work.unpack 'v3E'
-    unless value
-      # on architectures where sizeof(double) > 8
-      value, = work.unpack 'x6e'
-    end
+    row, column, xf, value = work.unpack binfmt(:number)
     set_cell worksheet, row, column, xf, value
   end
   def read_rk worksheet, addr, work

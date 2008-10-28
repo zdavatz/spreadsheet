@@ -66,10 +66,8 @@ class Worksheet
       cent = 1
     end
     if value.is_a?(Integer)
-      shifted = [value].pack 'l'
-      ## I can't find a format for packing a little endian signed integer
-      shifted.reverse! if @bigendian
-      value, = shifted.unpack 'V'
+      ## although not documented as signed, 'V' appears to correctly pack
+      #  negative numbers.
       value <<= 2
     else
       # FIXME: precision of small numbers
@@ -172,8 +170,13 @@ class Worksheet
     multiples, first_idx = nil
     row.each_with_index do |cell, idx|
       cell = nil if cell == ''
-      number = cell.is_a?(Float) && cell.to_s.length > 5
-      if multiples && (!multiples.last.is_a?(cell.class) || number)
+      ## it appears that there are limitations to RK precision, both for
+      #  Integers and Floats, that lie well below 2^30 significant bits, or
+      #  Ruby's Bignum threshold. In that case we'll just write a Number
+      #  record
+      need_number = (cell.is_a?(Float) && cell.to_s.length > 5) \
+                      || (cell.is_a?(Numeric) && cell.abs > 0x500000)
+      if multiples && (!multiples.last.is_a?(cell.class) || need_number)
         write_multiples row, first_idx, multiples
         multiples, first_idx = nil
       end
@@ -197,7 +200,7 @@ class Worksheet
         #  10^9. Not sure what is a good rule of thumb here, but it seems that
         #  Decimal Numbers with more than 4 significant digits are not represented
         #  with sufficient precision by RK
-        if number
+        if need_number
           write_number row, idx
         elsif multiples
           multiples.push cell
