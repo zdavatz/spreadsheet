@@ -1,3 +1,18 @@
+=== 0.6.1.6 / 2008-10-28
+
+* 2 Bugfixes
+
+  * Fixed encoding and decoding of BigNums, negative and other large Numbers
+    http://rubyforge.org/tracker/index.php?func=detail&aid=22581&group_id=678&atid=2677
+  * Fix a bug where modifications to default columns weren't stored
+    http://rubyforge.org/forum/message.php?msg_id=61567
+
+* 1 minor enhancement
+
+  * Row#enriched_data won't return a Bogus-Date if the data isn't a Numeric
+    value
+    (Thanks to Bjørn Hjelle for the report)
+
 === 0.6.1.5 / 2008-10-24
 
 * 2 Bugfixes
