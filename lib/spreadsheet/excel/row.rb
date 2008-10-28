@@ -55,7 +55,7 @@ class Row < Spreadsheet::Row
     res = nil
     if link = @worksheet.links[[@idx, idx]]
       res = link
-    elsif fmt = format(idx)
+    elsif data.is_a?(Numeric) && fmt = format(idx)
       res = if fmt.datetime? || fmt.time?
               _datetime data
             elsif fmt.date?
