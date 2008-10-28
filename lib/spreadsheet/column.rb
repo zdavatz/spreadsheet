@@ -17,12 +17,27 @@ module Spreadsheet
   # #collapsed::      The Column is collapsed.
   # #outline_level::  Outline level of the column.
   class Column
+    class << self
+      def updater *keys
+        keys.each do |key|
+          unless instance_methods.include? "unupdated_#{key}="
+            alias_method :"unupdated_#{key}=", :"#{key}="
+            define_method "#{key}=" do |value|
+              send "unupdated_#{key}=", value
+              @worksheet.column_updated @idx, self if @worksheet
+              value
+            end
+          end
+        end
+      end
+    end
     include Datatypes
     include Enumerable
     attr_accessor :width, :worksheet
     attr_reader :default_format, :idx
     boolean :hidden, :collapsed
     enum :outline_level, 0, Integer
+    updater :width, :hidden, :outline_level
     def initialize idx, format, opts={}
       @idx = idx
       opts[:width] ||= 10
@@ -36,6 +51,8 @@ module Spreadsheet
     def default_format= format
       @worksheet.add_format format if @worksheet
       @default_format = format
+      @worksheet.column_updated @idx, self if @worksheet
+      format
     end
     ##
     # Iterate over all cells in this column.

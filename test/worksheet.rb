@@ -4,12 +4,13 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'test/unit'
-require 'spreadsheet/worksheet'
+require 'spreadsheet'
 
 module Spreadsheet
   class TestWorksheet < Test::Unit::TestCase
     def setup
-      @sheet = Worksheet.new
+      @book = Workbook.new
+      @sheet = @book.create_worksheet
     end
     def test_cell_writer
       assert_nil @sheet[0,0]
@@ -57,6 +58,15 @@ module Spreadsheet
       assert_equal 6, @sheet.row_count
       @sheet.replace_row 3
       assert_equal 4, @sheet.row_count
+    end
+    def test_modify_column
+      assert_equal 10, @sheet.column(0).width
+      @sheet.column(1).width = 20
+      assert_equal 10, @sheet.column(0).width
+      assert_equal 20, @sheet.column(1).width
+      @sheet.column(0).width = 30
+      assert_equal 30, @sheet.column(0).width
+      assert_equal 20, @sheet.column(1).width
     end
   end
 end

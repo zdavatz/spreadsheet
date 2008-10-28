@@ -54,6 +54,9 @@ module Spreadsheet
     def column_count
       dimensions[3] - dimensions[2]
     end
+    def column_updated idx, column
+      @columns[idx] = column
+    end
     ##
     # Delete the Row at _idx_ (0-based) from this Worksheet.
     def delete_row idx
