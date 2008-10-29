@@ -7,7 +7,7 @@ module Spreadsheet
       @io_or_path = io_or_path
     end
     def write workbook
-      if @io_or_path.is_a? IO
+      if @io_or_path.respond_to? :seek
         write_workbook workbook, @io_or_path
       else
         File.open(@io_or_path, "wb+") do |fh|
