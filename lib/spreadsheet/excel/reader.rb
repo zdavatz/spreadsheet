@@ -300,7 +300,7 @@ class Reader
     value = read_string work[2..-1], 2
     @formats.store idx, client(value, @workbook.encoding)
   end
-  def read_formula worksheet, work, pos, len
+  def read_formula worksheet, addr, work
     # Offset  Size  Contents
     #      0     2  Index to row
     #      2     2  Index to column
@@ -383,6 +383,7 @@ class Reader
     else
       # leave the Formula value blank
     end
+    set_cell worksheet, row, column, xf, formula
   end
   def read_hlink worksheet, work, pos, len
     # 6.53.1 Common Record Contents
@@ -661,6 +662,9 @@ class Reader
         when 0x0002    # INTEGER ➜ 6.56 (BIFF2 only)
           found = true
           # TODO: implement for BIFF2 support
+        when :formula  # FORMULA ➜ 6.46
+          found = true
+          read_formula worksheet, addr, work
         when :label    # LABEL ➜ 6.59 (BIFF2-BIFF7)
           found = true
           read_label worksheet, addr, work
