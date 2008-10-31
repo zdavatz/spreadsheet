@@ -635,9 +635,9 @@ class Reader
   end
   def read_row worksheet, addr
     row = addr[:index]
-    @current_row_block.fetch row do
+    @current_row_block.fetch [worksheet, row] do
       @current_row_block.clear
-      cells = @current_row_block[row] = Row.new(nil, row)
+      cells = @current_row_block[[worksheet, row]] = Row.new(nil, row)
       @pos = addr[:offset]
       found = false
       while tuple = get_next_chunk
@@ -969,7 +969,7 @@ class Reader
     @workbook.add_format fmt
   end
   def set_cell worksheet, row, column, xf, value=nil
-    cells = @current_row_block[row] ||= Row.new(nil, row)
+    cells = @current_row_block[[worksheet, row]] ||= Row.new(nil, row)
     cells.formats[column] = @workbook.format(xf) unless xf == 0
     cells[column] = value
   end
