@@ -20,6 +20,11 @@ class Row < Spreadsheet::Row
   def datetime idx
     _datetime at(idx)
   end
+  def each &block
+    size.times do |idx|
+      block.call self[idx]
+    end
+  end
   ##
   # Access data in this Row like you would in an Array. If a cell is formatted
   # as a Date or DateTime, the decoded Date or DateTime value is returned.

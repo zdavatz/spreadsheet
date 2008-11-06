@@ -44,6 +44,10 @@ class Workbook < Spreadsheet::Workbook
   def add_shared_string str
     @sst.push str
   end
+  def add_worksheet worksheet
+    @changes.store :boundsheets, true
+    super
+  end
   def biff_version
     case @bof
     when 0x009

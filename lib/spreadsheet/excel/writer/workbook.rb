@@ -154,11 +154,17 @@ class Workbook < Spreadsheet::Writer
     sst_strings.each_with_index do |str, idx| sst.store str, idx end
     sheets = worksheets(workbook)
     positions = []
+    newsheets = []
     sheets.each do |sheet|
       @sst[sheet] = sst
       pos, len = workbook.offsets[sheet.worksheet]
-      positions.push pos
-      sheet.write_changes reader, pos + len, sst_status
+      if pos
+        positions.push pos
+        sheet.write_changes reader, pos + len, sst_status
+      else
+        newsheets.push sheet
+        sheet.write_from_scratch
+      end
       sheet_data[sheet.worksheet] = sheet.data
     end
     Ole::Storage.open io do |ole|
@@ -202,6 +208,9 @@ class Workbook < Spreadsheet::Writer
           reader.seek lastpos
         end
         writer.write reader.read
+        newsheets.each do |sheet|
+          writer.write sheet.data
+        end
       end
     end
   end
