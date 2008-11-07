@@ -1,3 +1,17 @@
+=== 0.6.1.9 / 2008-11-07
+
+* 1 Bugfix
+
+  * Fixes a precision-issue in Excel::Row#datetime: Excel records Time-Values
+    with more significant bits (but not necessarily more precise) than
+    DateTime can handle.
+    (Thanks to Bjørn Hjelle for the Bugreport)
+
+* 1 minor enhancement
+
+  * Added support for appending Worksheets to a Workbook
+    (Thanks to Mohammed Rabbani for the report)
+
 === 0.6.1.8 / 2008-10-31
 
 * 1 Bugfix
