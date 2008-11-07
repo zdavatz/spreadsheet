@@ -112,6 +112,7 @@ class Reader
     extend_internals biff
     read_workbook
     @workbook.default_format = @workbook.format 0
+    @workbook.changes.clear
     @workbook
   end
   def read_blank worksheet, addr, work
