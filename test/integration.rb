@@ -502,6 +502,20 @@ module Spreadsheet
       assert_instance_of Excel::Worksheet, sheet
       assert_equal sheet, book.worksheet("S\000h\000e\000e\000t\0001\000")
     end
+    def test_datetime
+      path = File.join @data, 'test_datetime.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      time = sheet[0,0]
+      assert_equal 22, time.hour
+      assert_equal 00, time.min
+      assert_equal 00, time.sec
+      time = sheet[1,0]
+      assert_equal 22, time.hour
+      assert_equal 30, time.min
+      assert_equal 45, time.sec
+    end
     def test_change_encoding
       path = File.join @data, 'test_version_excel95.xls'
       book = Spreadsheet.open path

@@ -54,7 +54,11 @@ class Row < Spreadsheet::Row
   def _datetime data # :nodoc:
     return data if data.is_a?(DateTime)
     date = _date data
-    DateTime.new(date.year, date.month, date.day) + (data.to_f % 1)
+    hour = (data % 1) * 24
+    min  = (hour % 1) * 60
+    sec  = (min  % 1) * 60
+    DateTime.new(date.year, date.month, date.day,
+                 hour.to_i, min.to_i, sec.round)
   end
   def enriched_data idx, data # :nodoc:
     res = nil
