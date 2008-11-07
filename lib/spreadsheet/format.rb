@@ -160,7 +160,7 @@ module Spreadsheet
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !!/([YMD].*[hms])|([hms].*[YMD])/.match(@number_format.to_s)
+      !!/([YMD].*[HS])|([HS].*[YMD])/.match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Time?
