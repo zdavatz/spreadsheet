@@ -99,7 +99,7 @@ module Internals
     :labelsst   => 'v3V',
     :number     => "v3#{EIGHT_BYTE_DOUBLE}",
     :rk         => 'v3V',
-    :row        => 'v5Cv',
+    :row        => 'v4x4V',
     :xf         => 'v3C4V2v',
   }
   # From BIFF5 on, the built-in number formats will be omitted. The built-in
@@ -339,6 +339,7 @@ module Internals
     :distributed => 4,
   }
   NGILA_V_FX = XF_V_ALIGN.invert
+  OPCODE_SIZE = 4
   def binfmt key
     BINARY_FORMATS[key]
   end

@@ -26,12 +26,12 @@ class << self
       define_method "#{key}?" do
         !!instance_variable_get("@#{key}")
       end
-      define_method "#{key}!" do
-        instance_variable_set("@#{key}", true)
-      end
       define_method "#{key}=" do |arg|
         arg = false if arg == 0
         instance_variable_set("@#{key}", !!arg)
+      end
+      define_method "#{key}!" do
+        send "#{key}=", true
       end
     end
   end

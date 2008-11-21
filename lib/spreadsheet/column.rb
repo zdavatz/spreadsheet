@@ -37,7 +37,7 @@ module Spreadsheet
     attr_reader :default_format, :idx
     boolean :hidden, :collapsed
     enum :outline_level, 0, Integer
-    updater :width, :hidden, :outline_level
+    updater :collapsed, :hidden, :outline_level, :width
     def initialize idx, format, opts={}
       @idx = idx
       opts[:width] ||= 10

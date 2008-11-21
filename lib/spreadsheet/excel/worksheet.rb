@@ -43,7 +43,9 @@ class Worksheet < Spreadsheet::Worksheet
     @rows.fetch idx do
       if addr = @row_addresses[idx]
         row = @reader.read_row self, addr
-        row.default_format = addr[:default_format]
+        [:default_format, :height, :outline_level, :hidden, ].each do |key|
+          row.send "#{key}=", addr[key]
+        end
         row.worksheet = self
         row
       else
@@ -51,7 +53,7 @@ class Worksheet < Spreadsheet::Worksheet
       end
     end
   end
-  def row_updated idx, row
+  def row_updated idx, row, args={}
     res = super
     @workbook.changes.store self, true
     @workbook.changes.store :boundsheets, true

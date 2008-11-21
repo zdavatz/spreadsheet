@@ -15,12 +15,30 @@ module Spreadsheet
   #                   Format is stored in #formats for the cell.
   # #height::         The height of this Row in points (defaults to 12).
   class Row < Array
+    include Datatypes
     class << self
+      def format_updater *keys
+        keys.each do |key|
+          unless instance_methods.include? "unupdated_#{key}="
+            alias_method :"unupdated_#{key}=", :"#{key}="
+            define_method "#{key}=" do |value|
+              send "unupdated_#{key}=", value
+              if @worksheet
+                @formatted = true
+                @worksheet.row_updated @idx, self, :formatted => true
+              end
+              value
+            end
+          end
+        end
+      end
       def updater *keys
         keys.each do |key|
           define_method key do |*args|
             res = super
-            @worksheet.row_updated @idx, self if @worksheet
+            if @worksheet
+              @worksheet.row_updated @idx, self, :formatted => @formatted
+            end
             res
           end
         end
@@ -28,9 +46,12 @@ module Spreadsheet
     end
     attr_reader :formats, :default_format
     attr_accessor :idx, :height, :worksheet
+    boolean :hidden, :collapsed
+    enum :outline_level, 0, Integer
     updater :[]=, :clear, :concat, :delete, :delete_if, :fill, :insert, :map!,
             :pop, :push, :reject!, :replace, :reverse!, :shift, :slice!,
             :sort!, :uniq!, :unshift
+    format_updater :collapsed, :height, :hidden, :outline_level
     def initialize worksheet, idx, cells=[]
       @worksheet = worksheet
       @idx = idx
@@ -48,6 +69,7 @@ module Spreadsheet
     # stored for the cell.
     def default_format= format
       @worksheet.add_format format if @worksheet
+      @worksheet.row_updated @idx, self, :formatted => true if @worksheet
       @default_format = format
     end
     ##
@@ -71,7 +93,7 @@ module Spreadsheet
     def set_format idx, fmt
       @formats[idx] = fmt
       @worksheet.add_format fmt
-      @worksheet.row_updated @idx, self if @worksheet
+      @worksheet.row_updated @idx, self, :formatted => true if @worksheet
       fmt
     end
     def inspect

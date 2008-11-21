@@ -749,6 +749,23 @@ module Spreadsheet
       row = sheet.row 9
       assert_equal 0.00009, row[0]
     end
+    def test_write_to_stringio
+      book = Spreadsheet::Excel::Workbook.new
+      sheet = book.create_worksheet :name => 'My Worksheet'
+      sheet[0,0] = 'my cell'
+      data = StringIO.new ''
+      assert_nothing_raised do
+        book.write data
+      end
+      assert_nothing_raised do
+        book = Spreadsheet.open data
+      end
+      assert_instance_of Spreadsheet::Excel::Workbook, book
+      assert_equal 1, book.worksheets.size
+      sheet = book.worksheet 0
+      assert_equal 'My Worksheet', sheet.name
+      assert_equal 'my cell', sheet[0,0]
+    end
     def test_write_new_workbook
       book = Spreadsheet::Excel::Workbook.new
       path = File.join @var, 'test_write_workbook.xls'
@@ -764,6 +781,7 @@ module Spreadsheet
       sheet1.format_column 3, Format.new(:weight => :bold, :color => :red)
       sheet1.format_column 6..9, fmt1
       sheet1.format_column [4,5,7], fmt2
+      sheet1.row(0).height = 20
       sheet1[0,0] = str1
       sheet1.row(0).push str1
       sheet1.row(1).concat [str2, str2]
@@ -811,6 +829,10 @@ module Spreadsheet
       assert_equal 'b', sheet1[9,1]
       assert_equal 'c', sheet1[9,2]
       sheet1.delete_row 9
+      row = sheet1.row(11)
+      row.height = 40
+      row.push 'x'
+      row.pop
       sheet2 = book.create_worksheet :name => 'my name'
       book.write path
       Spreadsheet.client_encoding = 'UTF-16LE'
@@ -854,6 +876,7 @@ module Spreadsheet
       assert_equal 20, col.width
       row = sheet.row 0
       assert_equal col.default_format, row.format(1)
+      assert_equal 20, row.height
       assert_equal str1, row[0]
       assert_equal str1, sheet[0,0]
       assert_equal str1, sheet.cell(0,0)
@@ -936,6 +959,7 @@ module Spreadsheet
       assert_equal 100.005, sheet1[10,2]
       assert_equal 10.0005, sheet1[10,3]
       assert_equal 1.00005, sheet1[10,4]
+      assert_equal 40, sheet1.row(11).height
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
       assert_equal "m\000y\000 \000n\000a\000m\000e\000",
@@ -972,6 +996,8 @@ module Spreadsheet
       fmt = Format.new :number_format => "D\0D\0.\0M\0M\0.\0Y\0Y\0Y\0Y\0"
       sheet1.row(6).set_format 1, fmt
       sheet1.update_row 7, nil, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+      sheet1.row(8).default_format = fmt
+      sheet1[8,0] = @@iconv.iconv 'formatted when empty'
       sheet2 = book.create_worksheet :name => "m\0y\0 \0n\0a\0m\0e\0"
       book.write path
       Spreadsheet.client_encoding = 'UTF-8'
@@ -1070,14 +1096,32 @@ module Spreadsheet
       assert_equal [1,2,3,4,5,6,7,8,9,0], row[1,10]
       assert_equal [1,2,3,4,5,6,7,8,9,0], sheet[7,1..10]
       assert_equal [1,2,3,4,5,6,7,8,9,0], sheet.cell(7,1..10)
+      row = sheet.row 8
+      assert_equal 'formatted when empty', row[0]
+      assert_not_nil row.default_format
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
       assert_equal "my name",
                    sheet.name
       assert_not_nil sheet.offset
     end
+    def test_template
+      template = File.join @data, 'test_copy.xls'
+      output = File.join @var, 'test_template.xls'
+      book = Spreadsheet.open template
+      sheet1 = book.worksheet 0
+      sheet1.row(4).replace [ 'Daniel J. Berger', 'U.S.A.',
+        'Author of original code for Spreadsheet::Excel' ]
+      book.write output
+      assert_nothing_raised do
+        book = Spreadsheet.open output
+      end
+      sheet = book.worksheet 0
+      row = sheet.row(4)
+      assert_equal 'Daniel J. Berger', row[0]
+    end
     def test_bignum
-      smallnum = 0x500000
+      smallnum = 0x1fffffff
       bignum = smallnum + 1
       book = Spreadsheet::Workbook.new
       sheet = book.create_worksheet
@@ -1085,6 +1129,10 @@ module Spreadsheet
       sheet[1,0] = -bignum
       sheet[0,1] = smallnum
       sheet[1,1] = -smallnum
+      sheet[0,2] = bignum - 0.1
+      sheet[1,2] = -bignum - 0.1
+      sheet[0,3] = smallnum - 0.1
+      sheet[1,3] = -smallnum - 0.1
       path = File.join @var, 'test_big-number.xls'
       book.write path
       assert_nothing_raised do
@@ -1094,6 +1142,10 @@ module Spreadsheet
       assert_equal -bignum, book.worksheet(0)[1,0]
       assert_equal smallnum, book.worksheet(0)[0,1]
       assert_equal -smallnum, book.worksheet(0)[1,1]
+      assert_equal bignum - 0.1, book.worksheet(0)[0,2]
+      assert_equal -bignum - 0.1, book.worksheet(0)[1,2]
+      assert_equal smallnum - 0.1, book.worksheet(0)[0,3]
+      assert_equal -smallnum - 0.1, book.worksheet(0)[1,3]
     end
   end
 end

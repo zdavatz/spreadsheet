@@ -1,5 +1,6 @@
 require 'stringio'
 require 'spreadsheet/excel/writer/biff8'
+require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/internals/biff8'
 
 module Spreadsheet
@@ -61,9 +62,13 @@ class Worksheet
     cent = 0
     int = 2
     higher = value * 100
-    if higher == higher.to_i
-      value = higher.to_i
+    if higher.is_a?(Float) && higher < 0xfffffffc
       cent = 1
+      if higher == higher.to_i
+        value = higher.to_i
+      else
+        value = higher
+      end
     end
     if value.is_a?(Integer)
       ## although not documented as signed, 'V' appears to correctly pack
@@ -79,6 +84,11 @@ class Worksheet
   end
   def name
     unicode_string @worksheet.name
+  end
+  def need_number? cell
+    (cell.is_a?(Numeric) && cell.abs > 0x1fffffff) \
+      || (cell.is_a?(Float) \
+          && !/^[\000\001]\000{3}/.match([cell * 100].pack(EIGHT_BYTE_DOUBLE)))
   end
   def row_blocks
     # All cells in an Excel document are divided into blocks of 32 consecutive
@@ -174,8 +184,7 @@ class Worksheet
       #  Integers and Floats, that lie well below 2^30 significant bits, or
       #  Ruby's Bignum threshold. In that case we'll just write a Number
       #  record
-      need_number = (cell.is_a?(Float) && cell.to_s.length > 5) \
-                      || (cell.is_a?(Numeric) && cell.abs > 0x500000)
+      need_number = need_number? cell
       if multiples && (!multiples.last.is_a?(cell.class) || need_number)
         write_multiples row, first_idx, multiples
         multiples, first_idx = nil
@@ -223,19 +232,44 @@ class Worksheet
     blocks = row_blocks
     lastpos = reader.pos
     offsets = {}
+    row_offsets = []
+    changes = @worksheet.changes
     @worksheet.offsets.each do |key, pair|
-      if @worksheet.changes.include?(key) \
+      if changes.include?(key) \
         || (sst_status == :complete_update && key.is_a?(Integer))
         offsets.store pair, key
       end
     end
-    offsets.invert.sort_by do |key, (pos, len)|
-      pos
-    end.each do |key, (pos, len)|
-      @io.write reader.read(pos - lastpos)
+    ## FIXME it may be smarter to simply write all rowblocks, instead of doing a
+    #        song-and-dance routine for every row...
+    work = offsets.invert
+    work.each do |key, (pos, len)|
+      case key
+      when Integer
+        row_offsets.push [key, [pos, len]]
+      when :dimensions
+        row_offsets.push [-1, [pos, len]]
+      end
+    end
+    row_offsets.sort!
+    row_offsets.reverse!
+    @worksheet.each do |row|
+      key = row.idx
+      if changes.include?(key) && !work.include?(key)
+        row, pair = row_offsets.find do |idx, _| idx <= key end
+        work.store key, pair
+      end
+    end
+    work = work.sort_by do |key, (pos, len)|
+      [pos, key.is_a?(Integer) ? key : -1]
+    end
+    work.each do |key, (pos, len)|
+      @io.write reader.read(pos - lastpos) if pos > lastpos
       if key.is_a?(Integer)
-        block = blocks.find do |rows| rows.any? do |row| row.idx == key end end
-        write_rowblock block
+        if block = blocks.find do |rows| rows.any? do |row| row.idx == key end end
+          write_rowblock block
+          blocks.delete block
+        end
       else
         send "write_#{key}"
       end
@@ -552,7 +586,11 @@ class Worksheet
     when NilClass
       write_mulblank row, idx, multiples
     when Numeric
-      write_mulrk row, idx, multiples
+      if multiples.size > 1
+        write_mulrk row, idx, multiples
+      else
+        write_rk row, idx
+      end
     end
   end
   ##
@@ -600,37 +638,61 @@ class Worksheet
     #                 15  0x8000  0 = Row has custom height;
     #                             1 = Row has default height
     #      8     2  Not used
-    #     10     1  0 = No defaults written;
-    #               1 = Default row attribute field and XF index occur below (fl)
-    #     11     2  Relative offset to calculate stream position of the first
-    #               cell record for this row (➜ 5.7.1)
-    #   [13]     3  (written only if fl = 1) Default row attributes (➜ 3.12)
-    #   [16]     2  (written only if fl = 1) Index to XF record (➜ 6.115)
-    has_defaults = row.default_format ? 1 : 0
+    #     10     2  In BIFF3-BIFF4 this field contains a relative offset to
+    #               calculate stream position of the first cell record for this
+    #               row (➜ 5.7.1). In BIFF5-BIFF8 this field is not used
+    #               anymore, but the DBCELL record (➜ 6.26) instead.
+    #     12     4  Option flags and default row formatting:
+    #                  Bit  Mask        Contents
+    #                  2-0  0x00000007  Outline level of the row
+    #                    4  0x00000010  1 = Outline group starts or ends here
+    #                                       (depending on where the outline
+    #                                       buttons are located, see WSBOOL
+    #                                       record, ➜ 6.113), and is collapsed
+    #                    5  0x00000020  1 = Row is hidden (manually, or by a
+    #                                       filter or outline group)
+    #                    6  0x00000040  1 = Row height and default font height
+    #                                       do not match
+    #                    7  0x00000080  1 = Row has explicit default format (fl)
+    #                    8  0x00000100  Always 1
+    #                27-16  0x0fff0000  If fl = 1: Index to default XF record
+    #                                              (➜ 6.115)
+    #                   28  0x10000000  1 = Additional space above the row.
+    #                                       This flag is set, if the upper
+    #                                       border of at least one cell in this
+    #                                       row or if the lower border of at
+    #                                       least one cell in the row above is
+    #                                       formatted with a thick line style.
+    #                                       Thin and medium line styles are not
+    #                                       taken into account.
+    #                   29  0x20000000  1 = Additional space below the row.
+    #                                       This flag is set, if the lower
+    #                                       border of at least one cell in this
+    #                                       row or if the upper border of at
+    #                                       least one cell in the row below is
+    #                                       formatted with a medium or thick
+    #                                       line style. Thin line styles are
+    #                                       not taken into account.
+    height = row.height || 12 # FIXME: where is the default font height?
+    opts = row.outline_level & 0x00000007
+    opts |= 0x00000010 if row.collapsed?
+    opts |= 0x00000020 if row.hidden?
+    opts |= 0x00000040 if height != 12 # FIXME: where is the default font height?
+    if fmt = row.default_format
+      xf_idx = @workbook.xf_index @worksheet.workbook, fmt
+      opts |= 0x00000080
+      opts |= xf_idx << 16
+    end
+    opts |= 0x00000100
+    # TODO: Row spacing
     data = [
       row.idx,
       row.first_used,
       row.first_unused,
-      row.height * TWIPS,
-      0, # Not used
-      has_defaults,
-      0, # OOffice does not set this - ignore until someone complains
-      1,
-      15,
-      0,
-    ]
-    # OpenOffice apparently can't read Rows with a length other than 16 Bytes
-    fmt = binfmt(:row) + 'C3'
-=begin
-    if format = row.default_format
-      fmt = fmt + 'xv'
-      data.concat [
-        #0, # Row attributes should only matter in BIFF2
-        workbook.xf_index(@worksheet.workbook, format),
-      ]
-    end
-=end
-    write_op opcode(:row), data.pack(fmt)
+      height * TWIPS,
+      opts,
+    ].pack binfmt(:row)
+    write_op opcode(:row), data
   end
   def write_rowblock block
     # ●● ROW Properties of the used rows

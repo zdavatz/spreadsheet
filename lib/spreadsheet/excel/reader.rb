@@ -16,7 +16,6 @@ module Spreadsheet
 class Reader
   include Spreadsheet::Encodings
   include Spreadsheet::Excel::Internals
-  OPCODE_SIZE = 4
   ROW_BLOCK_OPS = [
     :blank, :boolerr, :dbcell, :formula, :label, :labelsst, :mulblank, :mulrk,
     :number, :rk, :rstring,
@@ -986,29 +985,66 @@ class Reader
     #                 15  0x8000  0 = Row has custom height;
     #                             1 = Row has default height
     #      8     2  Not used
-    #     10     1  0 = No defaults written;
-    #               1 = Default row attribute field and XF index occur below (fl)
-    #     11     2  Relative offset to calculate stream position of the first
-    #               cell record for this row (➜ 5.7.1)
-    #   [13]     3  (written only if fl = 1) Default row attributes (➜ 3.12)
-    #   [16]     2  (written only if fl = 1) Index to XF record (➜ 6.115)
+    #     10     2  In BIFF3-BIFF4 this field contains a relative offset to
+    #               calculate stream position of the first cell record for this
+    #               row (➜ 5.7.1). In BIFF5-BIFF8 this field is not used
+    #               anymore, but the DBCELL record (➜ 6.26) instead.
+    #     12     4  Option flags and default row formatting:
+    #                  Bit  Mask        Contents
+    #                  2-0  0x00000007  Outline level of the row
+    #                    4  0x00000010  1 = Outline group starts or ends here
+    #                                       (depending on where the outline
+    #                                       buttons are located, see WSBOOL
+    #                                       record, ➜ 6.113), and is collapsed
+    #                    5  0x00000020  1 = Row is hidden (manually, or by a
+    #                                       filter or outline group)
+    #                    6  0x00000040  1 = Row height and default font height
+    #                                       do not match
+    #                    7  0x00000080  1 = Row has explicit default format (fl)
+    #                    8  0x00000100  Always 1
+    #                27-16  0x0fff0000  If fl = 1: Index to default XF record
+    #                                              (➜ 6.115)
+    #                   28  0x10000000  1 = Additional space above the row.
+    #                                       This flag is set, if the upper
+    #                                       border of at least one cell in this
+    #                                       row or if the lower border of at
+    #                                       least one cell in the row above is
+    #                                       formatted with a thick line style.
+    #                                       Thin and medium line styles are not
+    #                                       taken into account.
+    #                   29  0x20000000  1 = Additional space below the row.
+    #                                       This flag is set, if the lower
+    #                                       border of at least one cell in this
+    #                                       row or if the upper border of at
+    #                                       least one cell in the row below is
+    #                                       formatted with a medium or thick
+    #                                       line style. Thin line styles are
+    #                                       not taken into account.
     @current_row_block_offset ||= [pos]
-    index, first_used, first_unused, flags,
-      hasdefaults, offset = work.unpack binfmt(:row)
+    index, first_used, first_unused, height, flags = work.unpack binfmt(:row)
+    height &= 0x7fff
     format = nil
     # TODO: read attributes from work[13,3], read flags
-    if hasdefaults > 0 && work.size > 13
-      xf, = work[-2..-1].unpack 'v'
-      format = @workbook.format(xf)
+    attrs = {
+      :default_format => format,
+      :first_used     => first_used,
+      :first_unused   => first_unused,
+      :index          => index,
+      :row_block      => @current_row_block_offset,
+      :offset         => @current_row_block_offset[0],
+      :outline_level  => flags & 0x00000007,
+      :collapsed      => (flags & 0x0000010) > 0,
+      :hidden         => (flags & 0x0000020) > 0,
+    }
+    if (flags & 0x00000040) > 0
+      attrs.store :height, height / TWIPS
     end
-    worksheet.set_row_address index,
-                              :default_format => format,
-                              :first_used     => first_used,
-                              :first_unused   => first_unused,
-                              :index        => index,
-                              :row_block    => @current_row_block_offset,
-                              :offset       => @current_row_block_offset[0]
-                              #:first_cell   => offset
+    if (flags & 0x00000080) > 0
+      xf = (flags & 0x0fff0000) >> 16
+      attrs.store :default_format, @workbook.format(xf)
+    end
+    # TODO: Row spacing
+    worksheet.set_row_address index, attrs
   end
   private
   def extend_internals version

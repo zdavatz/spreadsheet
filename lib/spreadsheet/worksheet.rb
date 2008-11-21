@@ -173,9 +173,12 @@ module Spreadsheet
     ##
     # Tell Worksheet that the Row at _idx_ has been updated and the #dimensions
     # need to be recalculated. You should not need to call this directly.
-    def row_updated idx, row
+    def row_updated idx, row, opts={}
       @dimensions = nil
-      row = @rows[idx] = shorten(row)
+      unless opts[:formatted]
+        row = shorten(row)
+      end
+      @rows[idx] = row
       format_dates row
       row
     end

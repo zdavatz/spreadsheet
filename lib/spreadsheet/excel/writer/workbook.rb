@@ -76,7 +76,7 @@ class Workbook < Spreadsheet::Writer
     total = current.size
     current.uniq!
     current.delete ''
-    if (stored - current).empty?
+    if (stored - current).empty? && !stored.empty?
       ## if all previously stored strings are still needed, we don't have to
       #  rewrite all cells because the sst-index of such string does not change.
       additions = current - stored
@@ -198,8 +198,20 @@ class Workbook < Spreadsheet::Writer
               writer.write reader.read(pos - lastpos)
               buffer.rewind
               writer.write buffer.read
-            else
+            elsif sst.empty? || workbook.biff_version < 8
               write_boundsheets workbook, writer, oldoffset + bytechange
+            else
+              write_sst workbook, buffer, writer.pos
+              write_boundsheets workbook, writer, oldoffset + buffer.size
+              pos = lastpos
+              len = positions.min - lastpos
+              if len > OPCODE_SIZE
+                reader.seek pos
+                writer.write reader.read(len - OPCODE_SIZE)
+              end
+              buffer.rewind
+              writer.write buffer.read
+              write_eof workbook, writer
             end
           else
             send "write_#{key}", workbook, writer
