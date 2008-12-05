@@ -40,7 +40,7 @@ class Worksheet < Spreadsheet::Worksheet
   end
   def row idx
     ensure_rows_read
-    @rows.fetch idx do
+    @rows[idx] or begin
       if addr = @row_addresses[idx]
         row = @reader.read_row self, addr
         [:default_format, :height, :outline_level, :hidden, ].each do |key|
