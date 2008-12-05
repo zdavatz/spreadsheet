@@ -770,10 +770,12 @@ module Spreadsheet
       book = Spreadsheet::Excel::Workbook.new
       path = File.join @var, 'test_write_workbook.xls'
       sheet1 = book.create_worksheet
-      str1 = 'Shared String'
+      str1 = 'My Shared String'
       str2 = 'Another Shared String'
-      str3 = '1234567890 ' * 1000
-      str4 = '9876543210 ' * 1000
+      assert_equal 1, (str1.size + str2.size) % 2, 
+        "str3 should start at an odd offset to test splitting of wide strings"
+      str3 = '–––––––––– ' * 1000
+      str4 = '1234567890 ' * 1000
       fmt1 = Format.new :italic => true, :color => :blue
       sheet1.format_column 1, fmt1, :width => 20
       fmt2 = Format.new(:weight => :bold, :color => :yellow)
@@ -844,7 +846,10 @@ module Spreadsheet
       assert_equal 'UTF-16LE', book.encoding
       assert_equal str1, book.shared_string(0)
       assert_equal str2, book.shared_string(1)
-      test = book.shared_string 2
+      test = nil
+      assert_nothing_raised "I've probably split a two-byte-character" do
+        test = book.shared_string 2
+      end
       if test != str3
         str3.size.times do |idx|
           len = idx.next

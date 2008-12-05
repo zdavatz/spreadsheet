@@ -38,7 +38,7 @@ module Biff8
     wide = opts & 1
     owing = @incomplete_sst.continued_chars
     size = [work.size, owing * (1 + wide) + 1].min
-    chars = size - 1 / (1 + wide)
+    chars = (size - 1) / (1 + wide)
     @incomplete_sst.continue oppos + OPCODE_SIZE, size, chars
     unless @incomplete_sst.continued?
       @incomplete_sst = nil

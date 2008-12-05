@@ -474,17 +474,18 @@ class Workbook < Spreadsheet::Writer
     data = [total, sst_size].pack 'V2'
     op = 0x00fc
     wide = 0
-    header =
     offsets = []
     strings.each_with_index do |string, idx|
       sst.store string, idx
       op_offset = data.size + 4
       offsets.push [offset + writer.pos + op_offset, op_offset] if idx % 8 == 0
-      header, packed, wide = _unicode_string string, 2
+      header, packed, next_wide = _unicode_string string, 2
+      # the first few bytes (header + first character) must not be split
       must_fit = header.size + wide + 1
       while data.size + must_fit > @recordsize_limit
         op, data, wide = write_string_part writer, op, data, wide
       end
+      wide = next_wide
       data << header << packed
     end
     until data.empty?
@@ -497,7 +498,17 @@ class Workbook < Spreadsheet::Writer
   end
   def write_string_part writer, op, data, wide
     bef = data.size
-    data = write_op writer, op, data
+    ## if we're writing wide characters, we need to make sure we don't cut
+    #  characters in half
+    if wide > 0 && data.size > @recordsize_limit
+      remove = @recordsize_limit - data.size
+      remove -= remove % 2
+      rest = data.slice!(remove..-1)
+      write_op writer, op, data
+      data = rest
+    else
+      data = write_op writer, op, data
+    end
     op = 0x003c
     # Unicode strings are split in a special way. At the beginning of each
     # CONTINUE record the option flags byte is repeated. Only the
