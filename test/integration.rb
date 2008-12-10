@@ -767,7 +767,7 @@ module Spreadsheet
       assert_equal 'my cell', sheet[0,0]
     end
     def test_write_new_workbook
-      book = Spreadsheet::Excel::Workbook.new
+      book = Spreadsheet::Workbook.new
       path = File.join @var, 'test_write_workbook.xls'
       sheet1 = book.create_worksheet
       str1 = 'My Shared String'
@@ -973,7 +973,7 @@ module Spreadsheet
     end
     def test_write_new_workbook__utf16
       Spreadsheet.client_encoding = 'UTF-16LE'
-      book = Spreadsheet::Excel::Workbook.new
+      book = Spreadsheet::Workbook.new
       path = File.join @var, 'test_write_workbook.xls'
       sheet1 = book.create_worksheet
       str1 = @@iconv.iconv 'Shared String'

@@ -17,7 +17,7 @@ module Spreadsheet
 class Workbook < Spreadsheet::Writer
   include Spreadsheet::Excel::Writer::Biff8
   include Spreadsheet::Excel::Internals
-  attr_reader :fonts
+  attr_reader :fonts, :date_base
   def initialize *args
     super
     @biff_version = 0x0600
@@ -227,8 +227,9 @@ class Workbook < Spreadsheet::Writer
     end
   end
   def write_datemode workbook, writer
+    mode = @date_base.year == 1899 ? 0x00 : 0x01
     data = [
-      0x00, # 0 = Base date is 1899-Dec-31
+      mode, # 0 = Base date is 1899-Dec-31
             #     (the cell value 1 represents 1900-Jan-01)
             # 1 = Base date is 1904-Jan-01
             #     (the cell value 1 represents 1904-Jan-02)
@@ -588,8 +589,10 @@ class Workbook < Spreadsheet::Writer
   # depending on the class and state of _workbook_.
   def write_workbook workbook, io
     unless workbook.is_a?(Excel::Workbook) && workbook.io
+      @date_base = Date.new 1899, 12, 31
       write_from_scratch workbook, io
     else
+      @date_base = workbook.date_base
       if workbook.changes.empty?
         super
       else

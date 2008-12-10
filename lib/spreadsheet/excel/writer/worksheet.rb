@@ -48,7 +48,7 @@ class Worksheet
       date = DateTime.new date.year, date.month, date.day,
                           date.hour, date.min, date.sec
     end
-    value = date - @worksheet.workbook.date_base
+    value = date - @workbook.date_base
     if date > LEAP_ERROR
       value += 1
     end
