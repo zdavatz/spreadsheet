@@ -578,7 +578,7 @@ class Worksheet
       fmt << 'vV'
     end
     # Index to last column (lc)
-    data.push idx + multiples.size
+    data.push idx + multiples.size - 1
     write_op opcode(:mulrk), data.pack(fmt << 'v')
   end
   def write_multiples row, idx, multiples
