@@ -1,3 +1,70 @@
+=== 0.6.2 / 2008-12-11
+
+* 14 Bugfixes
+
+  * Fixed a bug where #<boolean>! methods did not trigger a call to
+    #row_updated
+
+  * Corrected the Row-Format in both Reader and Writer (was Biff5 for some
+    reason)
+
+  * Populates Row-instances with @default_format, @height, @outline_level
+    and @hidden attributes
+
+  * Fixed a Bug where Workbooks deriving from a Template-Workbook without
+    SST could not be saved
+    Reported in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=22863&group_id=678&atid=2678
+
+  * Improved handling of Numeric Values (writes a RK-Entry for a Float
+    only if it can be encoded with 4 leading zeroes, and a Number-Entry for an
+    Integer only if it cannot be encoded as an RK)
+
+  * Fixes a bug where changes to a Row were ignored if they were
+    outside of an existing Row-Block.
+
+  * Fixes a bug where MULRK-Entries sometimes only contained a single RK
+
+  * Fixes a bug where formatting was ignored if it was applied to empty Rows
+    Reported by Zomba Lumix in
+    http://rubyforge.org/forum/message.php?msg_id=61985
+
+  * Fixes a bug where modifying a Row in a loaded Workbook could lead to Rows
+    with smaller indices being set to nil.
+    Reported by Ivan Samsonov in
+    http://rubyforge.org/forum/message.php?msg_id=62816
+
+  * Deals with rounding-problems when calculating Time
+    Reported by Bughunter extraordinaire Bjørn Hjelle
+
+  * Correct splitting of wide characters in SST
+    Reported by Michel Ziegler and by Eugene Mikhailov in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=23085&group_id=678&atid=2677
+
+  * Fix an off-by-one error in write_mulrk that caused Excel to complain that
+    'Data may be lost', reported by Emma in
+    http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/321979
+    and by Chris Lowis in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=22892&group_id=678&atid=2677
+
+
+  * Read formats correctly in read_mulrk
+    Reported by Ivan Samsonov
+    Fixes that part of http://rubyforge.org/forum/message.php?msg_id=62821
+    which is a bug. Does nothing for the disappearance of Rich-Text
+    formatting, which will not be addressed until 0.7.0
+
+  * Fixes a (benign?) bug, where adding text to a template-file resulted in
+    a duplicate extsst-record.
+
+* 2 minor enhancements
+
+  * Improved recognition of Time-Formats
+
+  * Improvement to Robustness: allow Spreadsheet::Workbook.new
+    Takes care of http://rubyforge.org/forum/message.php?msg_id=62941
+    Reported by David Chamberlain
+
 === 0.6.1.9 / 2008-11-07
 
 * 1 Bugfix
