@@ -61,6 +61,12 @@ module Biff8
     @incomplete_string, @sst_size, @sst_offset, @incomplete_sst = nil
   end
   ##
+  # Store the offset of extsst, so we can write a new extsst when the
+  # sst has changed
+  def read_extsst work, pos, len
+    @workbook.offsets.store :extsst, [pos, len]
+  end
+  ##
   # Read the Shared String Table present in all Biff8 Files.
   # This method only evaluates the header, the actual work is done in #_read_sst
   def read_sst work, pos, len

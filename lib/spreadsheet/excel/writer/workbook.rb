@@ -192,6 +192,9 @@ class Workbook < Spreadsheet::Writer
               write_sst_changes workbook, buffer, writer.pos,
                                 sst_total, sst_strings
               pos, len = tuple
+              if offset = workbook.offsets[:extsst]
+                len += offset[1].to_i
+              end
               bytechange = buffer.size - len
               write_boundsheets workbook, writer, oldoffset + bytechange
               reader.seek lastpos
@@ -216,7 +219,7 @@ class Workbook < Spreadsheet::Writer
           else
             send "write_#{key}", workbook, writer
           end
-          lastpos = pos + len
+          lastpos = [pos + len, reader.size - 1].min
           reader.seek lastpos
         end
         writer.write reader.read

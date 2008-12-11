@@ -745,7 +745,8 @@ class Reader
         read_sst work, pos, len
         # TODO: implement memory-efficient sst handling, possibly in conjunction
         #       with EXTSST
-        # when :extsst     # ●  EXTSST ➜ 6.40
+      when :extsst     # ●  EXTSST ➜ 6.40
+        read_extsst work, pos, len
       when :style      # ●● STYLE ➜ 6.99
         read_style work, pos, len
       when :format     # ○○ FORMAT (Number Format) ➜ 6.45
