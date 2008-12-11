@@ -597,7 +597,7 @@ class Reader
     # 4+2∙nc     2  Index to last column (lc)
     row, column, *xfs = work.unpack 'v*'
     last_column = xfs.pop # unused
-    xfs.each do |xf| set_cell worksheet, row, column, xf end
+    xfs.each_with_index do |xf, idx| set_cell worksheet, row, column + idx, xf end
   end
   def read_mulrk worksheet, addr, work
     # Offset  Size  Contents
