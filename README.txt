@@ -1,4 +1,5 @@
-Last Update: 13.10.2008, 19.45 - zdavatz
+Last Update: 16.12.2008, 10.33 - zdavatz
+
 
 = Spreadsheet
 
@@ -9,6 +10,11 @@ For a viewable directory of all recent changes, please see:
 
   http://scm.ywesee.com/?p=spreadsheet;a=summary
 
+For Non-GPLv3 commercial licencing, please see:
+
+  http://www.spreadsheet.ch
+
+
 == Description
 
 The Spreadsheet Library is designed to read and write Spreadsheet Documents.
@@ -17,12 +23,16 @@ supported. Spreadsheet is a combination/complete rewrite of the
 Spreadsheet::Excel Library by Daniel J. Berger and the ParseExcel Library by
 Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 
+
 == What's new?
+
 * Significantly improved memory-efficiency when reading large Excel Files
 * Limited Spreadsheet modification support
 * Improved handling of String Encodings
 
+
 == Roadmap
+
 0.7.0:: Improved Format support/Styles
 0.7.1:: Document Modification: Formats/Styles
 0.8.0:: Formula Support
@@ -31,15 +41,18 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 1.0.0:: Ruby 1.9 Support;
         Remove backward compatibility code
 
+
 == Dependencies
 
 * ruby 1.8
 * Iconv
 * ruby-ole[http://code.google.com/p/ruby-ole/]
 
+
 == Examples
 
 Have a look at the GUIDE[link://files/GUIDE_txt.html].
+
 
 == Installation
 
@@ -64,8 +77,9 @@ Copyright (c) 2003 by Hannes Wyss (hannes.wyss@gmail.com)
 New Code:
 Copyright (c) 2008 by Hannes Wyss (hannes.wyss@gmail.com)
 
+
 == License
 
-This library is distributed under the GPL.
+This library is distributed under the GPLv3.
 Please see the LICENSE[link://files/LICENSE_txt.html] file.
 
