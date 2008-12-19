@@ -1,3 +1,11 @@
+=== 0.6.2.1 / 2008-12-18
+
+* 1 Bugfix
+
+  * Using Spreadsheet together with 'jcode' could lead to broken Excel-Files
+    Thanks to Eugene Mikhailov for tracking this one down in:
+    http://rubyforge.org/tracker/index.php?func=detail&aid=23085&group_id=678&atid=2677
+
 === 0.6.2 / 2008-12-11
 
 * 14 Bugfixes

@@ -14,12 +14,20 @@ module Biff8
   # is a Null-byte) and perform compression.
   # Returns the data and compression_status (0/1)
   def compress_unicode_string data
-    wide = 1
-    if /^([^\0]\0)*$/.match data
-      data = data.delete "\0"
-      wide = 0
+    compressed = ''
+    expect_null = false
+    data.each_byte do |byte|
+      if expect_null
+        if byte != 0
+          return [data, 1] # 1 => Data consists of wide Chars
+        end
+        expect_null = false
+      else
+        compressed << byte
+        expect_null = true
+      end
     end
-    [data, wide]
+    [compressed, 0] # 0 => Data consists of compressed Chars
   end
   ##
   # Encode _string_ into a Biff8 Unicode String. Header and body are encoded
