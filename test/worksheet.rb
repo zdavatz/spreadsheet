@@ -28,10 +28,10 @@ module Spreadsheet
       assert_equal 2, @sheet.row_count
       @sheet[1,0] = nil
       assert_equal 2, @sheet.column_count
-      assert_equal 1, @sheet.row_count
+      assert_equal 2, @sheet.row_count
       @sheet[0,1] = nil
-      assert_equal 1, @sheet.column_count
-      assert_equal 1, @sheet.row_count
+      assert_equal 2, @sheet.column_count
+      assert_equal 2, @sheet.row_count
     end
     def test_column_count
       assert_equal 0, @sheet.column_count
@@ -44,7 +44,7 @@ module Spreadsheet
       @sheet.replace_row 5, nil, 'something', 4, 7, nil
       assert_equal 4, @sheet.column_count
       @sheet.replace_row 3
-      assert_equal 3, @sheet.column_count
+      assert_equal 4, @sheet.column_count
     end
     def test_row_count
       assert_equal 0, @sheet.row_count
@@ -57,7 +57,15 @@ module Spreadsheet
       @sheet.replace_row 5, nil, 'something', 4, 7, nil
       assert_equal 6, @sheet.row_count
       @sheet.replace_row 3
+      assert_equal 6, @sheet.row_count
+      @sheet.delete_row 3
+      assert_equal 5, @sheet.row_count
+      @sheet.delete_row 3
       assert_equal 4, @sheet.row_count
+      @sheet.delete_row 2
+      assert_equal 4, @sheet.row_count
+      @sheet.delete_row 2
+      assert_equal 3, @sheet.row_count
     end
     def test_modify_column
       assert_equal 10, @sheet.column(0).width

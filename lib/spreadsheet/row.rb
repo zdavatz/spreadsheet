@@ -1,3 +1,5 @@
+require 'spreadsheet/helpers'
+
 module Spreadsheet
   ##
   # The Row class. Encapsulates Cell data and formatting.
@@ -23,10 +25,7 @@ module Spreadsheet
             alias_method :"unupdated_#{key}=", :"#{key}="
             define_method "#{key}=" do |value|
               send "unupdated_#{key}=", value
-              if @worksheet
-                @formatted = true
-                @worksheet.row_updated @idx, self, :formatted => true
-              end
+              @worksheet.row_updated @idx, self if @worksheet
               value
             end
           end
@@ -36,9 +35,7 @@ module Spreadsheet
         keys.each do |key|
           define_method key do |*args|
             res = super
-            if @worksheet
-              @worksheet.row_updated @idx, self, :formatted => @formatted
-            end
+            @worksheet.row_updated @idx, self if @worksheet
             res
           end
         end
@@ -55,12 +52,7 @@ module Spreadsheet
     def initialize worksheet, idx, cells=[]
       @worksheet = worksheet
       @idx = idx
-      while !cells.empty? && !cells.last
-        cells.pop
-      end
       super cells
-      @first_used ||= index_of_first self
-      @first_unused ||= size
       @formats = []
       @height = 12
     end
@@ -69,17 +61,13 @@ module Spreadsheet
     # stored for the cell.
     def default_format= format
       @worksheet.add_format format if @worksheet
-      @worksheet.row_updated @idx, self, :formatted => true if @worksheet
+      @worksheet.row_updated @idx, self if @worksheet
       @default_format = format
     end
     ##
-    # #first_unused (really last used + 1) - the 0-based index of the first of
-    # all remaining contiguous blank Cells.
-    alias :first_unused :size
-    ##
     # #first_used the 0-based index of the first non-blank Cell.
     def first_used
-      index_of_first self
+      [ index_of_first(self), index_of_first(@formats) ].compact.min
     end
     ##
     # The Format for the Cell at _idx_ (0-based), or the first valid Format in
@@ -89,22 +77,48 @@ module Spreadsheet
         || @worksheet.column(idx).default_format if @worksheet
     end
     ##
-    # Set the Format for the Cell at _idx_ (0-based).
-    def set_format idx, fmt
-      @formats[idx] = fmt
-      @worksheet.add_format fmt
-      @worksheet.row_updated @idx, self, :formatted => true if @worksheet
-      fmt
+    # Returns a copy of self with nil-values appended for empty cells that have
+    # an associated Format.
+    # This is primarily a helper-function for the writer classes.
+    def formatted
+      copy = dup
+      @formats.rcompact!
+      if copy.length < @formats.size
+        copy.concat Array.new(@formats.size - copy.length)
+      end
+      copy
     end
+    ##
+    # Same as Row#size, but takes into account formatted empty cells
+    def formatted_size
+      @formats.rcompact!
+      sz = size
+      fs = @formats.size
+      fs > sz ? fs : sz
+    end
+    ##
+    # #first_unused (really last used + 1) - the 0-based index of the first of
+    # all remaining contiguous blank Cells.
+    alias :first_unused :formatted_size
     def inspect
       variables = instance_variables.collect do |name|
         "%s=%s" % [name, instance_variable_get(name)]
       end.join(' ')
       sprintf "#<%s:0x%014x %s %s>", self.class, object_id, variables, super
     end
+    ##
+    # Set the Format for the Cell at _idx_ (0-based).
+    def set_format idx, fmt
+      @formats[idx] = fmt
+      @worksheet.add_format fmt
+      @worksheet.row_updated @idx, self if @worksheet
+      fmt
+    end
     private
     def index_of_first ary # :nodoc:
-      ary.index(ary.find do |elm| elm end)
+      if first = ary.find do |elm| !elm.nil? end
+        ary.index first
+      end
     end
   end
 end

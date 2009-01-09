@@ -63,7 +63,7 @@ module Spreadsheet
         enc = Encoding.find enc
       end
       assert_equal enc, book.encoding
-      assert_equal 24, book.formats.size
+      assert_equal 25, book.formats.size
       assert_equal 5, book.fonts.size
       str1 = book.shared_string 0
       assert_equal @@iconv.iconv('Shared String'), str1
@@ -92,10 +92,10 @@ module Spreadsheet
       end
       assert_equal long, str4
       sheet = book.worksheet 0
-      assert_equal 10, sheet.row_count
-      assert_equal 11, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,2]
+      assert_equal 11, sheet.row_count
+      assert_equal 12, sheet.column_count
+      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -154,6 +154,7 @@ module Spreadsheet
       assert_equal 0.0001, row[0]
       row = sheet.row 9
       assert_equal 0.00009, row[0]
+      assert_equal :green, sheet.row(10).format(11).pattern_fg_color
     end
     def test_version_excel97__ooffice
       path = File.join @data, 'test_version_excel97.xls'
@@ -166,7 +167,7 @@ module Spreadsheet
         enc = Encoding.find enc
       end
       assert_equal enc, book.encoding
-      assert_equal 24, book.formats.size
+      assert_equal 25, book.formats.size
       assert_equal 5, book.fonts.size
       str1 = book.shared_string 0
       assert_equal 'Shared String', str1
@@ -195,10 +196,10 @@ module Spreadsheet
       end
       assert_equal long, str4
       sheet = book.worksheet 0
-      assert_equal 10, sheet.row_count
-      assert_equal 11, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,2]
+      assert_equal 11, sheet.row_count
+      assert_equal 12, sheet.column_count
+      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -577,10 +578,10 @@ module Spreadsheet
       book.write path
       assert_nothing_raised do book = Spreadsheet.open path end
       sheet = book.worksheet 0
-      assert_equal 10, sheet.row_count
-      assert_equal 11, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,2]
+      assert_equal 11, sheet.row_count
+      assert_equal 12, sheet.column_count
+      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused
@@ -686,10 +687,10 @@ module Spreadsheet
       assert_equal str3, book.shared_string(2)
       assert_equal str4, book.shared_string(3)
       sheet = book.worksheet 0
-      assert_equal 10, sheet.row_count
-      assert_equal 11, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0]
-      unuseds = [2,2,1,1,1,2,1,11,1,2]
+      assert_equal 11, sheet.row_count
+      assert_equal 12, sheet.column_count
+      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
         assert_equal unuseds.shift, row.first_unused

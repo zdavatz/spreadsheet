@@ -173,11 +173,8 @@ module Spreadsheet
     ##
     # Tell Worksheet that the Row at _idx_ has been updated and the #dimensions
     # need to be recalculated. You should not need to call this directly.
-    def row_updated idx, row, opts={}
+    def row_updated idx, row
       @dimensions = nil
-      unless opts[:formatted]
-        row = shorten(row)
-      end
       @rows[idx] = row
       format_dates row
       row
@@ -188,7 +185,7 @@ module Spreadsheet
       res = if row = @rows[idx]
               row[0, cells.size] = cells
               row
-            elsif cells = shorten(cells)
+            else
               Row.new self, idx, cells
             end
       row_updated idx, res
@@ -251,8 +248,9 @@ module Spreadsheet
       @dimensions[0] = index_of_first(@rows) || 0
       @dimensions[1] = @rows.size
       compact = @rows.compact
-      @dimensions[2] = compact.collect do |row| index_of_first row end.compact.min || 0
-      @dimensions[3] = compact.collect do |row| row.size end.max || 0
+      @dimensions[2] = compact.collect do |row| row.first_used end.compact.min || 0
+      @dimensions[3] = compact.collect do |row| row.first_unused end.max || 0
+      puts caller if @dimensions.nil?
       @dimensions
     end
     def shorten ary # :nodoc:

@@ -36,11 +36,11 @@ class Worksheet < Spreadsheet::Worksheet
     return if @row_addresses
     @dimensions = nil
     @row_addresses = []
-    @reader.read_worksheet self, @offset
+    @reader.read_worksheet self, @offset if @reader
   end
   def row idx
-    ensure_rows_read
     @rows[idx] or begin
+      ensure_rows_read
       if addr = @row_addresses[idx]
         row = @reader.read_row self, addr
         [:default_format, :height, :outline_level, :hidden, ].each do |key|
@@ -53,7 +53,7 @@ class Worksheet < Spreadsheet::Worksheet
       end
     end
   end
-  def row_updated idx, row, args={}
+  def row_updated idx, row
     res = super
     @workbook.changes.store self, true
     @workbook.changes.store :boundsheets, true
@@ -83,11 +83,11 @@ class Worksheet < Spreadsheet::Worksheet
                        index_of_first(@row_addresses) ].compact.min || 0
     @dimensions[1] = [ @rows.size, @row_addresses.size ].compact.max || 0
     compact = @rows.compact
-    first_rows = compact.collect do |row| index_of_first row end.compact.min
+    first_rows = compact.collect do |row| row.first_used end.compact.min
     first_addrs = @row_addresses.compact.collect do |addr|
       addr[:first_used] end.min
     @dimensions[2] = [ first_rows, first_addrs ].compact.min || 0
-    last_rows = compact.collect do |row| row.size end.max
+    last_rows = compact.collect do |row| row.first_unused end.max
     last_addrs = @row_addresses.compact.collect do |addr|
       addr[:first_unused] end.max
     @dimensions[3] = [last_rows, last_addrs].compact.max || 0

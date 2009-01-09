@@ -158,7 +158,7 @@ class Worksheet
     write_op 0x000c, [count].pack('v')
   end
   def write_cell type, row, idx, *args
-    xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx)
+    xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx]
     data = [
       row.idx, # Index to row
       idx,     # Index to column
@@ -178,7 +178,7 @@ class Worksheet
     # RK ➜ 6.82 (BIFF3-BIFF8)
     # RSTRING ➜ 6.84 (BIFF5/BIFF7)
     multiples, first_idx = nil
-    row.each_with_index do |cell, idx|
+    row.formatted.each_with_index do |cell, idx|
       cell = nil if cell == ''
       ## it appears that there are limitations to RK precision, both for
       #  Integers and Floats, that lie well below 2^30 significant bits, or
@@ -357,7 +357,7 @@ class Worksheet
   # Write a cell with a Formula. May write an additional String record depending
   # on the stored result of the Formula.
   def write_formula row, idx
-    xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx)
+    xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx]
     cell = row[idx]
     data1 = [
       row.idx,      # Index to row
@@ -556,7 +556,7 @@ class Worksheet
     ]
     # List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
     multiples.each_with_index do |blank, cell_idx|
-      xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx + cell_idx)
+      xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx + cell_idx]
       data.push xf_idx
     end
     # Index to last column (lc)
@@ -573,7 +573,7 @@ class Worksheet
     ]
     # List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
     multiples.each_with_index do |cell, cell_idx|
-      xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx + cell_idx)
+      xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx + cell_idx]
       data.push xf_idx, encode_rk(cell)
       fmt << 'vV'
     end
