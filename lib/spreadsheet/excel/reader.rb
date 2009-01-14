@@ -74,6 +74,23 @@ class Reader
       name
     end
   end
+  def get_next_chunk
+    pos = @pos
+    if pos < @data.size
+      op, len = @data[@pos,OPCODE_SIZE].unpack('v2')
+      @pos += OPCODE_SIZE
+      if len
+        work = @data[@pos,len]
+        @pos += len
+        code = SEDOCPO.fetch(op, op)
+        if io = @opts[:print_opcodes]
+          io.puts sprintf("0x%04x/%-16s %5i: %s",
+                          op, code.inspect, len, work.inspect)
+        end
+        [ pos, code, len + OPCODE_SIZE, work]
+      end
+    end
+  end
   def in_row_block? op, previous
     if op == :row
       previous == op
@@ -98,17 +115,7 @@ class Reader
   # The entry-point for reading Excel-documents. Reads the Biff-Version and
   # loads additional reader-methods before proceeding with parsing the document.
   def read io
-    @ole = Ole::Storage.open io
-    @workbook = Workbook.new io, {}
-    @book = @ole.file.open("Book") rescue @ole.file.open("Workbook")
-    @data = @book.read
-    read_bof
-    @workbook.ole = @book
-    @workbook.bof = @bof
-    @workbook.version = @version
-    biff = @workbook.biff_version
-    extend_reader biff
-    extend_internals biff
+    setup io
     read_workbook
     @workbook.default_format = @workbook.format 0
     @workbook.changes.clear
@@ -1047,6 +1054,19 @@ class Reader
     # TODO: Row spacing
     worksheet.set_row_address index, attrs
   end
+  def setup io
+    @ole = Ole::Storage.open io
+    @workbook = Workbook.new io, {}
+    @book = @ole.file.open("Book") rescue @ole.file.open("Workbook")
+    @data = @book.read
+    read_bof
+    @workbook.ole = @book
+    @workbook.bof = @bof
+    @workbook.version = @version
+    biff = @workbook.biff_version
+    extend_reader biff
+    extend_internals biff
+  end
   private
   def extend_internals version
     require 'spreadsheet/excel/internals/biff%i' % version
@@ -1059,19 +1079,6 @@ class Reader
     require 'spreadsheet/excel/reader/biff%i' % version
     extend Reader.const_get('Biff%i' % version)
   rescue LoadError
-  end
-  def get_next_chunk
-    pos = @pos
-    op, len = @data[@pos,OPCODE_SIZE].unpack('v2')
-    @pos += OPCODE_SIZE
-    if len
-      work = @data[@pos,len]
-      @pos += len
-      code = SEDOCPO.fetch(op, op)
-      #puts "0x%04x/%-16s (0x%08x) %5i: %s" % [op, code.inspect, pos, len, work[0,16].inspect]
-      #puts "0x%04x/%-16s %5i: %s" % [op, code.inspect, len, work[0,32].inspect]
-      [ pos, code, len + OPCODE_SIZE, work]
-    end
   end
 end
   end
