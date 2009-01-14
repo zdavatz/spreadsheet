@@ -1,3 +1,19 @@
+=== 0.6.3 / 2009-01-14
+
+* 1 Bugfix
+
+  * Fixes the issue reported by Corey Martella in
+    http://rubyforge.org/forum/message.php?msg_id=63651
+    as well as other issues engendered by the decision to always shorten
+    Rows to the last non-nil value.
+
+* 1 minor enhancement
+
+  * Documents created by Spreadsheet can now be Printed in Excel and
+    Excel-Viewer.
+    This issue was reported by Spencer Turner in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=23287&group_id=678&atid=2677
+
 === 0.6.2.1 / 2008-12-18
 
 * 1 Bugfix
