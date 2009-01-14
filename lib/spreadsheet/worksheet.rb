@@ -19,12 +19,19 @@ module Spreadsheet
   #                   instances may appear at more than one position in #columns.
   #                   If you modify a Column directly, your changes will be
   #                   reflected in all those positions.
+  # #active        :: When a user chooses to print a Workbook, Excel will include
+  #                   all active Worksheets. Defaults to true. If you want to
+  #                   exclude a Worksheet from the default print-list, set this
+  #                   to false. Warning: Excel will display a cryptic Error
+  #                   Message if a user tries to print a Workbook that has no
+  #                   active Worksheets.
   class Worksheet
     include Spreadsheet::Encodings
     include Enumerable
-    attr_accessor :name, :workbook
+    attr_accessor :active, :name, :workbook
     attr_reader :rows, :columns
     def initialize opts={}
+      @active = true
       @dimensions = [0,0,0,0]
       @name = opts[:name] || 'Worksheet'
       @workbook = opts[:workbook]

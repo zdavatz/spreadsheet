@@ -178,7 +178,8 @@ class Worksheet
     # RK ➜ 6.82 (BIFF3-BIFF8)
     # RSTRING ➜ 6.84 (BIFF5/BIFF7)
     multiples, first_idx = nil
-    row.formatted.each_with_index do |cell, idx|
+    row = row.formatted
+    row.each_with_index do |cell, idx|
       cell = nil if cell == ''
       ## it appears that there are limitations to RK precision, both for
       #  Integers and Floats, that lie well below 2^30 significant bits, or
@@ -415,47 +416,52 @@ class Worksheet
   ##
   # Write a new Worksheet.
   def write_from_scratch
-    # ●  BOF Type = worksheet (➜ 6.8)
+    # ●  BOF Type = worksheet (➜ 5.8)
     write_bof
-    # ○  UNCALCED ➜ 6.104
-    # ○  INDEX ➜ 5.7 (Row Blocks), ➜ 6.55
-    # ○  Calculation Settings Block ➜ 5.3
+    # ○  UNCALCED ➜ 5.105
+    # ○  INDEX ➜ 4.7 (Row Blocks), ➜ 5.59
+    # ○  Calculation Settings Block ➜ 4.3
     write_calccount
     write_refmode
     write_iteration
     write_saverecalc
-    # ○  PRINTHEADERS ➜ 6.76
-    # ○  PRINTGRIDLINES ➜ 6.75
-    # ○  GRIDSET ➜ 6.48
-    # ○  GUTS ➜ 6.49
-    # ○  DEFAULTROWHEIGHT ➜ 6.28
+    # ○  PRINTHEADERS ➜ 5.81
+    # ○  PRINTGRIDLINES ➜ 5.80
+    # ○  GRIDSET ➜ 5.52
+    # ○  GUTS ➜ 5.53
+    # ○  DEFAULTROWHEIGHT ➜ 5.31
     write_defaultrowheight
-    # ○  WSBOOL ➜ 6.113
+    # ○  WSBOOL ➜ 5.113
     write_wsbool
-    # ○  Page Settings Block ➜ 5.4
-    # ○  Worksheet Protection Block ➜ 5.18
-    # ○  DEFCOLWIDTH ➜ 6.29
+    # ○  Page Settings Block ➜ 4.4
+    # ○  Worksheet Protection Block ➜ 4.18
+    # ○  DEFCOLWIDTH ➜ 5.32
     write_defcolwidth
-    # ○○ COLINFO ➜ 6.18
+    # ○○ COLINFO ➜ 5.18
     write_colinfos
-    # ○  SORT ➜ 6.95
-    # ●  DIMENSIONS ➜ 6.31
+    # ○  SORT ➜ 5.99
+    # ●  DIMENSIONS ➜ 5.35
     write_dimensions
-    # ○○ Row Blocks ➜ 5.7
+    # ○○ Row Blocks ➜ 4.7
     write_rows
-    # ●  Worksheet View Settings Block ➜ 5.5
-    # ○  STANDARDWIDTH ➜ 6.97
-    # ○○ MERGEDCELLS ➜ 6.63
-    # ○  LABELRANGES ➜ 6.60
-    # ○  PHONETIC ➜ 6.73
-    # ○  Conditional Formatting Table ➜ 5.12
-    # ○  Hyperlink Table ➜ 5.13
+    # ●  Worksheet View Settings Block ➜ 4.5
+    # ●  WINDOW2 ➜ 5.110
+    write_window2
+    # ○  SCL ➜ 5.92 (BIFF4-BIFF8 only)
+    # ○  PANE ➜ 5.75
+    # ○○ SELECTION ➜ 5.93
+    # ○  STANDARDWIDTH ➜ 5.101
+    # ○○ MERGEDCELLS ➜ 5.67
+    # ○  LABELRANGES ➜ 5.64
+    # ○  PHONETIC ➜ 5.77
+    # ○  Conditional Formatting Table ➜ 4.12
+    # ○  Hyperlink Table ➜ 4.13
     write_hyperlink_table
-    # ○  Data Validity Table ➜ 5.14
-    # ○  SHEETLAYOUT ➜ 6.91 (BIFF8X only)
-    # ○  SHEETPROTECTION Additional protection, ➜ 6.92 (BIFF8X only)
-    # ○  RANGEPROTECTION Additional protection, ➜ 6.79 (BIFF8X only)
-    # ●  EOF ➜ 6.36
+    # ○  Data Validity Table ➜ 4.14
+    # ○  SHEETLAYOUT ➜ 5.96 (BIFF8X only)
+    # ○  SHEETPROTECTION Additional protection, ➜ 5.98 (BIFF8X only)
+    # ○  RANGEPROTECTION Additional protection, ➜ 5.84 (BIFF8X only)
+    # ●  EOF ➜ 5.36
     write_eof
   end
   def write_hlink row, col, link
@@ -560,7 +566,7 @@ class Worksheet
       data.push xf_idx
     end
     # Index to last column (lc)
-    data.push idx + multiples.size
+    data.push idx + multiples.size - 1
     write_op opcode(:mulblank), data.pack('v*')
   end
   ##
@@ -573,7 +579,7 @@ class Worksheet
     ]
     # List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
     multiples.each_with_index do |cell, cell_idx|
-      xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx + cell_idx]
+      xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx + cell_idx)
       data.push xf_idx, encode_rk(cell)
       fmt << 'vV'
     end
@@ -673,23 +679,28 @@ class Worksheet
     #                                       formatted with a medium or thick
     #                                       line style. Thin line styles are
     #                                       not taken into account.
-    height = row.height || 12 # FIXME: where is the default font height?
+    height = row.height || ROW_HEIGHT
     opts = row.outline_level & 0x00000007
     opts |= 0x00000010 if row.collapsed?
     opts |= 0x00000020 if row.hidden?
-    opts |= 0x00000040 if height != 12 # FIXME: where is the default font height?
+    opts |= 0x00000040 if height != ROW_HEIGHT
     if fmt = row.default_format
       xf_idx = @workbook.xf_index @worksheet.workbook, fmt
       opts |= 0x00000080
       opts |= xf_idx << 16
     end
     opts |= 0x00000100
+    height = if height == ROW_HEIGHT
+               height * TWIPS
+             else
+               ( height * TWIPS ) | 0x8000
+             end
     # TODO: Row spacing
     data = [
       row.idx,
       row.first_used,
       row.first_unused,
-      height * TWIPS,
+      height,
       opts,
     ].pack binfmt(:row)
     write_op opcode(:row), data
@@ -713,6 +724,54 @@ class Worksheet
   def write_saverecalc
     # 0 = Do not recalculate; 1 = Recalculate before saving the document
     write_op 0x005f, [1].pack('v')
+  end
+  def write_window2
+    # This record contains additional settings for the document window
+    # (BIFF2-BIFF4) or for the window of a specific worksheet (BIFF5-BIFF8).
+    # It is part of the Sheet View Settings Block (➜ 4.5).
+    # Offset  Size  Contents
+    #      0     2  Option flags:
+    #               Bits  Mask    Contents
+    #                  0  0x0001  0 = Show formula results
+    #                             1 = Show formulas
+    #                  1  0x0002  0 = Do not show grid lines
+    #                             1 = Show grid lines
+    #                  2  0x0004  0 = Do not show sheet headers
+    #                             1 = Show sheet headers
+    #                  3  0x0008  0 = Panes are not frozen
+    #                             1 = Panes are frozen (freeze)
+    #                  4  0x0010  0 = Show zero values as empty cells
+    #                             1 = Show zero values
+    #                  5  0x0020  0 = Manual grid line colour
+    #                             1 = Automatic grid line colour
+    #                  6  0x0040  0 = Columns from left to right
+    #                             1 = Columns from right to left
+    #                  7  0x0080  0 = Do not show outline symbols
+    #                             1 = Show outline symbols
+    #                  8  0x0100  0 = Keep splits if pane freeze is removed
+    #                             1 = Remove splits if pane freeze is removed
+    #                  9  0x0200  0 = Sheet not selected
+    #                             1 = Sheet selected (BIFF5-BIFF8)
+    #                 10  0x0400  0 = Sheet not active
+    #                             1 = Sheet active (BIFF5-BIFF8)
+    #                 11  0x0800  0 = Show in normal view
+    #                             1 = Show in page break preview (BIFF8)
+    #      2     2  Index to first visible row
+    #      4     2  Index to first visible column
+    #      6     2  Colour index of grid line colour (➜ 5.74).
+    #               Note that in BIFF2-BIFF5 an RGB colour is written instead.
+    #      8     2  Not used
+    #     10     2  Cached magnification factor in page break preview (in percent)
+    #               0 = Default (60%)
+    #     12     2  Cached magnification factor in normal view (in percent)
+    #               0 = Default (100%)
+    #     14     4  Not used
+    flags = 310
+    if @worksheet.active
+      flags |= 0x0200
+    end
+    data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)
+    write_op opcode(:window2), data
   end
   def write_wsbool
     bits = [

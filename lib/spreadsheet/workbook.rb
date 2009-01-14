@@ -13,7 +13,7 @@ module Spreadsheet
   class Workbook
     include Spreadsheet::Encodings
     attr_reader :io, :worksheets, :formats, :fonts
-    attr_accessor :encoding, :version, :default_format
+    attr_accessor :active_worksheet, :encoding, :default_format, :version
     def initialize io = nil, opts={:default_format => Format.new}
       @worksheets = []
       @io = io

@@ -54,7 +54,7 @@ module Spreadsheet
       @idx = idx
       super cells
       @formats = []
-      @height = 12
+      @height = 12.1
     end
     ##
     # Set the default Format used when writing a Cell if no explicit Format is

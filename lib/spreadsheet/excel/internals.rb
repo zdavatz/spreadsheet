@@ -98,8 +98,10 @@ module Internals
     :font       => 'v5C3x',
     :labelsst   => 'v3V',
     :number     => "v3#{EIGHT_BYTE_DOUBLE}",
+    :pagesetup  => "v8#{EIGHT_BYTE_DOUBLE}2v",
     :rk         => 'v3V',
     :row        => 'v4x4V',
+    :window2    => 'v4x2v2x4',
     :xf         => 'v3C4V2v',
   }
   # From BIFF5 on, the built-in number formats will be omitted. The built-in
@@ -278,6 +280,11 @@ module Internals
     :useselfs     => 0x0160, # ○  USESELFS (Natural Language Formulas) ➜ 6.105
     :dsf          => 0x0161, # ○  DSF (Double Stream File) ➜ 6.32
     :refreshall   => 0x01b7, # ○  REFRESHALL
+    ########################## ●  Worksheet View Settings Block ➜ 5.5
+    :window2      => 0x023e, # ●  WINDOW2 ➜ 5.110
+    :scl          => 0x00a0, # ○  SCL ➜ 5.92 (BIFF4-BIFF8 only)
+    :pane         => 0x0041, # ○  PANE ➜ 5.75
+    :selection    => 0x001d, # ○○ SELECTION ➜ 5.93
     ########################## ○  Page Settings Block ➜ 5.4
     :hpagebreaks  => 0x001b, # ○  HORIZONTALPAGEBREAKS ➜ 6.54
     :vpagebreaks  => 0x001a, # ○  VERTICALPAGEBREAKS ➜ 6.107
@@ -290,7 +297,7 @@ module Internals
     :topmargin    => 0x0028, # ○  TOPMARGIN ➜ 6.103
     :bottommargin => 0x0029, # ○  BOTTOMMARGIN ➜ 6.11
                              # ○  PLS (opcode unknown)
-    :setup        => 0x00a1, # ○  SETUP ➜ 6.89 (BIFF4-BIFF8 only)
+    :pagesetup    => 0x00a1, # ○  PAGESETUP ➜ 6.89 (BIFF4-BIFF8 only)
     :bitmap       => 0x00e9, # ○  BITMAP ➜ 6.6 (Background-Bitmap, BIFF8 only)
     ##########################
     :printheaders => 0x002a, # ○  PRINTHEADERS ➜ 6.76
@@ -340,6 +347,8 @@ module Internals
   }
   NGILA_V_FX = XF_V_ALIGN.invert
   OPCODE_SIZE = 4
+  ROW_HEIGHT = 12.1
+  SST_CHUNKSIZE = 20
   def binfmt key
     BINARY_FORMATS[key]
   end

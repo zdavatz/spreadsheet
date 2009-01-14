@@ -32,8 +32,8 @@ class Format < DelegateClass Spreadsheet::Format
   color :pattern_bg_color, :pattern_bg
   attr_accessor :xf_index
   attr_reader :format
-  def initialize writer, workbook, format=workbook.default_format, type=:format
-    @type = type.to_s.downcase
+  def initialize writer, workbook, format=workbook.default_format, opts={}
+    @opts = { :type => :format }.merge opts
     @format = format
     @writer = writer
     @workbook = workbook
@@ -62,7 +62,7 @@ class Format < DelegateClass Spreadsheet::Format
     writer.write [op,data.size].pack("v2")
     writer.write data
   end
-  def write_xf writer, type=@type
+  def write_xf writer, type=@opts[:type]
     xf_type = xf_type_prot type
     data = [
       font_index,   # Index to FONT record (➜ 6.43)

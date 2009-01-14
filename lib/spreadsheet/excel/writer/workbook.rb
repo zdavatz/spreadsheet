@@ -56,7 +56,8 @@ class Workbook < Spreadsheet::Writer
     formats = []
     unless opts[:existing_document]
       15.times do
-        formats.push Format.new(self, workbook, workbook.default_format, :style)
+        formats.push Format.new(self, workbook, workbook.default_format,
+                                :type => :style)
       end
       formats.push Format.new(self, workbook)
     end
@@ -258,7 +259,7 @@ class Workbook < Spreadsheet::Writer
     write_op writer, 0x000a
   end
   def write_extsst workbook, offsets, writer
-    header = [8].pack('v')
+    header = [SST_CHUNKSIZE].pack('v')
     data = offsets.collect do |pair| pair.push(0).pack('Vv2') end
     write_op writer, 0x00ff, header, data
   end
@@ -374,7 +375,9 @@ class Workbook < Spreadsheet::Writer
     buffer1 = StringIO.new ''
     # ●  BOF Type = workbook globals (➜ 6.8)
     write_bof workbook, buffer1, :globals
-    # ○  File Protection Block ➜ 5.19
+    # ○  File Protection Block ➜ 4.19
+    # ○  WRITEACCESS User name (BIFF3-BIFF8, ➜ 5.112)
+    # ○  FILESHARING File sharing options (BIFF3-BIFF8, ➜ 5.44)
     # ○  CODEPAGE ➜ 6.17
     write_encoding workbook, buffer1
     # ○  DSF ➜ 6.32
@@ -382,42 +385,46 @@ class Workbook < Spreadsheet::Writer
     # ○  TABID
     write_tabid workbook, buffer1
     # ○  FNGROUPCOUNT
-    # ○  Workbook Protection Block ➜ 5.18
+    # ○  Workbook Protection Block ➜ 4.18
+    # ○  WINDOWPROTECT Window settings: 1 = protected (➜ 5.111)
+    # ○  PROTECT Cell contents: 1 = protected (➜ 5.82)
     write_protect workbook, buffer1
+    # ○  OBJECTPROTECT Embedded objects: 1 = protected (➜ 5.72)
+    # ○  PASSWORD Hash value of the password; 0 = No password (➜ 5.76)
     write_password workbook, buffer1
-    # ●  WINDOW1 ➜ 6.108
+    # ○  BACKUP ➜ 5.5
+    # ○  HIDEOBJ ➜ 5.56
+    # ●  WINDOW1 ➜ 5.109
     write_window1 workbook, buffer1
-    # ○  BACKUP ➜ 6.5
-    # ○  HIDEOBJ ➜ 6.52
-    # ○  DATEMODE ➜ 6.25
+    # ○  DATEMODE ➜ 5.28
     write_datemode workbook, buffer1
-    # ○  PRECISION ➜ 6.74
+    # ○  PRECISION ➜ 5.79
     write_precision workbook, buffer1
     # ○  REFRESHALL
     write_refreshall workbook, buffer1
-    # ○  BOOKBOOL ➜ 6.9
+    # ○  BOOKBOOL ➜ 5.9
     write_bookbool workbook, buffer1
-    # ●● FONT ➜ 6.43
+    # ●● FONT ➜ 5.45
     write_fonts workbook, buffer1
-    # ○○ FORMAT ➜ 6.45
+    # ○○ FORMAT ➜ 5.49
     write_formats workbook, buffer1
-    # ●● XF ➜ 6.115
+    # ●● XF ➜ 5.115
     write_xfs workbook, buffer1
-    # ●● STYLE ➜ 6.99
+    # ●● STYLE ➜ 5.103
     write_styles workbook, buffer1
-    # ○  PALETTE ➜ 6.70
-    # ○  USESELFS ➜ 6.105
+    # ○  PALETTE ➜ 5.74
+    # ○  USESELFS ➜ 5.106
     buffer1.rewind
-    # ●● BOUNDSHEET ➜ 6.12
+    # ●● BOUNDSHEET ➜ 5.95
     buffer2 = StringIO.new ''
-    # ○  COUNTRY ➜ 6.23
-    # ○  Link Table ➜ 5.10.3
+    # ○  COUNTRY ➜ 5.22
+    # ○  Link Table ➜ 4.10.3
     # ○○ NAME ➜ 6.66
-    # ○  Shared String Table ➜ 5.11
-    # ●  SST ➜ 6.96
-    # ●  EXTSST ➜ 6.40
+    # ○  Shared String Table ➜ 4.11
+    # ●  SST ➜ 5.100
+    # ●  EXTSST ➜ 5.42
     write_sst workbook, buffer2, buffer1.size
-    # ●  EOF ➜ 6.36
+    # ●  EOF ➜ 5.37
     write_eof workbook, buffer2
     buffer2.rewind
     # worksheet data can only be assembled after write_sst
@@ -482,7 +489,9 @@ class Workbook < Spreadsheet::Writer
     strings.each_with_index do |string, idx|
       sst.store string, idx
       op_offset = data.size + 4
-      offsets.push [offset + writer.pos + op_offset, op_offset] if idx % 8 == 0
+      if idx % SST_CHUNKSIZE == 0
+        offsets.push [offset + writer.pos + op_offset, op_offset]
+      end
       header, packed, next_wide = _unicode_string string, 2
       # the first few bytes (header + first character) must not be split
       must_fit = header.size + wide + 1
@@ -546,9 +555,9 @@ class Workbook < Spreadsheet::Writer
               # 0x07 = Currency [0] (BIFF4-BIFF8)
               # 0x08 = Hyperlink (BIFF8)
               # 0x09 = Followed Hyperlink (BIFF8)
-      0xFF,   # Level for RowLevel or ColLevel style (zero-based, lv),
-              # 0xFF otherwise
-      0x00,   # The RowLevel and ColLevel styles specify the formatting of
+      0xff,   # Level for RowLevel or ColLevel style (zero-based, lv),
+              # 0xff otherwise
+              # The RowLevel and ColLevel styles specify the formatting of
               # subtotal cells in a specific outline level. The level is
               # specified by the last field in the STYLE record. Valid values
               # are 0…6 for the outline levels 1…7.
