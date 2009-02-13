@@ -1,3 +1,33 @@
+=== 0.6.3.1 / 2009-02-13
+
+* 3 Bugfixes
+
+  * Only selects the First Worksheet by default
+    This deals with an issue reported by Biörn Andersson in
+    http://rubyforge.org/tracker/?func=detail&atid=2677&aid=23736&group_id=678
+    where data-edits in OpenOffice were propagated through all selected
+    sheets.
+
+  * Honors Row, Column, Worksheet and Workbook-formats
+    and thus fixes a Bug introduced in
+    http://scm.ywesee.com/?p=spreadsheet;a=commit;h=52755ad76fdda151564b689107ca2fbb80af3b78
+    and reported in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=23875&group_id=678&atid=2678
+    and by Joachim Schneider in
+    http://rubyforge.org/forum/forum.php?thread_id=31056&forum_id=2920
+
+  * Fixes a bug reported by Alexander Skwar in
+    http://rubyforge.org/forum/forum.php?thread_id=31403&forum_id=2920
+    where the user-defined formatting of Dates and Times was overwritten with
+    a default format, and other issues connected with writing Dates and Times
+    into Spreadsheets.
+
+* 1 minor enhancements
+
+  * Spreadsheet shold now be completely warning-free,
+    as requested by Eric Peterson in
+    http://rubyforge.org/forum/forum.php?thread_id=31346&forum_id=2920
+
 === 0.6.3 / 2009-01-14
 
 * 1 Bugfix
