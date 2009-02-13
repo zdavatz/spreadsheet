@@ -96,16 +96,19 @@ class Workbook < Spreadsheet::Writer
     @number_formats[workbook][format] || 0
   end
   def sanitize_worksheets sheets
-    if sheets.all? do |sheet| !sheet.selected end
+    found_selected = false
+    sheets.each do |sheet|
+      found_selected ||= sheet.selected
+      sheet.format_dates!
+    end
+    unless found_selected
       sheets.first.selected = true
     end
     sheets
   end
   def worksheets workbook
-    @worksheets[workbook] ||= begin
-      sanitize_worksheets(workbook.worksheets).collect do |worksheet|
-        Excel::Writer::Worksheet.new self, worksheet
-      end
+    @worksheets[workbook] ||= workbook.worksheets.collect do |worksheet|
+      Excel::Writer::Worksheet.new self, worksheet
     end
   end
   def write_bof workbook, writer, type
@@ -155,6 +158,7 @@ class Workbook < Spreadsheet::Writer
   # Copy unchanged data verbatim, adjust offsets and write new records for
   # changed data.
   def write_changes workbook, io
+    sanitize_worksheets workbook.worksheets
     collect_formats workbook, :existing_document => true
     reader = workbook.ole
     sheet_data = {}
@@ -378,6 +382,7 @@ class Workbook < Spreadsheet::Writer
   ##
   # Write a new Excel file.
   def write_from_scratch workbook, io
+    sanitize_worksheets workbook.worksheets
     collect_formats workbook
     sheets = worksheets workbook
     buffer1 = StringIO.new ''

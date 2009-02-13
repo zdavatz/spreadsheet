@@ -140,6 +140,33 @@ module Spreadsheet
       res
     end
     ##
+    # Formats all Date, DateTime and Time cells with _format_ or the default
+    # formats:
+    # - 'DD.MM.YYYY' for Date
+    # - 'DD.MM.YYYY hh:mm:ss' for DateTime and Time
+    def format_dates! format=nil
+      each do |row|
+        row.each_with_index do |value, idx|
+          unless row.formats[idx] || row.format(idx).date_or_time?
+            numfmt = case value
+                     when DateTime, Time
+                       format || client('DD.MM.YYYY hh:mm:ss', 'UTF-8')
+                     when Date
+                       format || client('DD.MM.YYYY', 'UTF-8')
+                     end
+            case numfmt
+            when Format
+              row.set_format idx, numfmt
+            when String
+              fmt = row.format(idx).dup
+              fmt.number_format = numfmt
+              row.set_format idx, fmt
+            end
+          end
+        end
+      end
+    end
+    ##
     # Insert a Row at _idx_ (0-based) containing _cells_
     def insert_row idx, cells=[]
       res = @rows.insert idx, Row.new(self, idx, cells)
@@ -189,8 +216,6 @@ module Spreadsheet
     def row_updated idx, row
       @dimensions = nil
       @rows[idx] = row
-      format_dates row
-      row
     end
     ##
     # Updates the Row at _idx_ with the following arguments.
@@ -227,30 +252,6 @@ module Spreadsheet
       row(row)[column] = value
     end
     private
-    def format_dates row # :nodoc:
-      ## If no format is set in a cell which contains a Date or Time, we will
-      #  add a format. At the moment, the number formats correspond to builtin
-      #  Excel number-formats. We may need to add a level of abstraction if
-      #  additional writers are added to the library.
-      return unless row
-      row.each_with_index do |value, idx|
-        unless row.formats[idx]
-          format = nil
-          case value
-          when Date
-            format = @workbook.formats.find do |fmt| fmt.date? end
-            format ||= Format.new :number_format => client('M/D/YY', 'UTF-8')
-          when DateTime, Time
-            format = @workbook.formats.find do |fmt| fmt.datetime? end
-            format ||= Format.new :number_format => client('M/D/YY h:mm', 'UTF-8')
-          end
-          if format
-            row.formats[idx] = format
-            @workbook.add_format format
-          end
-        end
-      end
-    end
     def index_of_first ary # :nodoc:
       return unless ary
       ary.index(ary.find do |elm| elm end)

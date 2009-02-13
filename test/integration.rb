@@ -804,7 +804,7 @@ module Spreadsheet
       sheet1.row(6).set_format 0, fmt
       sheet1[6,1] = Date.new 2008, 10, 10
       sheet1[6,2] = Date.new 2008, 10, 12
-      fmt = Format.new :number_format => 'DD.MM.YYYY'
+      fmt = Format.new :number_format => 'D.M.YY'
       sheet1.row(6).set_format 1, fmt
       sheet1.update_row 7, nil, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
       sheet1[8,0] = 0.0005
@@ -930,12 +930,12 @@ module Spreadsheet
       assert_equal 1, row[0]
       assert_equal 1, sheet[6,0]
       assert_equal 1, sheet.cell(6,0)
-      assert_equal @@iconv.iconv('DD.MM.YYYY'), row.format(1).number_format
+      assert_equal @@iconv.iconv('D.M.YY'), row.format(1).number_format
       date = Date.new 2008, 10, 10
       assert_equal date, row[1]
       assert_equal date, sheet[6,1]
       assert_equal date, sheet.cell(6,1)
-      assert_equal @@iconv.iconv('M/D/YY'), row.format(2).number_format
+      assert_equal @@iconv.iconv('DD.MM.YYYY'), row.format(2).number_format
       date = Date.new 2008, 10, 12
       assert_equal date, row[2]
       assert_equal date, sheet[6,2]
@@ -1092,7 +1092,7 @@ module Spreadsheet
       assert_equal date, row[1]
       assert_equal date, sheet[6,1]
       assert_equal date, sheet.cell(6,1)
-      assert_equal 'M/D/YY', row.format(2).number_format
+      assert_equal 'DD.MM.YYYY', row.format(2).number_format
       date = Date.new 2008, 10, 12
       assert_equal date, row[2]
       assert_equal date, sheet[6,2]

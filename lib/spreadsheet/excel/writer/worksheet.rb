@@ -222,8 +222,8 @@ class Worksheet
         end
       when Formula
         write_formula row, idx
-      when Date
-        write_rk row, idx
+      when Date, Time
+        write_number row, idx
       end
     end
     write_multiples row, first_idx, multiples if multiples
@@ -607,7 +607,12 @@ class Worksheet
     # 2 2 Index to column
     # 4 2 Index to XF record (➜ 6.115)
     # 6 8 IEEE 754 floating-point value (64-bit double precision)
-    write_cell :number, row, idx, row[idx]
+    value = row[idx]
+    case value
+    when Date, Time
+      value = encode_date(value)
+    end
+    write_cell :number, row, idx, value
   end
   def write_op op, *args
     data = args.join
@@ -625,12 +630,7 @@ class Worksheet
   ##
   # Write a cell with a Numeric or Date value.
   def write_rk row, idx
-    value = row[idx]
-    case value
-    when Date, DateTime
-      value = encode_date(value)
-    end
-    write_cell :rk, row, idx, encode_rk(value)
+    write_cell :rk, row, idx, encode_rk(row[idx])
   end
   def write_row row
     # Offset  Size  Contents

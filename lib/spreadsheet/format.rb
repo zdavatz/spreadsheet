@@ -158,6 +158,11 @@ module Spreadsheet
       !!/[YMD]/.match(@number_format.to_s)
     end
     ##
+    # Is the cell formatted as a Date or Time?
+    def date_or_time?
+      !!/[hmsYMD]/.match(@number_format.to_s)
+    end
+    ##
     # Is the cell formatted as a DateTime?
     def datetime?
       !!/([YMD].*[HS])|([HS].*[YMD])/.match(@number_format.to_s)
