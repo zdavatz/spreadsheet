@@ -766,8 +766,10 @@ class Worksheet
     #     12     2  Cached magnification factor in normal view (in percent)
     #               0 = Default (100%)
     #     14     4  Not used
-    flags = 310
-    if @worksheet.active
+    flags = 0x0536  # Show grid lines, sheet headers, zero values. Automatic
+                    # grid line colour, Remove slits if pane freeze is removed,
+                    # Sheet is active.
+    if @worksheet.selected
       flags |= 0x0200
     end
     data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)

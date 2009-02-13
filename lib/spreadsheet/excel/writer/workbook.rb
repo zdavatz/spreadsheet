@@ -95,9 +95,17 @@ class Workbook < Spreadsheet::Writer
   def number_format_index workbook, format
     @number_formats[workbook][format] || 0
   end
+  def sanitize_worksheets sheets
+    if sheets.all? do |sheet| !sheet.selected end
+      sheets.first.selected = true
+    end
+    sheets
+  end
   def worksheets workbook
-    @worksheets[workbook] ||= workbook.worksheets.collect do |worksheet|
-      Excel::Writer::Worksheet.new self, worksheet
+    @worksheets[workbook] ||= begin
+      sanitize_worksheets(workbook.worksheets).collect do |worksheet|
+        Excel::Writer::Worksheet.new self, worksheet
+      end
     end
   end
   def write_bof workbook, writer, type
@@ -568,6 +576,8 @@ class Workbook < Spreadsheet::Writer
     write_op writer, 0x013d, [1].pack('v')
   end
   def write_window1 workbook, writer
+    selected = workbook.worksheets.find do |sheet| sheet.selected end
+    actidx = workbook.worksheets.index selected
     data = [
       0x0000, # Horizontal position of the document window
               # (in twips = 1/20 of a point)
@@ -587,7 +597,7 @@ class Workbook < Spreadsheet::Writer
               #              1 = Vertical scroll bar visible
               #   5  0x0020  0 = Worksheet tab bar hidden
               #              1 = Worksheet tab bar visible
-      0x0000, # Index to active (displayed) worksheet
+      actidx, # Index to active (displayed) worksheet
       0x0000, # Index of first visible tab in the worksheet tab bar
       0x0001, # Number of selected worksheets
               # (highlighted in the worksheet tab bar)

@@ -710,6 +710,50 @@ class Reader
     value = client read_string(work[6..-1], 2), @workbook.encoding
     set_cell worksheet, row, column, xf, value
   end
+  def read_window2 worksheet, work, pos, len
+    # This record contains additional settings for the document window
+    # (BIFF2-BIFF4) or for the window of a specific worksheet (BIFF5-BIFF8).
+    # It is part of the Sheet View Settings Block (➜ 4.5).
+    # Offset  Size  Contents
+    #      0     2  Option flags:
+    #               Bits  Mask    Contents
+    #                  0  0x0001  0 = Show formula results
+    #                             1 = Show formulas
+    #                  1  0x0002  0 = Do not show grid lines
+    #                             1 = Show grid lines
+    #                  2  0x0004  0 = Do not show sheet headers
+    #                             1 = Show sheet headers
+    #                  3  0x0008  0 = Panes are not frozen
+    #                             1 = Panes are frozen (freeze)
+    #                  4  0x0010  0 = Show zero values as empty cells
+    #                             1 = Show zero values
+    #                  5  0x0020  0 = Manual grid line colour
+    #                             1 = Automatic grid line colour
+    #                  6  0x0040  0 = Columns from left to right
+    #                             1 = Columns from right to left
+    #                  7  0x0080  0 = Do not show outline symbols
+    #                             1 = Show outline symbols
+    #                  8  0x0100  0 = Keep splits if pane freeze is removed
+    #                             1 = Remove splits if pane freeze is removed
+    #                  9  0x0200  0 = Sheet not selected
+    #                             1 = Sheet selected (BIFF5-BIFF8)
+    #                 10  0x0400  0 = Sheet not active
+    #                             1 = Sheet active (BIFF5-BIFF8)
+    #                 11  0x0800  0 = Show in normal view
+    #                             1 = Show in page break preview (BIFF8)
+    #      2     2  Index to first visible row
+    #      4     2  Index to first visible column
+    #      6     2  Colour index of grid line colour (➜ 5.74).
+    #               Note that in BIFF2-BIFF5 an RGB colour is written instead.
+    #      8     2  Not used
+    #     10     2  Cached magnification factor in page break preview (in percent)
+    #               0 = Default (60%)
+    #     12     2  Cached magnification factor in normal view (in percent)
+    #               0 = Default (100%)
+    #     14     4  Not used
+    flags, _ = work.unpack 'v'
+    worksheet.selected = flags & 0x0200 > 0
+  end
   def read_workbook
     worksheet = nil
     previous_op = nil
@@ -795,6 +839,8 @@ class Reader
         set_row_address worksheet, work, pos, len
       when :hlink
         read_hlink worksheet, work, pos, len
+      when :window2
+        read_window2 worksheet, work, pos, len
       end
       previous = op
     end

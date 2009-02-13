@@ -19,25 +19,31 @@ module Spreadsheet
   #                   instances may appear at more than one position in #columns.
   #                   If you modify a Column directly, your changes will be
   #                   reflected in all those positions.
-  # #active        :: When a user chooses to print a Workbook, Excel will include
-  #                   all active Worksheets. Defaults to true. If you want to
-  #                   exclude a Worksheet from the default print-list, set this
-  #                   to false. Warning: Excel will display a cryptic Error
-  #                   Message if a user tries to print a Workbook that has no
-  #                   active Worksheets.
+  # #selected      :: When a user chooses to print a Workbook, Excel will include
+  #                   all selected Worksheets. If no Worksheet is selected at
+  #                   Workbook#write, then the first Worksheet is selected by
+  #                   default.
   class Worksheet
     include Spreadsheet::Encodings
     include Enumerable
-    attr_accessor :active, :name, :workbook
+    attr_accessor :name, :selected, :workbook
     attr_reader :rows, :columns
     def initialize opts={}
-      @active = true
+      @selected = opts[:selected]
       @dimensions = [0,0,0,0]
       @name = opts[:name] || 'Worksheet'
       @workbook = opts[:workbook]
       @rows = []
       @columns = []
       @links = {}
+    end
+    def active # :nodoc:
+      warn "Worksheet#active is deprecated. Please use Worksheet#selected instead."
+      selected
+    end
+    def active= selected # :nodoc:
+      warn "Worksheet#active= is deprecated. Please use Worksheet#selected= instead."
+      self.selected = selected
     end
     ##
     # Add a Format to the Workbook. If you use Row#set_format, you should not
