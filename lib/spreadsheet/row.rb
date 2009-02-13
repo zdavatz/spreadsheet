@@ -50,6 +50,7 @@ module Spreadsheet
             :sort!, :uniq!, :unshift
     format_updater :collapsed, :height, :hidden, :outline_level
     def initialize worksheet, idx, cells=[]
+      @default_format = nil
       @worksheet = worksheet
       @idx = idx
       super cells

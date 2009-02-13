@@ -9,6 +9,7 @@ class SstEntry
   attr_accessor :chars, :phonetic, :richtext, :flags, :available,
                 :continued_chars, :wide
   def initialize opts = {}
+    @content = nil
     @offset = opts[:offset]
     @ole    = opts[:ole]
     @reader = opts[:reader]

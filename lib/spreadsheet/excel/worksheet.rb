@@ -13,6 +13,7 @@ class Worksheet < Spreadsheet::Worksheet
   offset :dimensions
   attr_reader :offset, :ole, :links
   def initialize opts = {}
+    @row_addresses = nil
     super
     @offset, @ole, @reader = opts[:offset], opts[:ole], opts[:reader]
     @dimensions = nil

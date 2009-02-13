@@ -1145,13 +1145,13 @@ module Spreadsheet
         book = Spreadsheet.open path
       end
       assert_equal bignum, book.worksheet(0)[0,0]
-      assert_equal -bignum, book.worksheet(0)[1,0]
+      assert_equal(-bignum, book.worksheet(0)[1,0])
       assert_equal smallnum, book.worksheet(0)[0,1]
-      assert_equal -smallnum, book.worksheet(0)[1,1]
+      assert_equal(-smallnum, book.worksheet(0)[1,1])
       assert_equal bignum - 0.1, book.worksheet(0)[0,2]
-      assert_equal -bignum - 0.1, book.worksheet(0)[1,2]
+      assert_equal(-bignum - 0.1, book.worksheet(0)[1,2])
       assert_equal smallnum - 0.1, book.worksheet(0)[0,3]
-      assert_equal -smallnum - 0.1, book.worksheet(0)[1,3]
+      assert_equal(-smallnum - 0.1, book.worksheet(0)[1,3])
     end
   end
 end

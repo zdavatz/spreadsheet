@@ -72,7 +72,6 @@ module Spreadsheet
       end
     end
     def inspect
-      "#<#{self.class}:#{object_id} "
       variables = (instance_variables - uninspect_variables).collect do |name|
         "%s=%s" % [name, instance_variable_get(name)]
       end.join(' ')

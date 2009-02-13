@@ -26,7 +26,9 @@ class Reader
       [1].pack('l') != "\001\000\000\000"
     }
     @opts = opts
+    @boundsheets = nil
     @current_row_block = {}
+    @current_row_block_offset = nil
     @formats = {}
     BUILTIN_FORMATS.each do |key, fmt| @formats.store key, client(fmt, 'UTF-8') end
   end
@@ -183,7 +185,7 @@ class Reader
     else
       @boundsheets = [1, pos, len]
     end
-    @workbook.set_boundsheets *@boundsheets
+    @workbook.set_boundsheets(*@boundsheets)
     @workbook.add_worksheet Worksheet.new(:name     => name,
                                           :ole      => @book,
                                           :offset   => offset,
@@ -762,14 +764,6 @@ class Reader
       case op
       when @bof, :bof  # ●  BOF Type = worksheet (➜ 6.8)
         return
-        worksheet = @workbook.worksheets.find do |worksheet|
-          worksheet.offset == pos
-        end
-        if worksheet
-          read_worksheet worksheet
-        else
-          warn "Unexpected BOF (0x%04x) at position 0x%04x" % [@bof, pos]
-        end
       when :eof        # ●  EOF ➜ 6.36
         postread_workbook
         return

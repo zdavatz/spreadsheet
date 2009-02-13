@@ -21,10 +21,11 @@ class << self
   def boolean *args
     args.each do |key|
       define_method key do
-        !!instance_variable_get("@#{key}")
+        name = "@#{key}"
+        !!(instance_variable_get(name) if instance_variables.include?(name))
       end
       define_method "#{key}?" do
-        !!instance_variable_get("@#{key}")
+        send key
       end
       define_method "#{key}=" do |arg|
         arg = false if arg == 0
@@ -73,7 +74,9 @@ class << self
       aliases.store value, value
     end
     define_method key do
-      instance_variable_get("@#{key}") || values.first
+      name = "@#{key}"
+      value = instance_variable_get(name) if instance_variables.include? name
+      value || values.first
     end
     define_method "#{key}=" do |arg|
       if arg

@@ -39,6 +39,7 @@ module Spreadsheet
     enum :outline_level, 0, Integer
     updater :collapsed, :hidden, :outline_level, :width
     def initialize idx, format, opts={}
+      @worksheet = nil
       @idx = idx
       opts[:width] ||= 10
       opts.each do |key, value|

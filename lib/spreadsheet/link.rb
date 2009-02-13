@@ -18,9 +18,10 @@ module Spreadsheet
   #                  but if you do, here is where you can find it.
   class Link < String
     attr_accessor :target_frame, :url, :dos, :fragment
-    def initialize url='', description=url
+    def initialize url='', description=url, fragment=nil
       super description
       @url = url
+      @fragment = fragment
     end
     ##
     # The Url with the fragment appended if present.

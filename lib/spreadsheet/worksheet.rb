@@ -29,6 +29,7 @@ module Spreadsheet
     attr_accessor :name, :selected, :workbook
     attr_reader :rows, :columns
     def initialize opts={}
+      @default_format = nil
       @selected = opts[:selected]
       @dimensions = [0,0,0,0]
       @name = opts[:name] || 'Worksheet'
@@ -174,7 +175,6 @@ module Spreadsheet
       res
     end
     def inspect
-      "#<#{self.class}:#{object_id} "
       names = instance_variables
       names.delete '@rows'
       variables = names.collect do |name|
