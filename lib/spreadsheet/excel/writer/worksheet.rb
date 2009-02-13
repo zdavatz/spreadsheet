@@ -158,7 +158,7 @@ class Worksheet
     write_op 0x000c, [count].pack('v')
   end
   def write_cell type, row, idx, *args
-    xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx]
+    xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx)
     data = [
       row.idx, # Index to row
       idx,     # Index to column
@@ -358,7 +358,7 @@ class Worksheet
   # Write a cell with a Formula. May write an additional String record depending
   # on the stored result of the Formula.
   def write_formula row, idx
-    xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx]
+    xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx)
     cell = row[idx]
     data1 = [
       row.idx,      # Index to row
@@ -562,7 +562,7 @@ class Worksheet
     ]
     # List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
     multiples.each_with_index do |blank, cell_idx|
-      xf_idx = @workbook.xf_index @worksheet.workbook, row.formats[idx + cell_idx]
+      xf_idx = @workbook.xf_index @worksheet.workbook, row.format(idx + cell_idx)
       data.push xf_idx
     end
     # Index to last column (lc)

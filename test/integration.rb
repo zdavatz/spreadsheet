@@ -580,7 +580,7 @@ module Spreadsheet
       sheet = book.worksheet 0
       assert_equal 11, sheet.row_count
       assert_equal 12, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      useds = [0,0,0,0,0,0,0,0,0,0,0]
       unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
@@ -689,7 +689,7 @@ module Spreadsheet
       sheet = book.worksheet 0
       assert_equal 11, sheet.row_count
       assert_equal 12, sheet.column_count
-      useds = [0,0,0,0,0,0,0,1,0,0,11]
+      useds = [0,0,0,0,0,0,0,0,0,0,0]
       unuseds = [2,2,1,1,1,2,1,11,1,2,12]
       sheet.each do |row|
         assert_equal useds.shift, row.first_used
