@@ -33,11 +33,18 @@ module Spreadsheet
       end
       def updater *keys
         keys.each do |key|
-          define_method key do |*args|
-            res = super(*args)
-            @worksheet.row_updated @idx, self if @worksheet
-            res
-          end
+          ## Passing blocks to methods defined with define_method is not possible
+          #  in Ruby 1.8:
+          #  http://groups.google.com/group/ruby-talk-google/msg/778184912b769e5f
+          #  use class_eval as suggested by someone else in
+          #  http://rubyforge.org/tracker/index.php?func=detail&aid=25732&group_id=678&atid=2677
+          class_eval <<-SRC, __FILE__, __LINE__
+            def #{key}(*args)
+              res = super(*args)
+              @worksheet.row_updated @idx, self if @worksheet
+              res
+            end
+          SRC
         end
       end
     end
