@@ -232,8 +232,8 @@ module Spreadsheet
     ##
     # Renumbers all Rows starting at _idx_ and calls #row_updated for each of
     # them.
-    def updated_from idx
-      idx.upto(@rows.size - 1) do |idx|
+    def updated_from index
+      index.upto(@rows.size - 1) do |idx|
         row = row(idx)
         row.idx = idx
         row_updated idx, row

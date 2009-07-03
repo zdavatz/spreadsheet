@@ -640,7 +640,7 @@ class Workbook < Spreadsheet::Writer
     @sst[worksheet][str]
   end
   def xf_index workbook, format
-    if fmt = @formats[workbook].find do |fmt| fmt.format == format end
+    if fmt = @formats[workbook].find do |fm| fm.format == format end
       fmt.xf_index
     else
       0

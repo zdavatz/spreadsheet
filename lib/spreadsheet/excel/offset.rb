@@ -7,6 +7,7 @@ module Spreadsheet
 # Considered internal and subject to change without notice.
 module Offset
   include Compatibility
+  attr_reader :changes, :offsets
   def initialize *args
     super
     @changes = {}
@@ -14,7 +15,6 @@ module Offset
   end
   def Offset.append_features mod
     super
-    attr_reader :changes, :offsets
     mod.module_eval do
       class << self
         include Compatibility
