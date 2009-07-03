@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 # TestIntegration -- Spreadheet -- 08.10.2007 -- hwyss@ywesee.com
 
 $: << File.expand_path('../lib', File.dirname(__FILE__))
@@ -9,7 +10,23 @@ require 'fileutils'
 
 module Spreadsheet
   class TestIntegration < Test::Unit::TestCase
-    @@iconv = Iconv.new('UTF-16LE', 'UTF-8')
+    if RUBY_VERSION >= '1.9'
+      class IconvStub
+        def initialize to, from
+          @to, @from = to, from
+        end
+        def iconv str
+          dp = str.dup
+          dp.force_encoding @from
+          dp.encode @to
+        end
+      end
+      @@iconv = IconvStub.new('UTF-16LE', 'UTF-8')
+      @@bytesize = :bytesize
+    else
+      @@iconv = Iconv.new('UTF-16LE', 'UTF-8')
+      @@bytesize = :size
+    end
     def setup
       @var = File.expand_path 'var', File.dirname(__FILE__)
       FileUtils.mkdir_p @var
@@ -66,6 +83,7 @@ module Spreadsheet
       assert_equal 25, book.formats.size
       assert_equal 5, book.fonts.size
       str1 = book.shared_string 0
+      other = @@iconv.iconv('Shared String')
       assert_equal @@iconv.iconv('Shared String'), str1
       str2 = book.shared_string 1
       assert_equal @@iconv.iconv('Another Shared String'), str2
@@ -305,7 +323,7 @@ module Spreadsheet
       assert_equal str2, sheet[1,1]
       assert_equal str2, sheet.cell(1,1)
       row = sheet.row 2
-      assert_equal 510, row[0].size
+      assert_equal 510, row[0].send(@@bytesize)
       assert_equal str3, row[0]
       assert_equal str3, sheet[2,0]
       assert_equal str3, sheet.cell(2,0)
@@ -313,7 +331,7 @@ module Spreadsheet
       assert_nil sheet[2,1]
       assert_nil sheet.cell(2,1)
       row = sheet.row 3
-      assert_equal 510, row[0].size
+      assert_equal 510, row[0].send(@@bytesize)
       assert_equal str4, row[0]
       assert_equal str4, sheet[3,0]
       assert_equal str4, sheet.cell(3,0)
@@ -378,7 +396,7 @@ module Spreadsheet
       assert_equal str2, sheet[1,1]
       assert_equal str2, sheet.cell(1,1)
       row = sheet.row 2
-      assert_equal 255, row[0].size
+      assert_equal 255, row[0].send(@@bytesize)
       assert_equal str3, row[0]
       assert_equal str3, sheet[2,0]
       assert_equal str3, sheet.cell(2,0)
@@ -386,7 +404,7 @@ module Spreadsheet
       assert_nil sheet[2,1]
       assert_nil sheet.cell(2,1)
       row = sheet.row 3
-      assert_equal 255, row[0].size
+      assert_equal 255, row[0].send(@@bytesize)
       assert_equal str4, row[0]
       assert_equal str4, sheet[3,0]
       assert_equal str4, sheet.cell(3,0)
@@ -451,7 +469,7 @@ module Spreadsheet
       assert_equal str2, sheet[1,1]
       assert_equal str2, sheet.cell(1,1)
       row = sheet.row 2
-      assert_equal 255, row[0].size
+      assert_equal 255, row[0].send(@@bytesize)
       assert_equal str3, row[0]
       assert_equal str3, sheet[2,0]
       assert_equal str3, sheet.cell(2,0)
@@ -459,7 +477,7 @@ module Spreadsheet
       assert_nil sheet[2,1]
       assert_nil sheet.cell(2,1)
       row = sheet.row 3
-      assert_equal 255, row[0].size
+      assert_equal 255, row[0].send(@@bytesize)
       assert_equal str4, row[0]
       assert_equal str4, sheet[3,0]
       assert_equal str4, sheet.cell(3,0)
@@ -501,7 +519,11 @@ module Spreadsheet
       assert_equal 3, sheets.size
       sheet = book.worksheet 0
       assert_instance_of Excel::Worksheet, sheet
-      assert_equal sheet, book.worksheet("S\000h\000e\000e\000t\0001\000")
+      str = "S\000h\000e\000e\000t\0001\000"
+      if RUBY_VERSION >= '1.9'
+        str.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
+      end
+      assert_equal sheet, book.worksheet(str)
     end
     def test_datetime
       path = File.join @data, 'test_datetime.xls'
@@ -844,7 +866,11 @@ module Spreadsheet
       str3 = @@iconv.iconv str3
       str4 = @@iconv.iconv str4
       assert_nothing_raised do book = Spreadsheet.open path end
-      assert_equal 'UTF-16LE', book.encoding
+      if RUBY_VERSION >= '1.9'
+        assert_equal 'UTF-16LE', book.encoding.name
+      else
+        assert_equal 'UTF-16LE', book.encoding
+      end
       assert_equal str1, book.shared_string(0)
       assert_equal str2, book.shared_string(1)
       test = nil
@@ -873,8 +899,9 @@ module Spreadsheet
       assert_equal 2, book.worksheets.size
       sheet = book.worksheets.first
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
-      assert_equal "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000",
-                   sheet.name
+      name = "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000"
+      name.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
+      assert_equal name, sheet.name
       assert_not_nil sheet.offset
       assert_not_nil col = sheet.column(1)
       assert_equal true, col.default_format.font.italic?
@@ -968,8 +995,9 @@ module Spreadsheet
       assert_equal 40, sheet1.row(11).height
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
-      assert_equal "m\000y\000 \000n\000a\000m\000e\000",
-                   sheet.name
+      name = "m\000y\000 \000n\000a\000m\000e\000"
+      name.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
+      assert_equal name, sheet.name
       assert_not_nil sheet.offset
     end
     def test_write_new_workbook__utf16
@@ -999,12 +1027,12 @@ module Spreadsheet
       sheet1.row(6).set_format 0, fmt
       sheet1[6,1] = Date.new 2008, 10, 10
       sheet1[6,2] = Date.new 2008, 10, 12
-      fmt = Format.new :number_format => "D\0D\0.\0M\0M\0.\0Y\0Y\0Y\0Y\0"
+      fmt = Format.new :number_format => @@iconv.iconv("DD.MM.YYYY")
       sheet1.row(6).set_format 1, fmt
       sheet1.update_row 7, nil, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
       sheet1.row(8).default_format = fmt
       sheet1[8,0] = @@iconv.iconv 'formatted when empty'
-      sheet2 = book.create_worksheet :name => "m\0y\0 \0n\0a\0m\0e\0"
+      sheet2 = book.create_worksheet :name => @@iconv.iconv("my name")
       book.write path
       Spreadsheet.client_encoding = 'UTF-8'
       str1 = 'Shared String'
@@ -1012,7 +1040,11 @@ module Spreadsheet
       str3 = '1234567890 ' * 1000
       str4 = '9876543210 ' * 1000
       assert_nothing_raised do book = Spreadsheet.open path end
-      assert_equal 'UTF-16LE', book.encoding
+      if RUBY_VERSION >= '1.9'
+        assert_equal 'UTF-16LE', book.encoding.name
+      else
+        assert_equal 'UTF-16LE', book.encoding
+      end
       assert_equal str1, book.shared_string(0)
       assert_equal str2, book.shared_string(1)
       test = book.shared_string 2

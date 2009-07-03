@@ -1,8 +1,11 @@
+require 'spreadsheet/compatibility'
+
 module Spreadsheet
   ##
   # This module defines convenience-methods for the definition of Spreadsheet
   # attributes (boolean, colors and enumerations)
   module Datatypes
+    include Compatibility
     def Datatypes.append_features mod
       super
       mod.module_eval do
@@ -21,7 +24,7 @@ class << self
   def boolean *args
     args.each do |key|
       define_method key do
-        name = "@#{key}"
+        name = ivar_name key
         !!(instance_variable_get(name) if instance_variables.include?(name))
       end
       define_method "#{key}?" do
@@ -29,7 +32,7 @@ class << self
       end
       define_method "#{key}=" do |arg|
         arg = false if arg == 0
-        instance_variable_set("@#{key}", !!arg)
+        instance_variable_set(ivar_name(key), !!arg)
       end
       define_method "#{key}!" do
         send "#{key}=", true
@@ -45,7 +48,7 @@ class << self
       define_method "#{key}=" do |name|
         name = name.to_s.downcase.to_sym
         if COLORS.include?(name)
-          instance_variable_set "@#{key}", name
+          instance_variable_set ivar_name(key), name
         else
           raise ArgumentError, "unknown color '#{name}'"
         end
@@ -74,7 +77,7 @@ class << self
       aliases.store value, value
     end
     define_method key do
-      name = "@#{key}"
+      name = ivar_name key
       value = instance_variable_get(name) if instance_variables.include? name
       value || values.first
     end
@@ -84,14 +87,14 @@ class << self
           aliases.fetch arg.to_s.downcase.gsub(/[ \-]/, '_').to_sym, arg
         end
         if values.any? do |val| val === arg end
-          instance_variable_set("@#{key}", arg)
+          instance_variable_set(ivar_name(key), arg)
         else
           valid = values.collect do |val| val.inspect end.join ', '
           raise ArgumentError,
             "Invalid value '#{arg.inspect}' for #{key}. Valid values are: #{valid}"
         end
       else
-        instance_variable_set "@#{key}", values.first
+        instance_variable_set ivar_name(key), values.first
       end
     end
   end

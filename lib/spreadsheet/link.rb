@@ -1,4 +1,5 @@
 require 'uri'
+require 'spreadsheet/encodings'
 
 module Spreadsheet
   ##
@@ -17,6 +18,7 @@ module Spreadsheet
   #                  Filename introduced in VFAT. You probably will not need this,
   #                  but if you do, here is where you can find it.
   class Link < String
+    include Encodings
     attr_accessor :target_frame, :url, :dos, :fragment
     def initialize url='', description=url, fragment=nil
       super description
@@ -28,7 +30,7 @@ module Spreadsheet
     def href
       href = (@url || @dos).to_s.dup
       if @fragment
-        href << '#' << @fragment
+        href << client('#') << @fragment
       end
       href
     end

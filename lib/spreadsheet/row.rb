@@ -34,7 +34,7 @@ module Spreadsheet
       def updater *keys
         keys.each do |key|
           define_method key do |*args|
-            res = super
+            res = super(*args)
             @worksheet.row_updated @idx, self if @worksheet
             res
           end

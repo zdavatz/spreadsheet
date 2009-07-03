@@ -4,10 +4,16 @@ module Spreadsheet
   module Encodings
     if RUBY_VERSION >= '1.9'
       def client string, internal='UTF-16LE'
+        string.force_encoding internal
         string.encode Spreadsheet.client_encoding
       end
-      def internal string, internal='UTF-16LE'
-        string.encode internal
+      def internal string, client=Spreadsheet.client_encoding
+        string.force_encoding client
+        string.encode('UTF-16LE').force_encoding('ASCII-8BIT')
+      end
+      def utf8 string, client=Spreadsheet.client_encoding
+        string.force_encoding client
+        string.encode('UTF-8')
       end
     else
       require 'iconv'
@@ -17,9 +23,14 @@ module Spreadsheet
         iconv = @@iconvs[key] ||= Iconv.new(Spreadsheet.client_encoding, internal)
         iconv.iconv string
       end
-      def internal string, internal='UTF-16LE'
-        key = [internal, Spreadsheet.client_encoding]
-        iconv = @@iconvs[key] ||= Iconv.new(internal, Spreadsheet.client_encoding)
+      def internal string, client=Spreadsheet.client_encoding
+        key = ['UTF-16LE', client]
+        iconv = @@iconvs[key] ||= Iconv.new('UTF-16LE', client)
+        iconv.iconv string
+      end
+      def utf8 string, client=Spreadsheet.client_encoding
+        key = ['UTF-8', client]
+        iconv = @@iconvs[key] ||= Iconv.new('UTF-8', client)
         iconv.iconv string
       end
     end

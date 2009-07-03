@@ -264,7 +264,6 @@ module Spreadsheet
       compact = @rows.compact
       @dimensions[2] = compact.collect do |row| row.first_used end.compact.min || 0
       @dimensions[3] = compact.collect do |row| row.first_unused end.max || 0
-      puts caller if @dimensions.nil?
       @dimensions
     end
     def shorten ary # :nodoc:

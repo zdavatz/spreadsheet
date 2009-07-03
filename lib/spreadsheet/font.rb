@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spreadsheet/datatypes'
 require 'spreadsheet/encodings'
 
@@ -73,17 +74,18 @@ module Spreadsheet
     end
     def key # :nodoc:
       key = @name.dup
-      key << '_' << size.to_s
-      key << '_' << weight.to_s
-      key << '_italic'    if italic?
-      key << '_strikeout' if strikeout?
-      key << '_outline'   if outline?
-      key << '_shadow'    if shadow?
-      key << '_' << escapement.to_s
-      key << '_' << underline.to_s
-      key << '_' << color.to_s
-      key << '_' << family.to_s
-      key << '_' << encoding.to_s
+      underscore = client('_', 'UTF-8')
+      key << underscore << client(size.to_s, 'US-ASCII')
+      key << client('_', 'UTF-8') << client(weight.to_s, 'US-ASCII')
+      key << client('_italic', 'UTF-8')    if italic?
+      key << client('_strikeout', 'UTF-8') if strikeout?
+      key << client('_outline', 'UTF-8')   if outline?
+      key << client('_shadow', 'UTF-8')    if shadow?
+      key << underscore << client(escapement.to_s, 'US-ASCII')
+      key << underscore << client(underline.to_s, 'US-ASCII')
+      key << underscore << client(color.to_s, 'US-ASCII')
+      key << underscore << client(family.to_s, 'US-ASCII')
+      key << underscore << client(encoding.to_s, 'US-ASCII')
     end
   end
 end

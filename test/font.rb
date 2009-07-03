@@ -4,7 +4,7 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'test/unit'
-require 'spreadsheet/font'
+require 'spreadsheet'
 
 module Spreadsheet
   class TestFont < Test::Unit::TestCase

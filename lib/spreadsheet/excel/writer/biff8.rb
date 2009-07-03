@@ -36,11 +36,12 @@ module Biff8
     header, data, _ = _unicode_string string, count_length
     header << data
   end
+  @@bytesize = RUBY_VERSION >= '1.9' ? :bytesize : :size
   ##
   # Encode _string_ into a Biff8 Unicode String Header and Body.
   def _unicode_string string, count_length=1
     data = internal string
-    size = data.size / 2
+    size = data.send(@@bytesize) / 2
     fmt = count_length == 1 ? 'C2' : 'vC'
     data, wide = compress_unicode_string data
     opts = wide

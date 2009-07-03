@@ -8,6 +8,7 @@ module Spreadsheet
     end
     def write workbook
       if @io_or_path.respond_to? :seek
+        @io_or_path.binmode
         write_workbook workbook, @io_or_path
       else
         File.open(@io_or_path, "wb+") do |fh|

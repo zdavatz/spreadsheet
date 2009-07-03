@@ -501,15 +501,17 @@ class Worksheet
 
     ].pack('V2')
     tail = []
+    ## call internal to get the correct internal encoding in Ruby 1.9
+    nullstr = internal "\000"
     unless link == link.url
-      desc = internal(link).dup << "\000\000"
+      desc = internal(link).dup << nullstr
       tail.push [desc.size / 2].pack('V'), desc
     end
     if link.target_frame
-      frme = internal(link.target_frame).dup << "\000\000"
+      frme = internal(link.target_frame).dup << nullstr
       tail.push [frme.size / 2].pack('V'), frme
     end
-    url = internal(link.url).dup << "\000\000"
+    url = internal(link.url).dup << nullstr
     tail.push [
       # 6.53.2 Hyperlink containing a URL (Uniform Resource Locator)
       # These data fields occur for links which are not local files or files
@@ -526,7 +528,7 @@ class Worksheet
                 # string.
     ].pack('H32V'), url
     if link.fragment
-      frag = internal(link.fragment).dup << "\000\000"
+      frag = internal(link.fragment).dup << nullstr
       tail.push [frag.size / 2].pack('V'), frag
     end
     write_op opcode(:hlink), cell_range, guid, options, *tail

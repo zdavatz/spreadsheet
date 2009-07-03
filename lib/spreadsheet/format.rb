@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spreadsheet/datatypes'
 require 'spreadsheet/encodings'
 require 'spreadsheet/font'
@@ -155,22 +156,22 @@ module Spreadsheet
     ##
     # Is the cell formatted as a Date?
     def date?
-      !!/[YMD]/.match(@number_format.to_s)
+      !!Regexp.new(client("[YMD]", 'UTF-8')).match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Date or Time?
     def date_or_time?
-      !!/[hmsYMD]/.match(@number_format.to_s)
+      !!Regexp.new(client("[hmsYMD]", 'UTF-8')).match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !!/([YMD].*[HS])|([HS].*[YMD])/.match(@number_format.to_s)
+      !!Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')).match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Time?
     def time?
-      !!/[hms]/.match(@number_format.to_s)
+      !!Regexp.new(client("[hms]", 'UTF-8')).match(@number_format.to_s)
     end
   end
 end
