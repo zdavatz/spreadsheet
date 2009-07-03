@@ -703,9 +703,9 @@ class Worksheet
     end
     opts |= 0x00000100
     height = if height == ROW_HEIGHT
-               height * TWIPS
+               (height * TWIPS).to_i | 0x8000
              else
-               ( height * TWIPS ) | 0x8000
+               height * TWIPS
              end
     # TODO: Row spacing
     data = [
