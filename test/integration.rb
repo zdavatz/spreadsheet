@@ -1185,5 +1185,29 @@ module Spreadsheet
       assert_equal smallnum - 0.1, book.worksheet(0)[0,3]
       assert_equal(-smallnum - 0.1, book.worksheet(0)[1,3])
     end
+    def test_bigfloat
+      # reported in http://rubyforge.org/tracker/index.php?func=detail&aid=24119&group_id=678&atid=2677
+      bigfloat = 10000000.0
+      book = Spreadsheet::Workbook.new
+      sheet = book.create_worksheet
+      sheet[0,0] = bigfloat
+      sheet[0,1] = bigfloat + 0.1
+      sheet[0,2] = bigfloat - 0.1
+      sheet[1,0] = -bigfloat
+      sheet[1,1] = -bigfloat + 0.1
+      sheet[1,2] = -bigfloat - 0.1
+      path = File.join @var, 'test_big-float.xls'
+      book.write path
+      assert_nothing_raised do
+        book = Spreadsheet.open path
+      end
+      sheet = book.worksheet(0)
+      assert_equal bigfloat, sheet[0,0]
+      assert_equal bigfloat + 0.1, sheet[0,1]
+      assert_equal bigfloat - 0.1, sheet[0,2]
+      assert_equal -bigfloat, sheet[1,0]
+      assert_equal -bigfloat + 0.1, sheet[1,1]
+      assert_equal -bigfloat - 0.1, sheet[1,2]
+    end
   end
 end

@@ -86,9 +86,19 @@ class Worksheet
     unicode_string @worksheet.name
   end
   def need_number? cell
-    (cell.is_a?(Numeric) && cell.abs > 0x1fffffff) \
-      || (cell.is_a?(Float) \
-          && !/^[\000\001]\000{3}/.match([cell * 100].pack(EIGHT_BYTE_DOUBLE)))
+    if cell.is_a?(Numeric) && cell.abs > 0x1fffffff
+      true
+    elsif cell.is_a?(Float)
+      higher = cell * 100
+      if higher == higher.to_i
+        need_number? higher.to_i
+      else
+        test1, test2 = [cell * 100].pack(EIGHT_BYTE_DOUBLE).unpack('V2')
+        test1 > 0 || need_number?(test2)
+      end
+    else
+      false
+    end
   end
   def row_blocks
     # All cells in an Excel document are divided into blocks of 32 consecutive
