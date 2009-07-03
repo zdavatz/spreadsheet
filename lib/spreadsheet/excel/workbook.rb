@@ -61,7 +61,7 @@ class Workbook < Spreadsheet::Workbook
     end
   end
   def date_base
-    @date_base ||= Date.new 1899, 12, 31
+    @date_base ||= DateTime.new 1899, 12, 31
   end
   def shared_string idx
     @sst[idx.to_i].content

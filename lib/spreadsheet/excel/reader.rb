@@ -770,9 +770,9 @@ class Reader
       when :datemode   # ○  DATEMODE ➜ 6.25
         flag, _ = work.unpack 'v'
         if flag == 1
-          @workbook.date_base = Date.new 1904, 1, 1
+          @workbook.date_base = DateTime.new 1904, 1, 1
         else
-          @workbook.date_base = Date.new 1899, 12, 31
+          @workbook.date_base = DateTime.new 1899, 12, 31
         end
       when :continue   # ○  CONTINUE ➜ 6.22
         case previous_op

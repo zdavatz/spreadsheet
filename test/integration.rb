@@ -1209,5 +1209,30 @@ module Spreadsheet
       assert_equal -bigfloat + 0.1, sheet[1,1]
       assert_equal -bigfloat - 0.1, sheet[1,2]
     end
+    def test_datetime
+      # reported in http://rubyforge.org/tracker/index.php?func=detail&aid=24414&group_id=678&atid=2677
+      datetime1 = DateTime.new(2008)
+      datetime2 = DateTime.new(2008, 1, 1, 1, 0, 1)
+      date1 = Date.new(2008)
+      date2 = Date.new(2009)
+      book = Spreadsheet::Workbook.new
+      sheet = book.create_worksheet
+      sheet[0,0] = datetime1
+      sheet[0,1] = datetime2
+      sheet[1,0] = date1
+      sheet[1,1] = date2
+      path = File.join @var, 'test_datetime.xls'
+      book.write path
+      assert_nothing_raised do
+        book = Spreadsheet.open path
+      end
+      sheet = book.worksheet(0)
+      assert_equal datetime1, sheet[0,0]
+      assert_equal datetime2, sheet[0,1]
+      assert_equal date1, sheet[1,0]
+      assert_equal date2, sheet[1,1]
+      assert_equal date1, sheet.row(0).date(0)
+      assert_equal datetime1, sheet.row(1).datetime(0)
+    end
   end
 end
