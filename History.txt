@@ -1,3 +1,35 @@
+=== 0.6.4 / 2009-07-03
+
+* 5 Bugfixes
+
+  * Fixes the issue reported by Harley Mackenzie in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=24119&group_id=678&atid=2677
+    where in some edge-cases numbers were stored incorrectly
+
+  * Fixes the issue reported and fixed by someone23 in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=25732&group_id=678&atid=2677
+    where using Row-updater methods with blocks caused LocalJumpErrors
+
+  * Fixes the issue reported and fixed by Corey Burrows in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=25784&group_id=678&atid=2677
+    where "Setting the height of a row, either in Excel directly, or via the
+    Spreadsheet::Row#height= method results in a row that Excel displays with
+    the maximum row height (409)."
+
+  * Fixes the issue reported by Don Park in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=25968&group_id=678&atid=2677
+    where some Workbooks could not be parsed due to the OLE-entry being all
+    uppercase
+
+  * Fixes the issue reported by Iwan Buetti in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=24414&group_id=678&atid=2677
+    where parsing some Workbooks failed with an Invalid date error.
+
+
+* 1 major enhancement
+
+  * Spreadsheet now runs on Ruby 1.9
+
 === 0.6.3.1 / 2009-02-13
 
 * 3 Bugfixes

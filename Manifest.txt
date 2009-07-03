@@ -10,6 +10,7 @@ lib/parseexcel/parseexcel.rb
 lib/parseexcel/parser.rb
 lib/spreadsheet.rb
 lib/spreadsheet/column.rb
+lib/spreadsheet/compatibility.rb
 lib/spreadsheet/datatypes.rb
 lib/spreadsheet/encodings.rb
 lib/spreadsheet/excel.rb
