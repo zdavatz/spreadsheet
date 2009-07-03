@@ -525,7 +525,7 @@ module Spreadsheet
       end
       assert_equal sheet, book.worksheet(str)
     end
-    def test_datetime
+    def test_read_datetime
       path = File.join @data, 'test_datetime.xls'
       book = Spreadsheet.open path
       assert_instance_of Excel::Workbook, book
@@ -604,9 +604,9 @@ module Spreadsheet
       assert_equal 12, sheet.column_count
       useds = [0,0,0,0,0,0,0,0,0,0,0]
       unuseds = [2,2,1,1,1,2,1,11,1,2,12]
-      sheet.each do |row|
-        assert_equal useds.shift, row.first_used
-        assert_equal unuseds.shift, row.first_unused
+      sheet.each do |rw|
+        assert_equal useds.shift, rw.first_used
+        assert_equal unuseds.shift, rw.first_unused
       end
       assert unuseds.empty?, "not all rows were visited in Spreadsheet#each"
       row = sheet.row 0
@@ -713,9 +713,9 @@ module Spreadsheet
       assert_equal 12, sheet.column_count
       useds = [0,0,0,0,0,0,0,0,0,0,0]
       unuseds = [2,2,1,1,1,2,1,11,1,2,12]
-      sheet.each do |row|
-        assert_equal useds.shift, row.first_used
-        assert_equal unuseds.shift, row.first_unused
+      sheet.each do |rw|
+        assert_equal useds.shift, rw.first_used
+        assert_equal unuseds.shift, rw.first_unused
       end
       assert unuseds.empty?, "not all rows were visited in Spreadsheet#each"
       row = sheet.row 0
@@ -1205,11 +1205,11 @@ module Spreadsheet
       assert_equal bigfloat, sheet[0,0]
       assert_equal bigfloat + 0.1, sheet[0,1]
       assert_equal bigfloat - 0.1, sheet[0,2]
-      assert_equal -bigfloat, sheet[1,0]
-      assert_equal -bigfloat + 0.1, sheet[1,1]
-      assert_equal -bigfloat - 0.1, sheet[1,2]
+      assert_equal(-bigfloat, sheet[1,0])
+      assert_equal(-bigfloat + 0.1, sheet[1,1])
+      assert_equal(-bigfloat - 0.1, sheet[1,2])
     end
-    def test_datetime
+    def test_datetime__off_by_one
       # reported in http://rubyforge.org/tracker/index.php?func=detail&aid=24414&group_id=678&atid=2677
       datetime1 = DateTime.new(2008)
       datetime2 = DateTime.new(2008, 1, 1, 1, 0, 1)

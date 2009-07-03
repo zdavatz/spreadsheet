@@ -52,10 +52,25 @@ class Row < Spreadsheet::Row
     return data if data.is_a?(DateTime)
     base = @worksheet.date_base
     date = base + data.to_f
+    hour = (data % 1) * 24
+    min  = (hour % 1) * 60
+    sec  = ((min % 1) * 60).round
+    min = min.floor
+    hour = hour.floor
+    if sec > 59
+      sec = 0
+      min += 1
+    end
+    if min > 59
+      hour += 1
+    end
+    if hour > 23
+      date += 1
+    end
     if LEAP_ERROR > base
       date -= 1
     end
-    date
+    DateTime.new(date.year, date.month, date.day, hour, min, sec)
   end
   def enriched_data idx, data # :nodoc:
     res = nil
