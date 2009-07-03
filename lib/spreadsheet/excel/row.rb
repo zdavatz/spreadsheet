@@ -50,8 +50,9 @@ class Row < Spreadsheet::Row
   end
   def _datetime data # :nodoc:
     return data if data.is_a?(DateTime)
-    date = @worksheet.date_base + data.to_f
-    if date > LEAP_ERROR
+    base = @worksheet.date_base
+    date = base + data.to_f
+    if LEAP_ERROR > base
       date -= 1
     end
     date
