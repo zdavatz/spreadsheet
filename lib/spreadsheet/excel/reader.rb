@@ -1104,7 +1104,9 @@ class Reader
     io.rewind
     @ole = Ole::Storage.open io
     @workbook = Workbook.new io, {}
-    @book = @ole.file.open("Book") rescue @ole.file.open("Workbook")
+    %w{Book Workbook BOOK WORKBOOK book workbook}.any? do |name|
+      @book = @ole.file.open(name) rescue false
+    end
     @data = @book.read
     read_bof
     @workbook.ole = @book
