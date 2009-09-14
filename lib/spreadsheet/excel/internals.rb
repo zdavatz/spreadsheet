@@ -226,6 +226,7 @@ module Internals
     :string       => 0x0207, #    STRING ➜ 6.98
     :style        => 0x0293, # ●● STYLE ➜ 6.99
     :xf           => 0x00e0, # ●● XF ➜ 6.115
+    :sharedfmla   => 0x04bc, #    SHAREDFMLA ➜ 5.94
     ########################## Unhandled Opcodes ################################
     :extsst       => 0x00ff, # ●  EXTSST ➜ 6.40
     :index        => 0x020b, # ○  INDEX ➜ 5.7 (Row Blocks), ➜ 6.55

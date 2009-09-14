@@ -1234,5 +1234,14 @@ module Spreadsheet
       assert_equal date1, sheet.row(0).date(0)
       assert_equal datetime1, sheet.row(1).datetime(0)
     end
+    def test_sharedfmla
+      path = File.join @data, 'test_formula.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      64.times do |idx|
+        assert_equal '5026', sheet[idx.next, 2].value
+      end
+    end
   end
 end
