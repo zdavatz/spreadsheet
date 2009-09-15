@@ -24,6 +24,12 @@ class TestRow < Test::Unit::TestCase
     d2 = row.datetime 1
     assert_equal d1, d2
   end
+  def test_datetime_overflow
+    row = Row.new @worksheet, 0, [nil, 40010.6666666666]
+    d1 = DateTime.new(2009,07,16,16)
+    d2 = row.datetime 1
+    assert_equal d1, d2
+  end
 end
   end
 end

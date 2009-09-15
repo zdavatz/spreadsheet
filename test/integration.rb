@@ -535,7 +535,17 @@ module Spreadsheet
       assert_equal 00, time.min
       assert_equal 00, time.sec
       time = sheet[1,0]
+      assert_equal 1899, time.year
+      assert_equal 12, time.month
+      assert_equal 30, time.day
       assert_equal 22, time.hour
+      assert_equal 30, time.min
+      assert_equal 45, time.sec
+      time = sheet[0,1]
+      assert_equal 1899, time.year
+      assert_equal 12, time.month
+      assert_equal 31, time.day
+      assert_equal 4, time.hour
       assert_equal 30, time.min
       assert_equal 45, time.sec
     end

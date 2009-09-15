@@ -62,9 +62,11 @@ class Row < Spreadsheet::Row
       min += 1
     end
     if min > 59
+      min = 0
       hour += 1
     end
     if hour > 23
+      hour = 0
       date += 1
     end
     if LEAP_ERROR > base
