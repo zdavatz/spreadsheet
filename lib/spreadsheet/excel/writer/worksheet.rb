@@ -265,12 +265,20 @@ class Worksheet
     end
     row_offsets.sort!
     row_offsets.reverse!
+    control = changes.size
     @worksheet.each do |row|
       key = row.idx
       if changes.include?(key) && !work.include?(key)
         row, pair = row_offsets.find do |idx, _| idx <= key end
         work.store key, pair
       end
+    end
+    if changes.size > control
+      warn <<-EOS
+Your Worksheet was modified while it was being written. This should not happen.
+Please contact the author (hannes dot wyss at gmail dot com) with a sample file
+and minimal code that generates this warning. Thanks!
+      EOS
     end
     work = work.sort_by do |key, (pos, len)|
       [pos, key.is_a?(Integer) ? key : -1]

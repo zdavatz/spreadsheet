@@ -1261,5 +1261,14 @@ module Spreadsheet
       assert_not_nil sheet[1,0]
       assert_not_nil sheet[2,1]
     end
+    def test_changes
+      path = File.join @data, 'test_changes.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 1
+      sheet[20,0] = 'Ciao Mundo!'
+      target = File.join @var, 'test_changes.xls'
+      assert_nothing_raised do book.write target end
+    end
   end
 end

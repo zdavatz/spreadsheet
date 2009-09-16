@@ -69,9 +69,9 @@ module Spreadsheet
     # stored for the cell.
     def default_format= format
       @worksheet.add_format format if @worksheet
-      @worksheet.row_updated @idx, self if @worksheet
       @default_format = format
     end
+    format_updater :default_format
     ##
     # #first_used the 0-based index of the first non-blank Cell.
     def first_used

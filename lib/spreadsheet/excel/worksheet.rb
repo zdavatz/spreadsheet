@@ -45,7 +45,7 @@ class Worksheet < Spreadsheet::Worksheet
       if addr = @row_addresses[idx]
         row = @reader.read_row self, addr
         [:default_format, :height, :outline_level, :hidden, ].each do |key|
-          row.send "#{key}=", addr[key]
+          row.send "unupdated_#{key}=", addr[key]
         end
         row.worksheet = self
         row
