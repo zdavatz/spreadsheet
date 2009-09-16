@@ -1253,5 +1253,13 @@ module Spreadsheet
         assert_equal '5026', sheet[idx.next, 2].value
       end
     end
+    def test_missing_row_op
+      path = File.join @data, 'test_missing_row.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      assert_not_nil sheet[1,0]
+      assert_not_nil sheet[2,1]
+    end
   end
 end

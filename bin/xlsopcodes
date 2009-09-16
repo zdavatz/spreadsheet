@@ -12,7 +12,7 @@ end
 target = target ? File.open(target, 'w') : STDOUT
 
 reader = Spreadsheet::Excel::Reader.new :print_opcodes => target
-reader.setup source
+reader.setup File.open(source)
 
 while tuple = reader.get_next_chunk
 end
