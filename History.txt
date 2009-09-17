@@ -1,3 +1,31 @@
+=== 0.6.4.1 / 2009-09-17
+
+* 3 Bugfixes
+
+  * Fixes the issue reported by Thomas Preymesser and tracked down most of the
+    way by Hugh McGowan in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=26647&group_id=678&atid=2677
+    where reading the value of the first occurrence of a shared formula
+    failed.
+
+  * Fixes the issue reported by Anonymous in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=26546&group_id=678&atid=2677
+    where InvalidDate was raised for some Dates.
+
+  * Fixes the issue reported by John Lee in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=27110&group_id=678&atid=2677
+    which is probably a duplicate of the Bug previously reported by Kadvin XJ in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=26182&group_id=678&atid=2677
+    where unchanged rows were marked as changed in the Excel-Writer while the
+    File was being written, triggering an Error.
+
+* 1 minor enhancement
+
+  * Detect row offsets from Cell data if Row-Ops are missing
+    This fixes a bug reported by Alexander Logvinov in
+    http://rubyforge.org/tracker/index.php?func=detail&aid=26513&group_id=678&atid=2677
+
+
 === 0.6.4 / 2009-07-03
 
 * 5 Bugfixes

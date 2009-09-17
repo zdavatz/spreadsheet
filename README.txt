@@ -1,18 +1,18 @@
-Last Update: 16.12.2008, 10.33 - zdavatz
+Last Update: 17.09.2009, 16.32 - hwyss
 
 
 = Spreadsheet
 
-  http://spreadsheet.rubyforge.org
-  http://scm.ywesee.com/spreadsheet
+http://spreadsheet.rubyforge.org
+http://scm.ywesee.com/spreadsheet
 
 For a viewable directory of all recent changes, please see:
 
-  http://scm.ywesee.com/?p=spreadsheet;a=summary
+http://scm.ywesee.com/?p=spreadsheet;a=summary
 
 For Non-GPLv3 commercial licencing, please see:
 
-  http://www.spreadsheet.ch
+http://www.spreadsheet.ch
 
 
 == Description
