@@ -40,9 +40,12 @@ lib/spreadsheet/row.rb
 lib/spreadsheet/workbook.rb
 lib/spreadsheet/worksheet.rb
 lib/spreadsheet/writer.rb
+test/data/test_changes.xls
 test/data/test_copy.xls
 test/data/test_datetime.xls
 test/data/test_empty.xls
+test/data/test_formula.xls
+test/data/test_missing_row.xls
 test/data/test_version_excel5.xls
 test/data/test_version_excel95.xls
 test/data/test_version_excel97.xls
