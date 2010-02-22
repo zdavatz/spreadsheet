@@ -829,7 +829,7 @@ module Spreadsheet
       sheet1[5,0] = 0.75
       sheet1.row(5).set_format 0, fmt
       link = Link.new 'http://scm.ywesee.com/?p=spreadsheet;a=summary',
-                      'The Spreadsheet GitWeb'
+                      'The Spreadsheet GitWeb', 'top'
       sheet1[5,1] = link
       sheet1[6,0] = 1
       fmt = Format.new :color => 'green'
@@ -962,6 +962,7 @@ module Spreadsheet
       url = @@iconv.iconv 'http://scm.ywesee.com/?p=spreadsheet;a=summary'
       assert_equal @@iconv.iconv('The Spreadsheet GitWeb'), link
       assert_equal url, link.url
+      assert_equal @@iconv.iconv('top'), link.fragment
       row = sheet.row 6
       assert_equal :green, row.format(0).font.color
       assert_equal 1, row[0]

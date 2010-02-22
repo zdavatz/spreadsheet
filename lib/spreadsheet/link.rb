@@ -30,7 +30,7 @@ module Spreadsheet
     def href
       href = (@url || @dos).to_s.dup
       if @fragment
-        href << client('#') << @fragment
+        href << client('#', 'UTF-8') << @fragment
       end
       href
     end
