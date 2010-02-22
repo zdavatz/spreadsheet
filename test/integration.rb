@@ -1271,5 +1271,11 @@ module Spreadsheet
       target = File.join @var, 'test_changes.xls'
       assert_nothing_raised do book.write target end
     end
+    def test_read_baltic
+      path = File.join @data, 'test_baltic.xls'
+      assert_nothing_raised do
+        Spreadsheet.open path
+      end
+    end
   end
 end

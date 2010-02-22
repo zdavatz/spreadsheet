@@ -59,7 +59,8 @@ module Spreadsheet
     enum :encoding, :default, :iso_latin1, :symbol, :apple_roman, :shift_jis,
                     :korean_hangul, :korean_johab, :chinese_simplified,
                     :chinese_traditional, :greek, :turkish, :vietnamese,
-                    :hebrew, :arabic, :cyrillic, :thai, :iso_latin2, :oem_latin1
+                    :hebrew, :arabic, :baltic, :cyrillic, :thai, :iso_latin2,
+                    :oem_latin1
     def initialize name, opts={}
       self.name = name
       @color = :text
