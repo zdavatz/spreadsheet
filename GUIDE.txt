@@ -168,6 +168,64 @@ a particular Cell, Spreadsheet will leave it untouched:
   row[6] = Time.new 2008, 10, 12
   # -> the Format of cell 6 is left unchanged.
 
+== Outline (Grouping) and Hidding
+Spreadsheet supports outline (grouping) and hidding functions from version 
+0.6.5. In order to hide rows or columns, you can use 'hidden' property. 
+As for outline, 'outline_level' property is also available. You can use 
+both 'hidden' and 'outline_level' at the same time.
+
+You can create a new file with outline and hidding rows and columns as
+follows:
+
+  require 'spreadsheet'
+  
+  # create a new book and sheet
+  book = Spreadsheet::Workbook.new
+  sheet = book.create_worksheet
+  5.times {|j| 5.times {|i| sheet[j,i] = (i+1)*10**j}}
+  
+  # column
+  sheet.column(2).hidden = true
+  sheet.column(3).hidden = true
+  sheet.column(2).outline_level = 1
+  sheet.column(3).outline_level = 1
+  
+  # row
+  sheet.row(2).hidden = true
+  sheet.row(3).hidden = true
+  sheet.row(2).outline_level = 1
+  sheet.row(3).outline_level = 1
+  
+  # save file
+  book.write 'out.xls'
+
+Also you can read an existing file and change the hidden and outline
+properties. Here is the example below:
+
+  require 'spreadsheet'
+  
+  # read an existing file
+  file = ARGV[0]
+  book = Spreadsheet.open(file, 'rb')
+  sheet= book.worksheet(0)
+  
+  # column
+  sheet.column(2).hidden = true
+  sheet.column(3).hidden = true
+  sheet.column(2).outline_level = 1
+  sheet.column(3).outline_level = 1
+  
+  # row
+  sheet.row(2).hidden = true
+  sheet.row(3).hidden = true
+  sheet.row(2).outline_level = 1
+  sheet.row(3).outline_level = 1
+  
+  # save file
+  book.write "out.xls"
+
+Notes
+  * The outline_level should be under 8, which is due to the Excel data format.
 
 == More about Encodings
 Spreadsheet assumes it's running on Ruby 1.8 with Iconv-support. It is your

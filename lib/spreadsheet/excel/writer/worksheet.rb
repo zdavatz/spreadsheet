@@ -240,6 +240,15 @@ class Worksheet
     write_multiples row, first_idx, multiples if multiples
   end
   def write_changes reader, endpos, sst_status
+
+    ## FIXME this is not smart solution to update outline_level.
+    #        without this process, outlines in row disappear in MS Excel.       
+    @worksheet.row_count.times do |i|
+      if @worksheet.row(i).outline_level > 0
+        @worksheet.row(i).outline_level = @worksheet.row(i).outline_level
+      end
+    end
+
     reader.seek @worksheet.offset
     blocks = row_blocks
     lastpos = reader.pos
@@ -296,6 +305,13 @@ and minimal code that generates this warning. Thanks!
       lastpos = pos + len
       reader.seek lastpos
     end
+
+    # Necessary for outline (grouping) and hiding functions 
+    # but these below are not necessary to run
+    # if [Row|Column]#hidden? = false and [Row|Column]#outline_level == 0
+    write_colinfos
+    write_guts
+
     @io.write reader.read(endpos - lastpos)
   end
   def write_colinfo bunch
@@ -448,6 +464,7 @@ and minimal code that generates this warning. Thanks!
     # ○  PRINTGRIDLINES ➜ 5.80
     # ○  GRIDSET ➜ 5.52
     # ○  GUTS ➜ 5.53
+    write_guts
     # ○  DEFAULTROWHEIGHT ➜ 5.31
     write_defaultrowheight
     # ○  WSBOOL ➜ 5.113
@@ -482,6 +499,28 @@ and minimal code that generates this warning. Thanks!
     # ○  RANGEPROTECTION Additional protection, ➜ 5.84 (BIFF8X only)
     # ●  EOF ➜ 5.36
     write_eof
+  end
+  ##
+  # Write record that contains information about the layout of outline symbols.
+  def write_guts
+    # find the maximum outline_level in rows and columns
+    row_outline_level = 0
+    col_outline_level = 0
+    if(row = @worksheet.rows.select{|x| x!=nil}.max{|a,b| a.outline_level <=> b.outline_level})
+      row_outline_level = row.outline_level
+    end
+    if(col = @worksheet.columns.select{|x| x!=nil}.max{|a,b| a.outline_level <=> b.outline_level})
+      col_outline_level = col.outline_level
+    end
+    # set data
+    data = [
+      0,  # Width of the area to display row outlines (left of the sheet), in pixel
+      0,  # Height of the area to display column outlines (above the sheet), in pixel
+      row_outline_level+1, # Number of visible row outline levels (used row levels+1; or 0,if not used)
+      col_outline_level+1  # Number of visible column outline levels (used column levels+1; or 0,if not used)
+    ]
+    # write record
+    write_op opcode(:guts), data.pack('v4')
   end
   def write_hlink row, col, link
     # FIXME: only Hyperlinks are supported at present.
@@ -793,6 +832,8 @@ and minimal code that generates this warning. Thanks!
     if @worksheet.selected
       flags |= 0x0200
     end
+    flags |= 0x0080 # Show outline symbols, 
+                    # but if [Row|Column]#outline_level = 0 the symbols are not shown.
     data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)
     write_op opcode(:window2), data
   end

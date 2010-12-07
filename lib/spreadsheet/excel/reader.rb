@@ -216,7 +216,7 @@ class Reader
                           :width         => width.to_f / 256,
                           :hidden        => (opts & 0x0001) > 0,
                           :collapsed     => (opts & 0x1000) > 0,
-                          :outline_level => (opts & 0x0700)
+                          :outline_level => (opts & 0x0700) / 256
       column.worksheet = worksheet
       worksheet.columns[col] = column
     end
@@ -830,6 +830,8 @@ class Reader
       #when :index      # ○  INDEX ➜ 5.7 (Row Blocks), ➜ 6.55
         # TODO: if there are changes in rows, omit index when writing
         #read_index worksheet, work, pos, len
+      when :guts       #    GUTS      5.53
+        read_guts worksheet, work, pos, len
       when :colinfo    # ○○ COLINFO ➜ 6.18
         read_colinfo worksheet, work, pos, len
       when :dimensions # ●  DIMENSIONS ➜ 6.31
@@ -848,6 +850,18 @@ class Reader
       end
       previous = op
     end
+  end
+  def read_guts worksheet, work, pos, len
+    # Offset Size Contents
+    #      0    2 Width of the area to display row outlines (left of the sheet), in pixel
+    #      2    2 Height of the area to display column outlines (above the sheet), in pixel
+    #      4    2 Number of visible row outline levels (used row levels + 1; or 0, if not used)
+    #      6    2 Number of visible column outline levels (used column levels + 1; or 0, if not used)
+    width, height, row_level, col_level = work.unpack 'v4'
+    worksheet.guts[:width] = width
+    worksheet.guts[:height] = height
+    worksheet.guts[:row_level] = row_level
+    worksheet.guts[:col_level] = col_level
   end
   def read_style work, pos, len
     # User-Defined Cell Styles:

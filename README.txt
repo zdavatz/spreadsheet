@@ -1,9 +1,9 @@
-Last Update: 17.09.2009, 16.32 - hwyss
+Last Update: 07.12.2010 - Masaomi Hatakeyama 
 
 
 = Spreadsheet
 
-http://spreadsheet.rubyforge.org
+http://spreadsheet.rubyforge.org (this is not the latest information)
 http://scm.ywesee.com/spreadsheet
 
 For a viewable directory of all recent changes, please see:
@@ -26,6 +26,7 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 
 == What's new?
 
+* Supported outline (grouping) functions
 * Significantly improved memory-efficiency when reading large Excel Files
 * Limited Spreadsheet modification support
 * Improved handling of String Encodings
@@ -75,7 +76,7 @@ ParseExcel:
 Copyright (c) 2003 by Hannes Wyss (hannes.wyss@gmail.com)
 
 New Code:
-Copyright (c) 2008 by Hannes Wyss (hannes.wyss@gmail.com)
+Copyright (c) 2010 ywesee GmbH (mhatakeyama@ywesee.com, zdavatz@ywesee.com)
 
 
 == License

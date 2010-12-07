@@ -1,6 +1,6 @@
 ### Spreadsheet - A Library for reading and writing Spreadsheet Documents.
 #
-#   Copyright (C) 2008  Hannes Wyss
+#   Copyright (C) 2008-2010 ywesee GmbH
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
 #
 #   Contact Information:
 #
-#     E-Mail: hannes.wyss@gmail.com
+#     E-Mail: mhatakeyama@ywesee.com, zdavatz@ywesee.com
 #     P-Mail: ywesee GmbH
-#             Hannes Wyss
+#             Zeno R.R. Davatz
 #             Winterthurerstrasse 52
 #             8006 Zürich
 ###           Switzerland
@@ -42,7 +42,7 @@ module Spreadsheet
 
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '0.6.4.1'
+  VERSION = '0.6.5.0'
 
   ##
   # Default client Encoding. Change this value if your application uses a
