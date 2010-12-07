@@ -168,13 +168,13 @@ a particular Cell, Spreadsheet will leave it untouched:
   row[6] = Time.new 2008, 10, 12
   # -> the Format of cell 6 is left unchanged.
 
-== Outline (Grouping) and Hidding
-Spreadsheet supports outline (grouping) and hidding functions from version 
+== Outline (Grouping) and Hiding
+Spreadsheet supports outline (grouping) and hiding functions from version 
 0.6.5. In order to hide rows or columns, you can use 'hidden' property. 
 As for outline, 'outline_level' property is also available. You can use 
 both 'hidden' and 'outline_level' at the same time.
 
-You can create a new file with outline and hidding rows and columns as
+You can create a new file with outline and hiding rows and columns as
 follows:
 
   require 'spreadsheet'
