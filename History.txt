@@ -1,3 +1,15 @@
+=== 0.6.5 / 07.12.2010
+
+* 2 Enhancements
+
+  * Outlining (Grouping) of lines and columns is now possible. The outlining 
+    maximum is 8. This means you can do 8 subgroups in a group.
+
+  * Hiding and Unhiding of lines and columns is now possible. 
+
+  * Both of above two points is now possible by creating a new Excel File from 
+    scratch or editing an existing XLS and adding groups or hiding lines to it.
+
 === 0.6.4.1 / 2009-09-17
 
 * 3 Bugfixes
