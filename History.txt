@@ -1,6 +1,6 @@
 === 0.6.5 / 07.12.2010
 
-* 2 Enhancements
+* 2 Enhancements courtesy to ISS AG.
 
   * Outlining (Grouping) of lines and columns is now possible. The outlining 
     maximum is 8. This means you can do 8 subgroups in a group.
