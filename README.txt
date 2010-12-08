@@ -1,4 +1,4 @@
-Last Update: 07.12.2010 - Masaomi Hatakeyama 
+Last Update: 08.12.2010 - Masaomi Hatakeyama 
 
 
 = Spreadsheet
@@ -46,7 +46,6 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 == Dependencies
 
 * ruby 1.8
-* Iconv
 * ruby-ole[http://code.google.com/p/ruby-ole/]
 
 
@@ -63,6 +62,13 @@ Using RubyGems[http://www.rubygems.org]:
 
 If you don't like RubyGems[http://www.rubygems.org], let me know which
 installation solution you prefer and I'll include it in the future.
+
+If you can use 'rake' and 'hoe' library is also installed, you can 
+build a gem package as follows:
+
+* rake gem 
+
+The gem package is built in pkg directory.
 
 
 == Authors
