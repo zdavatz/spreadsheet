@@ -1,7 +1,7 @@
 require 'spreadsheet/workbook'
 require 'spreadsheet/excel/offset'
 require 'spreadsheet/excel/writer'
-require 'ole/file_system'
+require 'ole/storage'
 
 module Spreadsheet
   module Excel
