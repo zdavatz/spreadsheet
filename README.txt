@@ -4,7 +4,6 @@ Last Update: 08.12.2010 - Masaomi Hatakeyama
 = Spreadsheet
 
 http://spreadsheet.rubyforge.org (this is not the latest information)
-http://scm.ywesee.com/spreadsheet
 
 For a viewable directory of all recent changes, please see:
 
