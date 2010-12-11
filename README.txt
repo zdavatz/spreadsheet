@@ -7,7 +7,7 @@ http://spreadsheet.rubyforge.org (this is not the latest information)
 
 For a viewable directory of all recent changes, please see:
 
-http://scm.ywesee.com/?p=spreadsheet;a=summary
+http://scm.ywesee.com/?p=spreadsheet/.git;a=summary
 
 For Non-GPLv3 commercial licencing, please see:
 
