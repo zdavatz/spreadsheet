@@ -1,9 +1,9 @@
-Last Update: 08.12.2010 - Masaomi Hatakeyama 
+Last Update: 08.12.2010 - Zeno Davatz
 
 
 = Spreadsheet
 
-http://spreadsheet.rubyforge.org (this is not the latest information)
+http://spreadsheet.rubyforge.org
 
 For a viewable directory of all recent changes, please see:
 
