@@ -1,3 +1,9 @@
+=== 0.6.5.1 / 17.1.2011
+
+* One enhancement thanks to Qiong Peng, Moo Yu, and Thierry Thelliez
+
+  * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet
+
 === 0.6.5 / 07.12.2010
 
 * 2 Enhancements courtesy to ISS AG.
