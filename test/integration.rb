@@ -521,7 +521,7 @@ module Spreadsheet
       assert_instance_of Excel::Worksheet, sheet
       str = "S\000h\000e\000e\000t\0001\000"
       if RUBY_VERSION >= '1.9'
-        str.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
+        str.force_encoding 'UTF-16LE' if str.respond_to?(:force_encoding)
       end
       assert_equal sheet, book.worksheet(str)
     end
