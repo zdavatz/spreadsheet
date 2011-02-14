@@ -1,3 +1,9 @@
+=== 0.6.5.2 / 14.2.2011
+
+* Updated test/integration.rb to work with Ruby ruby 1.9.2p136 (2010-12-25 revision 30365) [i686-linux]
+  
+  * Thanks for the hint tomiacannondale@gmail.com
+
 === 0.6.5.1 / 17.1.2011
 
 * One enhancement thanks to Qiong Peng, Moo Yu, and Thierry Thelliez
