@@ -1,7 +1,12 @@
 Last Update: 08.12.2010 - Zeno Davatz
 
-
 = Spreadsheet
+
+The Mailinglist can be found here:
+
+http://groups.google.com/group/rubyspreadsheet
+
+The code can be found here:
 
 http://spreadsheet.rubyforge.org
 
