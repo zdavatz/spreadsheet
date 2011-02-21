@@ -14,6 +14,10 @@ For a viewable directory of all recent changes, please see:
 
 http://scm.ywesee.com/?p=spreadsheet/.git;a=summary
 
+To get a graphical overview of the Library please see
+
+http://spreadsheet.rubyforge.org/spreadsheet.jpeg
+
 For Non-GPLv3 commercial licencing, please see:
 
 http://www.spreadsheet.ch
