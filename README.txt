@@ -2,7 +2,7 @@ Last Update: 14.02.2011 - Zeno R.R. Davatz
 
 = Spreadsheet
 
-The Mailinglist can be found here:
+The Mailing List can be found here:
 
 http://groups.google.com/group/rubyspreadsheet
 

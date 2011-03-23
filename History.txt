@@ -1,3 +1,9 @@
+=== 0.6.5.3 / 23.3.2011
+
+* Updated Txt lib/spreadsheet/excel/writer/biff8.rb with a Patch from Alexandre Bini
+
+  * See this for full detail: http://url.ba/6r1z
+
 === 0.6.5.2 / 14.2.2011
 
 * Updated test/integration.rb to work with Ruby ruby 1.9.2p136 (2010-12-25 revision 30365) [i686-linux]
