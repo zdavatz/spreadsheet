@@ -14,7 +14,7 @@ module Biff8
   # is a Null-byte) and perform compression.
   # Returns the data and compression_status (0/1)
   def compress_unicode_string data
-    compressed = ''
+    compressed = internal('')
     expect_null = false
     data.each_byte do |byte|
       if expect_null
