@@ -1,3 +1,10 @@
+=== 0.6.5.4 / 18.4.2011
+
+* Updated worksheet.rb according to the Patch of Björn Andersson.
+
+  * https://gist.github.com/925007#file_test.patch
+  * http://url.ba/09p9
+
 === 0.6.5.3 / 23.3.2011
 
 * Updated Txt lib/spreadsheet/excel/writer/biff8.rb with a Patch from Alexandre Bini
