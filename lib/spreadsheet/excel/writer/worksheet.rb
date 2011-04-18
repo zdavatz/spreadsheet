@@ -89,7 +89,7 @@ class Worksheet
   def need_number? cell
     if cell.is_a?(Numeric) && cell.abs > 0x1fffffff
       true
-    elsif cell.is_a?(Float)
+    elsif cell.is_a?(Float) and not cell.nan?
       higher = cell * 100
       if higher == higher.to_i
         need_number? higher.to_i
