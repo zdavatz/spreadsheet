@@ -488,6 +488,7 @@ and minimal code that generates this warning. Thanks!
     # ○○ SELECTION ➜ 5.93
     # ○  STANDARDWIDTH ➜ 5.101
     # ○○ MERGEDCELLS ➜ 5.67
+    write_merged_cells
     # ○  LABELRANGES ➜ 5.64
     # ○  PHONETIC ➜ 5.77
     # ○  Conditional Formatting Table ➜ 4.12
@@ -837,6 +838,20 @@ and minimal code that generates this warning. Thanks!
     data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)
     write_op opcode(:window2), data
   end
+
+  def write_merged_cells
+    return unless @worksheet.merged_cells.any?
+    # FIXME standards say the record is limited by 1027 records at once
+    # And no CONTINUE is supported
+
+    merge_cells = @worksheet.merged_cells.dup
+    while (window = merge_cells.slice!(0...1027)).any?
+      count = window.size
+      data = ([count] + window.flatten).pack('v2v*')
+      write_op opcode(:mergedcells), data
+    end
+  end
+
   def write_wsbool
     bits = [
          #   Bit  Mask    Contents

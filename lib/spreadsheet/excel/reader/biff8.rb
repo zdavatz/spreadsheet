@@ -161,6 +161,27 @@ module Biff8
     owing     = chars - have_chrs
     [chars, flagsize, wide, phonetic, richtext, avbl, owing, skip]
   end
+
+  def read_range_address_list work, len
+    # Cell range address, BIFF8:
+    # Offset  Size  Contents
+    # 0       2     Index to first row
+    # 2       2     Index to last row
+    # 4       2     Index to first column
+    # 6       2     Index to last column
+    # ! In several cases, BIFF8 still writes the BIFF2-BIFF5 format of a cell range address
+    # (using 8-bit values for the column indexes). This will be mentioned at the respective place.
+    #
+    offset = 0, results = []
+    return results if len < 2
+    count = work[0..1].unpack('v').first
+    offset = 2
+    count.times do |i|
+      results << work[offset...offset+8].unpack('v4')
+      offset += 8
+    end
+    results
+  end
   ##
   # Insert null-characters into a compressed UTF-16 string
   def wide string
