@@ -471,6 +471,7 @@ and minimal code that generates this warning. Thanks!
     write_wsbool
     # ○  Page Settings Block ➜ 4.4
     # ○  Worksheet Protection Block ➜ 4.18
+    write_proctection
     # ○  DEFCOLWIDTH ➜ 5.32
     write_defcolwidth
     # ○○ COLINFO ➜ 5.18
@@ -850,6 +851,16 @@ and minimal code that generates this warning. Thanks!
       data = ([count] + window.flatten).pack('v2v*')
       write_op opcode(:mergedcells), data
     end
+  end
+
+  def write_proctection
+    return unless @worksheet.protected?
+    # ○ PROTECT Worksheet contents: 1 = protected (➜ 5.82)
+    write_op opcode(:protect), [1].pack('v')
+    # ○ OBJECTPROTECT Embedded objects: 1 = protected (➜ 5.72)
+    # ○ SCENPROTECT Scenarios: 1 = protected (➜ 5.91)
+    # ○ PASSWORD Hash value of the password; 0 = no password (➜ 5.76)
+    write_op opcode(:password), [@worksheet.password_hash].pack('v')
   end
 
   def write_wsbool
