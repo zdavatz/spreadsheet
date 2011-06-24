@@ -76,7 +76,7 @@ module Internals
     0x0012 => :navy,
     0x0016 => :silver,
     0x0017 => :gray,
-    0x001d => :orange,
+    0x0034 => :orange,
     0x0024 => :purple,
     0x0040 => :border,
     0x0041 => :pattern_bg,
