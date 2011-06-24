@@ -1,3 +1,9 @@
+=== 0.6.5.5 / 24.6.2011
+
+* updated the color code for orange to 0x0034 => :orange, thanks to the hint of Jonty
+
+  * https://gist.github.com/1044700
+
 === 0.6.5.4 / 18.4.2011
 
 * Updated worksheet.rb according to the Patch of Björn Andersson.
