@@ -1,3 +1,9 @@
+=== 0.6.5.6 / 20.7.2011
+
+* Added a fix from R. van der Hoorn to sanitize_worksheets if 'sheets' is empty.
+
+  * https://github.com/vanderhoorn/spreadsheet/commit/c109f2ac5486f9a38a6d93267daf560ab4b9473e
+
 === 0.6.5.5 / 24.6.2011
 
 * updated the color code for orange to 0x0034 => :orange, thanks to the hint of Jonty
