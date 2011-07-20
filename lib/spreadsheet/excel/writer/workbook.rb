@@ -96,6 +96,7 @@ class Workbook < Spreadsheet::Writer
     @number_formats[workbook][format] || 0
   end
   def sanitize_worksheets sheets
+    return sheets if sheets.blank?
     found_selected = false
     sheets.each do |sheet|
       found_selected ||= sheet.selected
