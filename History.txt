@@ -1,6 +1,12 @@
 === 0.6.5.6 / 20.7.2011
 
-* Added a fix from R. van der Hoorn to sanitize_worksheets if 'sheets' is empty.
+* Fixed the bug introduced by Roel van der Hoorn and updated the test cases.
+
+  * https://github.com/vanderhoorn/spreadsheet/commit/c79ab14dcf40dee1d6d5ad2b174f3fe31414ca28
+
+=== 0.6.5.6 / 20.7.2011
+
+* Added a fix from Roel van der Hoorn to sanitize_worksheets if 'sheets' is empty.
 
   * https://github.com/vanderhoorn/spreadsheet/commit/c109f2ac5486f9a38a6d93267daf560ab4b9473e
 
