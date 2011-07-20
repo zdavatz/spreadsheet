@@ -1,6 +1,8 @@
-Last Update: 14.02.2011 - Zeno R.R. Davatz
+Last Update: 20.07.2011 - Zeno R.R. Davatz
 
 = Spreadsheet
+
+http://spreadsheet.rubyforge.org
 
 The Mailing List can be found here:
 
