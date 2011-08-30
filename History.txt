@@ -1,3 +1,11 @@
+=== 0.6.5.8 / 30.8.2011
+
+* This patch is about adding a sheet_count method to workbook so that it returns
+* the total no of worksheets for easy access. Please check. By
+* tamizhgeek@gmail.com
+
+        * https://gist.github.com/1180625
+
 === 0.6.5.7 / 20.7.2011
 
 * Fixed the bug introduced by Roel van der Hoorn and updated the test cases.
