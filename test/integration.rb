@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
-# TestIntegration -- Spreadheet -- 08.10.2007 -- hwyss@ywesee.com
+# TestIntegration -- spreadheet -- 07.09.2011 -- mhatakeyama@ywesee.com
+# TestIntegration -- spreadheet -- 08.10.2007 -- hwyss@ywesee.com
 
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 
@@ -1294,6 +1295,17 @@ module Spreadsheet
       end
     end
 =end
+    def test_write_frozen_string
+      Spreadsheet.client_encoding = 'UTF-16LE'
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_workbook.xls'
+      sheet1 = book.create_worksheet
+      str1 = "Frozen String.".freeze
+      sheet1[0,0] = str1
+      sheet1.row(0).push str1
+      assert_nothing_raised do 
+        book.write path
+      end
+    end
   end
 end
-
