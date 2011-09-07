@@ -1,3 +1,10 @@
+=== 0.6.5.9 / 7.9.2011
+
+* Fixed a frozen string bug thanks to dblock (Daniel Doubrovkine),
+* dblock@dblock.org
+
+  * https://github.com/dblock/spreadsheet/commit/164dcfbb24097728f1a7453702c270107e725b7c
+
 === 0.6.5.8 / 30.8.2011
 
 * This patch is about adding a sheet_count method to workbook so that it returns
