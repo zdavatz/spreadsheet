@@ -33,6 +33,11 @@ supported. Spreadsheet is a combination/complete rewrite of the
 Spreadsheet::Excel Library by Daniel J. Berger and the ParseExcel Library by
 Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 
+== Notes from Users
+
+Alfred: a@boxbot.org: I think it should be noted in the README file that the library doesn't
+recognize cell formats in Excel created documents, which results in
+Floats returned for any number.
 
 == What's new?
 
