@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nulogy-spreadsheet (0.6.5.7.1)
+    nulogy-spreadsheet (0.6.5.7.2)
       ruby-ole
 
 GEM

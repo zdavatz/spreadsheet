@@ -3,7 +3,7 @@ require "rubygems"
 
 spec = Gem::Specification.new do |s|
    s.name        = "nulogy-spreadsheet"
-   s.version     = "0.6.5.7.1"
+   s.version     = "0.6.5.7.2"
    s.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
    s.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
    s.author      = "Masaomi Hatakeyama, Zeno R.R. Davatz"
