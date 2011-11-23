@@ -1,0 +1,18 @@
+PATH
+  remote: .
+  specs:
+    nulogy-spreadsheet (0.6.5.7.1)
+      ruby-ole
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    rake (0.9.2.2)
+    ruby-ole (1.2.11.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  nulogy-spreadsheet!
+  rake

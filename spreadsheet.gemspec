@@ -1,9 +1,9 @@
 require "rubygems"
-require "rake"
+#require "rake"
 
 spec = Gem::Specification.new do |s|
-   s.name        = "spreadsheet"
-   s.version     = "0.6.5.7"
+   s.name        = "nulogy-spreadsheet"
+   s.version     = "0.6.5.7.1"
    s.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
    s.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
    s.author      = "Masaomi Hatakeyama, Zeno R.R. Davatz"
@@ -13,10 +13,11 @@ spec = Gem::Specification.new do |s|
    s.test_file   = "test/suite.rb"
    s.executables << 'xlsopcodes'
    s.add_dependency('ruby-ole')
-   s.homepage	 = "http://scm.ywesee.com/?p=spreadsheet/.git;a=summary"
+   s.add_development_dependency('rake')
+   s.homepage    = "https://github.com/nulogy/spreadsheet"
 end
 
-if $0 == __FILE__
-   Gem.manage_gems
-   Gem::Builder.new(spec).build
-end
+# if $0 == __FILE__
+#    Gem.manage_gems
+#    Gem::Builder.new(spec).build
+# end

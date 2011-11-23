@@ -1,19 +1,25 @@
-# -*- ruby -*-
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-$: << File.expand_path("./lib", File.dirname(__FILE__))
+desc 'Default: run unit tests.'
+task :default => :test
 
-require 'rubygems'
-require 'hoe'
-require './lib/spreadsheet.rb'
-
-ENV['RDOCOPT'] = '-c utf8'
-
-Hoe.plugin :git
-
-Hoe.spec('spreadsheet') do |p|
-   p.developer('Masaomi Hatakeyama, Zeno R.R. Davatz','mhatakeyama@ywesee.com, zdavatz@ywesee.com')
-   p.remote_rdoc_dir = 'spreadsheet'
-   p.extra_deps << ['ruby-ole', '>=1.0']
+desc 'Test the autocomplete_for plugin.'
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
 end
 
-# vim: syntax=Ruby
+desc 'Generate documentation for the spreadsheet plugin.'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'Spreadsheet'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README.markdown')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
