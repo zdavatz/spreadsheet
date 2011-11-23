@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
   s.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
   s.authors     = ["Masaomi Hatakeyama", "Zeno R.R. Davatz", "Clemens Park"]
-  s.email       = ["mhatakeyama@ywesee.com", "zdavatz@ywesee.com", "clemens.park@gmail.com"]
+  s.email       = "clemens.park@gmail.com"
   s.homepage    = "https://github.com/nulogy/spreadsheet"
   s.rubyforge_project = "nulogy-spreadsheet"
 
