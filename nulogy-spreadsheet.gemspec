@@ -3,11 +3,11 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "nulogy-spreadsheet"
-  s.version     = "0.6.5.7.2"
+  s.version     = "0.6.5.7.3"
   s.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
   s.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
   s.authors     = ["Masaomi Hatakeyama", "Zeno R.R. Davatz", "Clemens Park"]
-  s.email       = "sskirby@gmail.com"
+  s.email       = "clemens.park@gmail.com"
   s.homepage    = "https://github.com/nulogy/spreadsheet"
   s.rubyforge_project = "nulogy-spreadsheet"
 
