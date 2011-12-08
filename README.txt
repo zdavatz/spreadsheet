@@ -57,6 +57,10 @@ Floats returned for any number.
 1.0.0:: Ruby 1.9 Support;
         Remove backward compatibility code
 
+Note: Spreadsheet supports Ruby 1.8.6, 1.8.7, 1.9.2, 1.9.3
+
+You will get a deprecated warning about iconv when using spreadsheet with Ruby
+1.9.3. So replacing iconv is on the Roadmap as well ;).
 
 == Dependencies
 
