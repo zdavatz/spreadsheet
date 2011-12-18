@@ -1307,5 +1307,13 @@ module Spreadsheet
         book.write path
       end
     end
+    def test_read_merged_cells
+      path = File.join(@data, 'test_merged_cells.xls')
+      book = Spreadsheet.open(path)
+      assert_equal 8, book.biff_version
+      sheet = book.worksheet(0)
+      sheet[0,0] # trigger read_worksheet
+      assert_equal [[2, 4, 1, 1], [3, 3, 2, 3]], sheet.merged_cells
+    end
   end
 end
