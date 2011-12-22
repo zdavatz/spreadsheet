@@ -27,7 +27,7 @@ module Spreadsheet
     include Spreadsheet::Encodings
     include Enumerable
     attr_accessor :name, :selected, :workbook
-    attr_reader :rows, :columns
+    attr_reader :rows, :columns, :merged_cells
     def initialize opts={}
       @default_format = nil
       @selected = opts[:selected]
@@ -37,6 +37,7 @@ module Spreadsheet
       @rows = []
       @columns = []
       @links = {}
+      @merged_cells = []
     end
     def active # :nodoc:
       warn "Worksheet#active is deprecated. Please use Worksheet#selected instead."
@@ -250,6 +251,12 @@ module Spreadsheet
     # See also Row#[]=.
     def []= row, column, value
       row(row)[column] = value
+    end
+    ##
+    # Merges multiple cells into one.
+    def merge_cells start_row, start_col, end_row, end_col
+      # FIXME enlarge or dup check
+      @merged_cells.push [start_row, end_row, start_col, end_col]
     end
     private
     def index_of_first ary # :nodoc:

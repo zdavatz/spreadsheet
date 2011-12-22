@@ -216,6 +216,7 @@ module Internals
     :hlink        => 0x01b8, #    HLINK ➜ 6.52 (BIFF8 only)
     :label        => 0x0204, #    LABEL ➜ 6.59 (BIFF2-BIFF7)
     :labelsst     => 0x00fd, #    LABELSST ➜ 6.61 (BIFF8 only)
+    :mergedcells  => 0x00e5, # ○○ MERGEDCELLS	➜ 5.67 (BIFF8 only)
     :mulblank     => 0x00be, #    MULBLANK ➜ 6.64 (BIFF5-BIFF8)
     :mulrk        => 0x00bd, #    MULRK ➜ 6.65 (BIFF5-BIFF8)
     :number       => 0x0203, #    NUMBER ➜ 6.68

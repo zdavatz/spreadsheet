@@ -16,6 +16,26 @@ module Biff5
     length, = work.unpack fmt
     work[count_length, length]
   end
+
+  def read_range_address_list work, len
+    # Cell range address, BIFF2-BIFF5:
+    # Offset  Size  Contents
+    # 0       2     Index to first row
+    # 2       2     Index to last row
+    # 4       1     Index to first column
+    # 5       1     Index to last column
+    #
+    offset = 0, results = []
+    return results if len < 2
+    count = work[0..1].unpack('v').first
+    offset = 2
+    count.times do |i|
+      results << work[offset...offset+6].unpack('v2c2')
+      offset += 6
+    end
+    results
+  end
+
 end
     end
   end
