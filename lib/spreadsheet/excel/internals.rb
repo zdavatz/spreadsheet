@@ -54,6 +54,8 @@ module Internals
     32769 => "WINDOWS-1252", #(Latin I) (BIFF2-BIFF3)
   }
   SEGAPEDOC = CODEPAGES.invert
+  # color_codes according to http://support.softartisans.com/kbview_1205.aspx
+  # synonyms are in comments when reverse lookup
   COLOR_CODES = {
     0x0000 => :builtin_black,
     0x0001 => :builtin_white,
@@ -63,21 +65,63 @@ module Internals
     0x0005 => :builtin_yellow,
     0x0006 => :builtin_magenta,
     0x0007 => :builtin_cyan,
-    0x0008 => :black,
-    0x0009 => :white,
-    0x000a => :red,
-    0x000b => :lime,
-    0x000c => :blue,
-    0x000d => :yellow,
-    0x000e => :magenta,
-    0x000f => :cyan,
-    0x0010 => :brown,
-    0x0011 => :green,
-    0x0012 => :navy,
-    0x0016 => :silver,
-    0x0017 => :gray,
-    0x0034 => :orange,
-    0x0024 => :purple,
+    0x0008 => :black,                 #xls_color_0
+    0x0009 => :white,                 #xls_color_1
+    0x000a => :red,                   #xls_color_2
+    0x000b => :lime,                  #xls_color_3
+    0x000c => :blue,                  #xls_color_4
+    0x000d => :yellow,                #xls_color_5
+    0x000e => :magenta,               #xls_color_6, fuchsia
+    0x000f => :cyan,                  #xls_color_7, aqua
+    0x0010 => :brown,                 #xls_color_8
+    0x0011 => :green,                 #xls_color_9
+    0x0012 => :navy,                  #xls_color_10
+    0x0013 => :xls_color_11,
+    0x0014 => :xls_color_12,
+    0x0015 => :xls_color_13,
+    0x0016 => :silver,                #xls_color_14
+    0x0017 => :gray,                  #xls_color_15, grey
+    0x0018 => :xls_color_16,
+    0x0019 => :xls_color_17,
+    0x001a => :xls_color_18,
+    0x001b => :xls_color_19,
+    0x001c => :xls_color_20,
+    0x001d => :xls_color_21,
+    0x001e => :xls_color_22,
+    0x001f => :xls_color_23,
+    0x0020 => :xls_color_24,
+    0x0021 => :xls_color_25,
+    0x0022 => :xls_color_26,
+    0x0023 => :xls_color_27,
+    0x0024 => :purple,                #xls_color_28
+    0x0025 => :xls_color_29,
+    0x0026 => :xls_color_30,
+    0x0027 => :xls_color_31,
+    0x0028 => :xls_color_32,
+    0x0029 => :xls_color_33,
+    0x002a => :xls_color_34,
+    0x002b => :xls_color_35,
+    0x002c => :xls_color_36,
+    0x002d => :xls_color_37,
+    0x002e => :xls_color_38,
+    0x002f => :xls_color_39,
+    0x0030 => :xls_color_40,
+    0x0031 => :xls_color_41,
+    0x0032 => :xls_color_42,
+    0x0033 => :xls_color_43,
+    0x0034 => :orange,                #xls_color_44
+    0x0035 => :xls_color_45,
+    0x0036 => :xls_color_46,
+    0x0037 => :xls_color_47,
+    0x0038 => :xls_color_48,
+    0x0039 => :xls_color_49,
+    0x003a => :xls_color_50,
+    0x003b => :xls_color_51,
+    0x003c => :xls_color_52,
+    0x003d => :xls_color_53,
+    0x003e => :xls_color_54,
+    0x003f => :xls_color_55,
+
     0x0040 => :border,
     0x0041 => :pattern_bg,
     0x0043 => :dialog_bg,
@@ -86,11 +130,30 @@ module Internals
     0x004f => :chart_border,
     0x0050 => :tooltip_bg,
     0x0051 => :tooltip_text,
-    0x7fff => :text,
+    0x7fff => :text
   }
-  SEDOC_ROLOC = COLOR_CODES.invert.update( :aqua    => 0x000f,
-                                           :fuchsia => 0x000e,
-                                           :grey    => 0x0017 )
+
+  SEDOC_ROLOC = COLOR_CODES.invert.update(
+    :xls_color_0  => 0x0008,
+    :xls_color_1  => 0x0009,
+    :xls_color_2  => 0x000a,
+    :xls_color_3  => 0x000b,
+    :xls_color_4  => 0x000c,
+    :xls_color_5  => 0x000d,
+    :xls_color_6  => 0x000e,
+    :fuchsia      => 0x000e,
+    :xls_color_7  => 0x000f,
+    :aqua         => 0x000f,
+    :xls_color_8  => 0x0010,
+    :xls_color_9  => 0x0011,
+    :xls_color_10 => 0x0012,
+    :xls_color_14 => 0x0016,
+    :xls_color_15 => 0x0017,
+    :grey         => 0x0017,
+    :xls_color_28 => 0x0024,
+    :xls_color_44 => 0x0034
+  )
+
   BINARY_FORMATS = {
     :blank      => 'v3',
     :boolerr    => 'v3C2',
