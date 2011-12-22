@@ -19,6 +19,7 @@ class << self
              :black, :blue, :cyan, :brown, :fuchsia, :gray, :grey, :green,
              :lime, :magenta, :navy, :orange, :purple, :red, :silver, :white,
              :yellow,
+             :xls_color_0,
              :xls_color_1,
              :xls_color_2,
              :xls_color_3,
@@ -73,8 +74,7 @@ class << self
              :xls_color_52,
              :xls_color_53,
              :xls_color_54,
-             :xls_color_55,
-             :xls_color_56 ]
+             :xls_color_55 ]
   ##
   # Define instance methods to read and write boolean attributes.
   def boolean *args
