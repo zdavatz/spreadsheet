@@ -67,6 +67,29 @@ module Spreadsheet
       assert_equal 0, sheet.column_count
       assert_nothing_raised do sheet.inspect end
     end
+    def test_version_excel97__excel2010__utf16
+      Spreadsheet.client_encoding = 'UTF-16LE'
+      assert_equal 'UTF-16LE', Spreadsheet.client_encoding
+      path = File.join @data, 'test_version_excel97_2010.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      assert_equal 8, book.biff_version
+      assert_equal @@iconv.iconv('Microsoft Excel 97/2000/XP'),
+                   book.version_string
+      enc = 'UTF-16LE'
+      if defined? Encoding
+        enc = Encoding.find enc
+      end
+      assert_equal enc, book.encoding
+      sheet = book.worksheet 0
+      row = sheet.row 9
+      assert_equal 0.00009, row[0]
+      link = row[1]
+      assert_instance_of Link, link
+      assert_equal @@iconv.iconv('Link-Text'), link
+      assert_equal @@iconv.iconv('http://scm.ywesee.com/spreadsheet'), link.url
+      assert_equal @@iconv.iconv('http://scm.ywesee.com/spreadsheet'), link.href
+    end
     def test_version_excel97__ooffice__utf16
       Spreadsheet.client_encoding = 'UTF-16LE'
       assert_equal 'UTF-16LE', Spreadsheet.client_encoding
