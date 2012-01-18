@@ -1,3 +1,9 @@
+=== 0.6.7 / 18.01.2012
+
+* http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points point 2.
+* Tests by Michal
+* Patches by Timon
+
 === 0.6.6 / 18.01.2012
 
 * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points 8 and 9. 
