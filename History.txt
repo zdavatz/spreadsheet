@@ -1,3 +1,9 @@
+=== 0.6.6 / 18.01.2012
+
+* http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points 8 and 9. 
+* Fixes byjsaak@napalm.hu
+* Patches by Vitaly Klimov
+
 === 0.6.5.9 / 7.9.2011
 
 * Fixed a frozen string bug thanks to dblock (Daniel Doubrovkine),
