@@ -1,3 +1,8 @@
+=== 0.6.8 / 20.01.2012
+
+* adds the fix to allow the writing of empty rows, by ClemensP.
+* Test also by ClemensP.
+
 === 0.6.7 / 18.01.2012
 
 * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points point 2.
