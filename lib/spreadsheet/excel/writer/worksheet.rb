@@ -756,14 +756,18 @@ and minimal code that generates this warning. Thanks!
              else
                height * TWIPS
              end
-    # TODO: Row spacing
-    data = [
+
+    attrs = [
       row.idx,
       row.first_used,
       row.first_unused,
       height,
-      opts,
-    ].pack binfmt(:row)
+      opts]
+
+    return if attrs.any?(&:nil?)
+
+    # TODO: Row spacing
+    data = attrs.pack binfmt(:row)
     write_op opcode(:row), data
   end
   def write_rowblock block
