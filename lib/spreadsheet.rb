@@ -57,12 +57,12 @@ module Spreadsheet
     ##
     # Parses a Spreadsheet Document and returns a Workbook object. At present,
     # only Excel-Documents can be read.
-    def open io_or_path, mode="rb+", &block
+    def open io_or_path, mode="rb+"
       if io_or_path.respond_to? :seek
         Excel::Workbook.open(io_or_path)
-      elsif block
+      elsif block_given?
         File.open(io_or_path, mode) do |fh|
-          block.call open(fh)
+          yield open(fh)
         end
       else
         open File.open(io_or_path, mode)

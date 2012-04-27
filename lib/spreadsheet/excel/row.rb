@@ -20,9 +20,9 @@ class Row < Spreadsheet::Row
   def datetime idx
     _datetime at(idx)
   end
-  def each &block
+  def each
     size.times do |idx|
-      block.call self[idx]
+      yield self[idx]
     end
   end
   ##

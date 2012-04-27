@@ -108,9 +108,9 @@ module Spreadsheet
     # If the argument skip is given, #each iterates from that row until but
     # omitting the first unused Row, effectively skipping the first _skip_ Rows
     # from the top of the Worksheet.
-    def each skip=dimensions[0], &block
+    def each skip=dimensions[0]
       skip.upto(dimensions[1] - 1) do |idx|
-        block.call row(idx)
+        yield row(idx)
       end
     end
     def encoding # :nodoc:
