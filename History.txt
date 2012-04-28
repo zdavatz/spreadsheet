@@ -1,3 +1,9 @@
+=== 0.6.9 / 28.04.2012
+
+* Yield is more simple here too.
+* No need to capture the block in Spreadsheet.open
+* Rather than extending a core class, let's just use #rcompact from a helper module
+
 === 0.6.8 / 20.01.2012
 
 * adds the fix to allow the writing of empty rows, by ClemensP.
