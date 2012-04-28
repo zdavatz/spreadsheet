@@ -1,11 +1,11 @@
-class Array
-  def rcompact
-    dup.rcompact!
-  end
-  def rcompact!
-    while !empty? && last.nil?
-      pop
+module Spreadsheet
+  module Helpers
+    def rcompact(array)
+      while !array.empty? && array.last.nil?
+        array.pop
+      end
+      array
     end
-    self
+    module_function :rcompact
   end
 end

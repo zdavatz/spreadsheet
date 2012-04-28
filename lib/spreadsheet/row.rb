@@ -90,7 +90,7 @@ module Spreadsheet
     # This is primarily a helper-function for the writer classes.
     def formatted
       copy = dup
-      @formats.rcompact!
+      Helpers.rcompact(@formats)
       if copy.length < @formats.size
         copy.concat Array.new(@formats.size - copy.length)
       end
@@ -99,7 +99,7 @@ module Spreadsheet
     ##
     # Same as Row#size, but takes into account formatted empty cells
     def formatted_size
-      @formats.rcompact!
+      Helpers.rcompact(@formats)
       sz = size
       fs = @formats.size
       fs > sz ? fs : sz
