@@ -1,3 +1,4 @@
+.gitignore
 GUIDE.txt
 History.txt
 LICENSE.txt
@@ -29,6 +30,7 @@ lib/spreadsheet/excel/worksheet.rb
 lib/spreadsheet/excel/writer.rb
 lib/spreadsheet/excel/writer/biff8.rb
 lib/spreadsheet/excel/writer/format.rb
+lib/spreadsheet/excel/writer/n_worksheet.rb
 lib/spreadsheet/excel/writer/workbook.rb
 lib/spreadsheet/excel/writer/worksheet.rb
 lib/spreadsheet/font.rb
