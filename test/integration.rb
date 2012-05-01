@@ -1288,6 +1288,32 @@ module Spreadsheet
         book.write StringIO.new("", "w+") 
       end
     end
+
+    def test_read_protected_sheet
+      path = File.join @data, "test_merged_and_protected.xls"
+      book = Spreadsheet.open path
+      sheet = book.worksheet(0)
+      sheet.ensure_rows_read # FIXME HACK
+      assert sheet.protected?, "Expected sheet to be protected"
+      assert_equal Spreadsheet::Excel::Password.password_hash('testing'), sheet.password_hash
+    end
+
+    def test_write_protected_sheet
+      path = File.join @var, 'test_protected.xls'
+      book = Spreadsheet::Workbook.new
+      sheet = book.create_worksheet
+      sheet.protect! 'secret'
+      assert_nothing_raised do
+        book.write path
+      end
+
+      read_back = Spreadsheet.open path
+      sheet = read_back.worksheet(0)
+      sheet.ensure_rows_read # FIXME HACK
+      assert sheet.protected?, "Expected sheet to be proteced"
+      assert_equal Spreadsheet::Excel::Password.password_hash('secret'), sheet.password_hash
+    end
+
 =begin
     def test_read_baltic
       path = File.join @data, 'test_baltic.xls'
