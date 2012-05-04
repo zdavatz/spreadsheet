@@ -2,6 +2,7 @@ require 'date'
 require 'spreadsheet/column'
 require 'spreadsheet/encodings'
 require 'spreadsheet/row'
+require 'spreadsheet/excel/password_hash'
 
 module Spreadsheet
   ##
@@ -26,7 +27,7 @@ module Spreadsheet
   class Worksheet
     include Spreadsheet::Encodings
     include Enumerable
-    attr_accessor :name, :selected, :workbook
+    attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells
     def initialize opts={}
       @default_format = nil
@@ -38,6 +39,8 @@ module Spreadsheet
       @columns = []
       @links = {}
       @merged_cells = []
+      @protected = false
+      @password_hash = 0
     end
     def active # :nodoc:
       warn "Worksheet#active is deprecated. Please use Worksheet#selected instead."
@@ -92,6 +95,23 @@ module Spreadsheet
       add_format format
       format
     end
+    ##
+    # Is the worksheet protected?
+    def protected?
+      @protected
+    end
+    ##
+    # Set worklist protection
+    def protect! password = ''
+      @protected = true
+      password = password.to_s
+      if password.size == 0
+        @password_hash = 0
+      else
+        @password_hash = Excel::Password.password_hash password
+      end
+    end
+
     ##
     # Dimensions:: [ first used row, first unused row,
     #              first used column, first unused column ]
