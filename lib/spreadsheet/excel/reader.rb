@@ -866,6 +866,8 @@ class Reader
         read_window2 worksheet, work, pos, len
       when :mergedcells # ○○ MERGEDCELLS	➜ 5.67
         read_merged_cells worksheet, work, pos, len
+      when :protect, :password
+        read_sheet_protection worksheet, op, work
       else
         if ROW_BLOCK_OPS.include?(op)
           set_missing_row_address worksheet, work, pos, len
@@ -1062,6 +1064,14 @@ class Reader
     fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
     fmt.pattern_bg_color = COLOR_CODES[xf_pattern & 0x3f80] || :pattern_bg
     @workbook.add_format fmt
+  end
+  def read_sheet_protection worksheet, op, data
+    case op
+    when :protect
+      worksheet.protect! if data.unpack('v').first == 1
+    when :password
+      worksheet.password_hash = data.unpack('v').first
+    end
   end
   def set_cell worksheet, row, column, xf, value=nil
     cells = @current_row_block[[worksheet, row]] ||= Row.new(nil, row)
