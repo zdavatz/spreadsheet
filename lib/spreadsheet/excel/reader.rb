@@ -1067,8 +1067,10 @@ class Reader
   end
   def read_sheet_protection worksheet, op, data
     case op
-    when :protect: worksheet.protect! if data.unpack('v').first == 1
-    when :password: worksheet.password_hash = data.unpack('v').first
+    when :protect
+      worksheet.protect! if data.unpack('v').first == 1
+    when :password
+      worksheet.password_hash = data.unpack('v').first
     end
   end
   def set_cell worksheet, row, column, xf, value=nil
