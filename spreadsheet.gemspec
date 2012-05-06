@@ -19,4 +19,6 @@ end
 if $0 == __FILE__
    Gem.manage_gems
    Gem::Builder.new(spec).build
+else
+  spec
 end
