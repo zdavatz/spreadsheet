@@ -6,7 +6,7 @@ module Password
     # Makes an excel-compatible hash
     def password_hash(password)
       hash = 0
-      password.chars.reverse_each { |chr| hash = rol15(hash ^ chr[0]) }
+      password.chars.reverse_each { |chr| hash = rol15(hash ^ chr[0].ord) }
       hash ^ password.size ^ 0xCE4B
     end
 
