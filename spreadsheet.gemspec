@@ -13,6 +13,7 @@ spec = Gem::Specification.new do |s|
    s.test_file   = "test/suite.rb"
    s.executables << 'xlsopcodes'
    s.add_dependency('ruby-ole')
+   s.add_development_dependency('rake')
    s.homepage	 = "http://scm.ywesee.com/?p=spreadsheet/.git;a=summary"
 end
 
