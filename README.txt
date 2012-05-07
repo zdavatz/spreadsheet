@@ -1,4 +1,4 @@
-Last Update: 08.12.2011 - Zeno R.R. Davatz
+Last Update: 07.05.2011 - Zeno R.R. Davatz
 
 = Spreadsheet
 
@@ -47,15 +47,15 @@ Floats returned for any number.
 * Improved handling of String Encodings
 
 
-== Roadmap
+== On the Roadmap
 
-0.7.0:: Improved Format support/Styles
-0.7.1:: Document Modification: Formats/Styles
-0.8.0:: Formula Support
-0.8.1:: Document Modification: Formulas
-0.9.0:: Write-Support: BIFF5
-1.0.0:: Ruby 1.9 Support;
-        Remove backward compatibility code
+* Improved Format support/Styles
+* Document Modification: Formats/Styles
+* Formula Support
+* Document Modification: Formulas
+* Write-Support: BIFF5
+* Ruby 1.9 Support;
+* Remove backward compatibility code
 
 Note: Spreadsheet supports Ruby 1.8.6, 1.8.7, 1.9.2, 1.9.3
 
