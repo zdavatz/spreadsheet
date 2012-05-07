@@ -1,6 +1,3 @@
-require "rubygems"
-require "rake"
-
 spec = Gem::Specification.new do |s|
    s.name        = "spreadsheet"
    s.version     = "0.7.0"
@@ -13,13 +10,6 @@ spec = Gem::Specification.new do |s|
    s.test_file   = "test/suite.rb"
    s.executables << 'xlsopcodes'
    s.add_dependency('ruby-ole')
-   s.add_development_dependency('rake')
    s.homepage	 = "http://scm.ywesee.com/?p=spreadsheet/.git;a=summary"
 end
 
-if $0 == __FILE__
-   Gem.manage_gems
-   Gem::Builder.new(spec).build
-else
-  spec
-end
