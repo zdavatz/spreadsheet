@@ -1,3 +1,13 @@
+=== 0.7.0 / 07.05.2012
+
+* Author: Artem Ignatiev <zazubrik@gmail.com>
+* use both ruby 1.8 and 1.9 compatible way of getting character code when hashing
+* Fix syntax for ruby-1.9
+* return gemspec so that bundler can find it
+  When bundler loads gemspec, it evaluates it, and if the return value is 
+  not a gem specification built, refuses to load the gem.
+* Testing worksheet protection
+
 === 0.6.9 / 28.04.2012
 
 * Yield is more simple here too.
