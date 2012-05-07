@@ -20,6 +20,7 @@ lib/spreadsheet/excel/internals.rb
 lib/spreadsheet/excel/internals/biff5.rb
 lib/spreadsheet/excel/internals/biff8.rb
 lib/spreadsheet/excel/offset.rb
+lib/spreadsheet/excel/password_hash.rb
 lib/spreadsheet/excel/reader.rb
 lib/spreadsheet/excel/reader/biff5.rb
 lib/spreadsheet/excel/reader/biff8.rb
@@ -50,6 +51,7 @@ test/data/test_empty.xls
 test/data/test_formula.xls
 test/data/test_long_sst_record.xls
 test/data/test_merged_cells.xls
+test/data/test_merged_and_protected.xls
 test/data/test_missing_row.xls
 test/data/test_version_excel5.xls
 test/data/test_version_excel95.xls
@@ -64,3 +66,4 @@ test/row.rb
 test/suite.rb
 test/workbook.rb
 test/worksheet.rb
+test/workbook_protection.rb
