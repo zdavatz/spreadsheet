@@ -71,19 +71,21 @@ class Workbook < Spreadsheet::Writer
   end
   def complete_sst_update? workbook
     stored = workbook.sst.collect do |entry| entry.content end
-    current = worksheets(workbook).inject [] do |memo, worksheet|
-      memo.concat worksheet.strings
+    current = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
+      worksheet.strings.each do |k,v|
+        memo[k] += v
+      end
+      memo
     end
-    total = current.size
-    current.uniq!
+    num_total = current.values.inject(0){|memo,v| memo+v}
     current.delete ''
-    if (stored - current).empty? && !stored.empty?
+    if !stored.empty? && stored.all?{|x| current[x]}
       ## if all previously stored strings are still needed, we don't have to
       #  rewrite all cells because the sst-index of such string does not change.
-      additions = current - stored
-      [:partial_update, total, stored + additions]
+      additions = current.keys - stored
+      [:partial_update, num_total, stored + additions]
     else
-      [:complete_update, total, current]
+      [:complete_update, num_total, current.keys]
     end
   end
   def font_index workbook, font_key
@@ -482,12 +484,14 @@ class Workbook < Spreadsheet::Writer
     #      0     4  Total number of strings in the workbook (see below)
     #      4     4  Number of following strings (nm)
     #      8  var.  List of nm Unicode strings, 16-bit string length (➜ 3.4)
-    strings = worksheets(workbook).inject [] do |memo, worksheet|
-      memo.concat worksheet.strings
+    strings = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
+      worksheet.strings.each do |k,v|
+        memo[k] += v
+      end
+      memo
     end
-    total = strings.size
-    strings.uniq!
-    _write_sst workbook, writer, offset, total, strings
+    num_total = strings.values.inject(0){|memo,v| memo+v}
+    _write_sst workbook, writer, offset, num_total, strings.keys
   end
   def _write_sst workbook, writer, offset, total, strings
     sst = {}
