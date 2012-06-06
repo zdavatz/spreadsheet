@@ -84,6 +84,12 @@ module Spreadsheet
       @diagonal_color   = :builtin_black
       @pattern_fg_color = :border
       @pattern_bg_color = :pattern_bg
+      @regexes = {
+        :date         => Regexp.new(client("[YMD]", 'UTF-8')),
+        :date_or_time => Regexp.new(client("[hmsYMD]", 'UTF-8')),
+        :datetime     => Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')),
+        :time         => Regexp.new(client("[hms]", 'UTF-8'))
+      }
       # Temp code to prevent merged formats in non-merged cells.
       @used_merge    = 0
       opts.each do |key, val|
@@ -156,22 +162,22 @@ module Spreadsheet
     ##
     # Is the cell formatted as a Date?
     def date?
-      !!Regexp.new(client("[YMD]", 'UTF-8')).match(@number_format.to_s)
+      !!@regexes[:date].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Date or Time?
     def date_or_time?
-      !!Regexp.new(client("[hmsYMD]", 'UTF-8')).match(@number_format.to_s)
+      !!@regexes[:date_or_time].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !!Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')).match(@number_format.to_s)
+      !!@regexes[:datetime].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Time?
     def time?
-      !!Regexp.new(client("[hms]", 'UTF-8')).match(@number_format.to_s)
+      !!@regexes[:time].match(@number_format.to_s)
     end
   end
 end
