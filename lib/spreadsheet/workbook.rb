@@ -19,8 +19,9 @@ module Spreadsheet
       @io = io
       @fonts = []
       @formats = []
+      @formats_set = {}
       if @default_format = opts[:default_format]
-        @formats.push @default_format
+        add_format @default_format
       end
     end
     ##
@@ -34,7 +35,10 @@ module Spreadsheet
     # Add a Format to the Workbook. If you use Row#set_format, you should not
     # need to use this Method.
     def add_format format
-      @formats.push(format) if format && !@formats.include?(format)
+      if format && !@formats_set[format]
+        @formats_set[format] = true
+        @formats.push(format)
+      end
       format
     end
     ##
