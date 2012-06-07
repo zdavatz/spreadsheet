@@ -30,7 +30,6 @@ class Format < DelegateClass Spreadsheet::Format
   color :diagonal_color,   :border
   color :pattern_fg_color, :pattern_bg
   color :pattern_bg_color, :pattern_bg
-  attr_accessor :xf_index
   attr_reader :format
   def initialize writer, workbook, format=workbook.default_format, opts={}
     @opts = { :type => :format }.merge opts
