@@ -106,33 +106,11 @@ module Spreadsheet
       assert_equal enc, book.encoding
       assert_equal 25, book.formats.size
       assert_equal 5, book.fonts.size
-      str1 = book.shared_string 0
-      other = @@iconv.iconv('Shared String')
-      assert_equal @@iconv.iconv('Shared String'), str1
-      str2 = book.shared_string 1
-      assert_equal @@iconv.iconv('Another Shared String'), str2
-      str3 = book.shared_string 2
-      long = @@iconv.iconv('1234567890 ' * 1000)
-      if str3 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str3[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str3[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str3
-      str4 = book.shared_string 3
-      long = @@iconv.iconv('9876543210 ' * 1000)
-      if str4 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str4[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str4[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str4
+      str1 = @@iconv.iconv('Shared String')
+      str2 = @@iconv.iconv('Another Shared String')
+      str3 = @@iconv.iconv('1234567890 ' * 1000)
+      str4 = @@iconv.iconv('9876543210 ' * 1000)
+      assert_valid_sst(book, :contains => [str1, str2, str3, str4])
       sheet = book.worksheet 0
       assert_equal 11, sheet.row_count
       assert_equal 12, sheet.column_count
@@ -211,32 +189,11 @@ module Spreadsheet
       assert_equal enc, book.encoding
       assert_equal 25, book.formats.size
       assert_equal 5, book.fonts.size
-      str1 = book.shared_string 0
-      assert_equal 'Shared String', str1
-      str2 = book.shared_string 1
-      assert_equal 'Another Shared String', str2
-      str3 = book.shared_string 2
-      long = '1234567890 ' * 1000
-      if str3 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str3[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str3[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str3
-      str4 = book.shared_string 3
-      long = '9876543210 ' * 1000
-      if str4 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str4[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str4[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str4
+      str1 = 'Shared String'
+      str2 = 'Another Shared String'
+      str3 = '1234567890 ' * 1000
+      str4 = '9876543210 ' * 1000
+      assert_valid_sst(book, :contains => [str1, str2, str3, str4])
       sheet = book.worksheet 0
       assert_equal 11, sheet.row_count
       assert_equal 12, sheet.column_count
@@ -601,32 +558,12 @@ module Spreadsheet
       assert_equal 8, book.biff_version
       assert_equal 'Microsoft Excel 97/2000/XP', book.version_string
       path = File.join @var, 'test_change_cell.xls'
-      str1 = book.shared_string 0
-      assert_equal 'Shared String', str1
-      str2 = book.shared_string 1
-      assert_equal 'Another Shared String', str2
-      str3 = book.shared_string 2
-      long = '1234567890 ' * 1000
-      if str3 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str3[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str3[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str3
-      str4 = book.shared_string 3
-      long = '9876543210 ' * 1000
-      if str4 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str4[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str4[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str4
+      str1 = 'Shared String'
+      str2 = 'Another Shared String'
+      str3 = '1234567890 ' * 1000
+      str4 = '9876543210 ' * 1000
+      str5 = "Link-Text"
+      assert_valid_sst(book, :is => [str1, str2, str3, str4, str5])
       sheet = book.worksheet 0
       sheet[0,0] = 4
       row = sheet.row 1
@@ -704,44 +641,21 @@ module Spreadsheet
       assert_equal 8, book.biff_version
       assert_equal 'Microsoft Excel 97/2000/XP', book.version_string
       path = File.join @var, 'test_change_cell.xls'
-      str1 = book.shared_string 0
-      assert_equal 'Shared String', str1
-      str2 = book.shared_string 1
-      assert_equal 'Another Shared String', str2
-      str3 = book.shared_string 2
-      long = '1234567890 ' * 1000
-      if str3 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str3[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str3[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str3
-      str4 = book.shared_string 3
-      long = '9876543210 ' * 1000
-      if str4 != long
-        long.size.times do |idx|
-          len = idx.next
-          if str4[0,len] != long[0,len]
-            assert_equal long[idx - 5, 10], str4[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal long, str4
+      str1 = 'Shared String'
+      str2 = 'Another Shared String'
+      str3 = '1234567890 ' * 1000
+      str4 = '9876543210 ' * 1000
+      str5 = 'Link-Text'
+      assert_valid_sst(book, :is => [str1, str2, str3, str4, str5])
       sheet = book.worksheet 0
       sheet[0,0] = 4
-      str5 = 'A completely different String'
-      sheet[0,1] = str5
+      str6 = 'A completely different String'
+      sheet[0,1] = str6
       row = sheet.row 1
       row[0] = 3
       book.write path
       assert_nothing_raised do book = Spreadsheet.open path end
-      assert_equal str5, book.shared_string(0)
-      assert_equal str2, book.shared_string(1)
-      assert_equal str3, book.shared_string(2)
-      assert_equal str4, book.shared_string(3)
+      assert_valid_sst(book, :is => [str2, str3, str4, str5, str6])
       sheet = book.worksheet 0
       assert_equal 11, sheet.row_count
       assert_equal 12, sheet.column_count
@@ -756,9 +670,9 @@ module Spreadsheet
       assert_equal 4, row[0]
       assert_equal 4, sheet[0,0]
       assert_equal 4, sheet.cell(0,0)
-      assert_equal str5, row[1]
-      assert_equal str5, sheet[0,1]
-      assert_equal str5, sheet.cell(0,1)
+      assert_equal str6, row[1]
+      assert_equal str6, sheet[0,1]
+      assert_equal str6, sheet.cell(0,1)
       row = sheet.row 1
       assert_equal 3, row[0]
       assert_equal 3, sheet[1,0]
@@ -905,31 +819,7 @@ module Spreadsheet
       else
         assert_equal 'UTF-16LE', book.encoding
       end
-      assert_equal str1, book.shared_string(0)
-      assert_equal str2, book.shared_string(1)
-      test = nil
-      assert_nothing_raised "I've probably split a two-byte-character" do
-        test = book.shared_string 2
-      end
-      if test != str3
-        str3.size.times do |idx|
-          len = idx.next
-          if test[0,len] != str3[0,len]
-            assert_equal str3[idx - 5, 10], test[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal str3, test
-      test = book.shared_string 3
-      if test != str4
-        str4.size.times do |idx|
-          len = idx.next
-          if test[0,len] != str4[0,len]
-            assert_equal str4[idx - 5, 10], test[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal str4, test
+      assert_valid_sst(book, :contains => [str1, str2, str3, str4])
       assert_equal 2, book.worksheets.size
       sheet = book.worksheets.first
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
@@ -1080,28 +970,7 @@ module Spreadsheet
       else
         assert_equal 'UTF-16LE', book.encoding
       end
-      assert_equal str1, book.shared_string(0)
-      assert_equal str2, book.shared_string(1)
-      test = book.shared_string 2
-      if test != str3
-        str3.size.times do |idx|
-          len = idx.next
-          if test[0,len] != str3[0,len]
-            assert_equal str3[idx - 5, 10], test[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal str3, test
-      test = book.shared_string 3
-      if test != str4
-        str4.size.times do |idx|
-          len = idx.next
-          if test[0,len] != str4[0,len]
-            assert_equal str4[idx - 5, 10], test[idx - 5, 10], "in position #{idx}"
-          end
-        end
-      end
-      assert_equal str4, test
+      assert_valid_sst(book, :is => [str1, str2, str3, str4, "formatted when empty"])
       assert_equal 2, book.worksheets.size
       sheet = book.worksheets.first
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
@@ -1364,5 +1233,35 @@ module Spreadsheet
       sheet[0,0] # trigger read_worksheet
       assert_equal [[2, 4, 1, 1], [3, 3, 2, 3]], sheet.merged_cells
     end
+
+    private
+
+    # Validates the workbook's SST
+    # Valid options:
+    #   :is       => [array]
+    #   :contains => [array]
+    #   :length   => num
+    def assert_valid_sst(workbook, opts = {})
+      assert workbook.is_a?(Spreadsheet::Excel::Workbook)
+      sst = workbook.sst
+      assert sst.is_a?(Array)
+      strings = sst.map do |entry|
+        assert entry.is_a?(Spreadsheet::Excel::SstEntry)
+        entry.content
+      end
+      sorted_strings = strings.sort
+      # Make sure there are no duplicates, the whole point of the SST:
+      assert_equal strings.uniq.sort, sorted_strings
+      if opts[:is]
+        assert_equal opts[:is].sort, sorted_strings
+      end
+      if opts[:contains]
+        assert_equal [], opts[:contains] - sorted_strings
+      end
+      if opts[:length]
+        assert_equal opts[:length], sorted_strings
+      end
+    end
+
   end
 end
