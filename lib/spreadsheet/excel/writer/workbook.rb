@@ -83,7 +83,7 @@ class Workbook < Spreadsheet::Writer
     end
     num_total = current.values.inject(0){|memo,v| memo+v}
     current.delete ''
-    if !stored.empty? && stored.all?{|x| current[x]}
+    if !stored.empty? && stored.all?{|x| current.include?(x) }
       ## if all previously stored strings are still needed, we don't have to
       #  rewrite all cells because the sst-index of such string does not change.
       additions = current.keys - stored
