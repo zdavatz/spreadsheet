@@ -75,13 +75,14 @@ class Workbook < Spreadsheet::Writer
   end
   def complete_sst_update? workbook
     stored = workbook.sst.collect do |entry| entry.content end
+    num_total = 0
     current = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
       worksheet.strings.each do |k,v|
         memo[k] += v
+        num_total += v
       end
       memo
     end
-    num_total = current.values.inject(0){|memo,v| memo+v}
     current.delete ''
     if !stored.empty? && stored.all?{|x| current.include?(x) }
       ## if all previously stored strings are still needed, we don't have to
@@ -488,13 +489,14 @@ class Workbook < Spreadsheet::Writer
     #      0     4  Total number of strings in the workbook (see below)
     #      4     4  Number of following strings (nm)
     #      8  var.  List of nm Unicode strings, 16-bit string length (➜ 3.4)
+    num_total = 0
     strings = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
       worksheet.strings.each do |k,v|
         memo[k] += v
+        num_total += v
       end
       memo
     end
-    num_total = strings.values.inject(0){|memo,v| memo+v}
     _write_sst workbook, writer, offset, num_total, strings.keys
   end
   def _write_sst workbook, writer, offset, total, strings
