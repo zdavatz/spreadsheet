@@ -167,22 +167,30 @@ module Spreadsheet
     # - 'DD.MM.YYYY' for Date
     # - 'DD.MM.YYYY hh:mm:ss' for DateTime and Time
     def format_dates! format=nil
+      new_formats = {}
+      fmt_str_time = client('DD.MM.YYYY hh:mm:ss', 'UTF-8')
+      fmt_str_date = client('DD.MM.YYYY', 'UTF-8')
       each do |row|
         row.each_with_index do |value, idx|
           unless row.formats[idx] || row.format(idx).date_or_time?
             numfmt = case value
                      when DateTime, Time
-                       format || client('DD.MM.YYYY hh:mm:ss', 'UTF-8')
+                       format || fmt_str_time
                      when Date
-                       format || client('DD.MM.YYYY', 'UTF-8')
+                       format || fmt_str_date
                      end
             case numfmt
             when Format
               row.set_format idx, numfmt
             when String
-              fmt = row.format(idx).dup
-              fmt.number_format = numfmt
-              row.set_format idx, fmt
+              existing_format = row.format(idx)
+              new_formats[existing_format] ||= {}
+              new_format = new_formats[existing_format][numfmt]
+              if !new_format
+                new_format = new_formats[existing_format][numfmt] = existing_format.dup
+                new_format.number_format = numfmt
+              end
+              row.set_format idx, new_format
             end
           end
         end
