@@ -49,6 +49,32 @@ module Spreadsheet
 
           assert_equal false, sheet.data.empty?
         end
+
+        def test_strings
+          book = Spreadsheet::Excel::Workbook.new
+          sheet = book.create_worksheet
+          writer = Worksheet.new book, sheet
+          rowi = -1
+
+          assert_equal(
+            {},
+            writer.strings
+          )
+
+          sheet.row(rowi+=1).concat(["Hello", "World"])
+          assert_equal(
+            {"Hello" => 1, "World" => 1},
+            writer.strings
+          )
+
+          sheet.row(rowi+=1).concat(["Goodbye", "Cruel", "World", 2012])
+          assert_equal(
+            {"Hello" => 1, "Goodbye" => 1, "Cruel" => 1, "World" => 2},
+            writer.strings
+          )
+
+        end
+
       end
     end
   end

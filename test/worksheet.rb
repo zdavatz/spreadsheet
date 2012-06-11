@@ -76,5 +76,37 @@ module Spreadsheet
       assert_equal 30, @sheet.column(0).width
       assert_equal 20, @sheet.column(1).width
     end
+    def test_format_dates!
+      rowi = -1
+
+      @sheet.format_dates!
+      # No dates = no new formats
+      assert_equal 1, @book.formats.length # Default format
+
+      @sheet.row(rowi+=1).concat(["Hello", "World"])
+      @sheet.format_dates!
+      # No dates = no new formats
+      assert_equal 1, @book.formats.length
+
+      @sheet.row(rowi+=1).concat([Date.new(2010,1,1)])
+      @sheet.format_dates!
+      # 1 date = 1 new format
+      assert_equal 2, @book.formats.length
+
+      @sheet.row(rowi+=1).concat([Date.new(2011,1,1)])
+      @sheet.row(rowi+=1).concat([Date.new(2012,1,1)])
+      @sheet.row(rowi+=1).concat([Date.new(2013,1,1)])
+      @sheet.format_dates!
+      # 4 dates = only 1 new format across them:
+      assert_equal 3, @book.formats.length
+
+      @sheet.row(rowi+=1).concat([Date.new(2014,1,1)])
+      @sheet.row(rowi).default_format = Format.new
+      @sheet.row(rowi+=1).concat([Date.new(2015,1,1)])
+      @sheet.format_dates!
+      # 6 dates = 2 new formats across them:
+      assert_equal 6, @book.formats.length
+
+    end
   end
 end
