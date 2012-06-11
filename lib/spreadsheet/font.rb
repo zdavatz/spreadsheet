@@ -74,10 +74,18 @@ module Spreadsheet
       self.weight = bool ? :bold : nil
     end
     def key # :nodoc:
-      key = @name.dup
+      fk = fast_key
+      return @key if @previous_fast_key == fk
+      @previous_fast_key = fk
+      @key = build_key
+    end
+    private
+    def build_key # :nodoc:
       underscore = client('_', 'UTF-8')
+      key = []
+      key << @name
       key << underscore << client(size.to_s, 'US-ASCII')
-      key << client('_', 'UTF-8') << client(weight.to_s, 'US-ASCII')
+      key << underscore << client(weight.to_s, 'US-ASCII')
       key << client('_italic', 'UTF-8')    if italic?
       key << client('_strikeout', 'UTF-8') if strikeout?
       key << client('_outline', 'UTF-8')   if outline?
@@ -87,6 +95,10 @@ module Spreadsheet
       key << underscore << client(color.to_s, 'US-ASCII')
       key << underscore << client(family.to_s, 'US-ASCII')
       key << underscore << client(encoding.to_s, 'US-ASCII')
+      key.join("")
+    end
+    def fast_key
+      [@name, @size, @weight, @italic, @strikeout, @outline, @shadow, @escapement, @underline, @color, @family, @encoding]
     end
   end
 end
