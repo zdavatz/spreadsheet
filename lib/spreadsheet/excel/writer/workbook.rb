@@ -356,8 +356,8 @@ class Workbook < Spreadsheet::Writer
   end
   def write_fonts workbook, writer
     fonts = @fonts[workbook] = {}
-    @formats[workbook][:writers].each do |format|
-      if(font = format.font) && !fonts.include?(font.key)
+    @formats[workbook][:writers].map{|format| format.font }.compact.uniq.each do |font|
+      unless fonts.include?(font.key)
         fonts.store font.key, fonts.size
         write_font workbook, writer, font
       end
