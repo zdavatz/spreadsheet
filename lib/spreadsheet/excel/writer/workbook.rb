@@ -64,26 +64,33 @@ class Workbook < Spreadsheet::Writer
     workbook.formats.each do |fmt|
       formats.push Format.new(self, workbook, fmt)
     end
+    @formats[workbook] = {
+      :writers => [],
+      :xf_indexes => {}
+    }
     formats.each_with_index do |fmt, idx|
-      fmt.xf_index = idx
+      @formats[workbook][:writers] << fmt
+      @formats[workbook][:xf_indexes][fmt.format] ||= idx
     end
-    @formats[workbook] = formats
   end
   def complete_sst_update? workbook
     stored = workbook.sst.collect do |entry| entry.content end
-    current = worksheets(workbook).inject [] do |memo, worksheet|
-      memo.concat worksheet.strings
+    num_total = 0
+    current = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
+      worksheet.strings.each do |k,v|
+        memo[k] += v
+        num_total += v
+      end
+      memo
     end
-    total = current.size
-    current.uniq!
     current.delete ''
-    if (stored - current).empty? && !stored.empty?
+    if !stored.empty? && stored.all?{|x| current.include?(x) }
       ## if all previously stored strings are still needed, we don't have to
       #  rewrite all cells because the sst-index of such string does not change.
-      additions = current - stored
-      [:partial_update, total, stored + additions]
+      additions = current.keys - stored
+      [:partial_update, num_total, stored + additions]
     else
-      [:complete_update, total, current]
+      [:complete_update, num_total, current.keys]
     end
   end
   def font_index workbook, font_key
@@ -349,8 +356,8 @@ class Workbook < Spreadsheet::Writer
   end
   def write_fonts workbook, writer
     fonts = @fonts[workbook] = {}
-    @formats[workbook].each do |format|
-      if(font = format.font) && !fonts.include?(font.key)
+    @formats[workbook][:writers].map{|format| format.font }.compact.uniq.each do |font|
+      unless fonts.include?(font.key)
         fonts.store font.key, fonts.size
         write_font workbook, writer, font
       end
@@ -482,12 +489,15 @@ class Workbook < Spreadsheet::Writer
     #      0     4  Total number of strings in the workbook (see below)
     #      4     4  Number of following strings (nm)
     #      8  var.  List of nm Unicode strings, 16-bit string length (➜ 3.4)
-    strings = worksheets(workbook).inject [] do |memo, worksheet|
-      memo.concat worksheet.strings
+    num_total = 0
+    strings = worksheets(workbook).inject(Hash.new(0)) do |memo, worksheet|
+      worksheet.strings.each do |k,v|
+        memo[k] += v
+        num_total += v
+      end
+      memo
     end
-    total = strings.size
-    strings.uniq!
-    _write_sst workbook, writer, offset, total, strings
+    _write_sst workbook, writer, offset, num_total, strings.keys
   end
   def _write_sst workbook, writer, offset, total, strings
     sst = {}
@@ -635,17 +645,13 @@ class Workbook < Spreadsheet::Writer
     # the XF record with the fixed index 15 (0-based). By default, it uses the
     # worksheet/workbook default cell style, described by the very first XF
     # record (index 0).
-    @formats[workbook].each do |fmt| fmt.write_xf writer end
+    @formats[workbook][:writers].each do |fmt| fmt.write_xf writer end
   end
   def sst_index worksheet, str
     @sst[worksheet][str]
   end
   def xf_index workbook, format
-    if fmt = @formats[workbook].find do |fm| fm.format == format end
-      fmt.xf_index
-    else
-      0
-    end
+    @formats[workbook][:xf_indexes][format] || 0
   end
 end
     end

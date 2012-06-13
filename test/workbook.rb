@@ -25,5 +25,20 @@ module Spreadsheet
         @book.add_worksheet @worksheet2
         assert_equal 2, @book.sheet_count
     end
+    def test_add_format
+
+      assert_equal 1, @book.formats.length # Received a default format
+
+      f1 = Format.new
+      @book.add_format f1
+      assert_equal 2, @book.formats.length
+
+      f2 = Format.new
+      @book.add_format f2
+      assert_equal 3, @book.formats.length
+
+      @book.add_format f2
+      assert_equal 3, @book.formats.length # Rejected duplicate insertion
+    end
   end
 end
