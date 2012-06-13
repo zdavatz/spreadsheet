@@ -55,7 +55,7 @@ module Spreadsheet
           sheet = @book.create_worksheet
           rowi=-1
           # Stub inner #write_font as a counter:
-          (class << @workbook_writer; self; end).send(:define_method, :write_font) do
+          (class << @workbook_writer; self; end).send(:define_method, :write_font) do |*args|
             num_written += 1
           end
           io = StringIO.new("")
