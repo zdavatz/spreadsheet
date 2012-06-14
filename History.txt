@@ -1,3 +1,8 @@
+=== 0.7.2 / 14.06.2012
+
+* many changes by Mina Naguib <mina.git@naguib.ca>
+* see git log for full details
+
 === 0.7.1 / 08.05.2012
 
 * Author: Artem Ignatiev <zazubrik@gmail.com>
