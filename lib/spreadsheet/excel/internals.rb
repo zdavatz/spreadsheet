@@ -411,6 +411,27 @@ module Internals
     :distributed => 4,
   }
   NGILA_V_FX = XF_V_ALIGN.invert
+# border line styles taken from http://www.openoffice.org/sc/excelfileformat.pdf
+	XF_BORDER_LINE_STYLES = {
+		0x00	=>	:none,
+		0x01	=>	:thin,
+		0x02	=>	:medium,
+		0x03	=>	:dashed,
+		0x04	=>	:dotted,
+		0x05	=>	:thick,
+		0x06	=>	:double,
+		0x07	=>	:hair,
+# the following are only valid for BIFF8 and higher:
+		0x08	=>	:medium_dashed,
+		0x09	=>	:thin_dash_dotted,
+		0x0a	=>	:medium_dash_dotted,
+		0x0b	=>	:thin_dash_dot_dotted,
+		0x0c	=>	:medium_dash_dot_dotted,
+		0x0d	=>	:slanted_medium_dash_dotted
+	}
+# ensure reader always gets a valid line style
+	XF_BORDER_LINE_STYLES.default = :none 
+	SELYTS_ENIL_REDROB_FX = XF_BORDER_LINE_STYLES.invert
   OPCODE_SIZE = 4
   ROW_HEIGHT = 12.1
   SST_CHUNKSIZE = 20
