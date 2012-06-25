@@ -1,8 +1,8 @@
-Last Update: 07.05.2011 - Zeno R.R. Davatz
+Last Update: 26.06.2012 - Zeno R.R. Davatz
 
 = Spreadsheet
 
-http://spreadsheet.rubyforge.org
+https://github.com/zdavatz/spreadsheet
 
 The Mailing List can be found here:
 
@@ -10,7 +10,7 @@ http://groups.google.com/group/rubyspreadsheet
 
 The code can be found here:
 
-http://spreadsheet.rubyforge.org
+https://github.com/zdavatz/spreadsheet
 
 For a viewable directory of all recent changes, please see:
 
@@ -23,7 +23,6 @@ http://spreadsheet.rubyforge.org/spreadsheet.jpeg
 For Non-GPLv3 commercial licencing, please see:
 
 http://www.spreadsheet.ch
-
 
 == Description
 
