@@ -224,7 +224,7 @@ class Format < DelegateClass Spreadsheet::Format
     rot
   end
   def xf_type_prot type
-    type = type.to_s.downcase == 'style' ? 0xfff5 : 0x0000
+    type = type.to_s.downcase == 'style' ? 0xfff4 : 0x0000
     type |= locked
     type |= hidden << 1
     type
