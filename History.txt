@@ -1,3 +1,9 @@
+=== 0.7.3 / 26.06.2012
+
+* Fix Format borders
+* see https://github.com/zdavatz/spreadsheet/pull/6 for full details.
+* patches by uraki66@gmail.com
+
 === 0.7.2 / 14.06.2012
 
 * many changes by Mina Naguib <mina.git@naguib.ca>
