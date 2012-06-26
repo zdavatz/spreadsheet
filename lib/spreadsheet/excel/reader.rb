@@ -1048,21 +1048,23 @@ class Reader
     fmt.indent_level = xf_indent & 0x0f
     fmt.shrink = xf_indent & 0x10 > 0
     fmt.text_direction = NOITCERID_TXET_FX[xf_indent & 0xc0]
-    fmt.left   = xf_borders & 0x0000000f > 0
-    fmt.right  = xf_borders & 0x000000f0 > 0
-    fmt.top    = xf_borders & 0x00000f00 > 0
-    fmt.bottom = xf_borders & 0x0000f000 > 0
-    fmt.left_color     = COLOR_CODES[xf_borders & 0x007f0000] || :border
-    fmt.right_color    = COLOR_CODES[xf_borders & 0x3f800000] || :border
+    fmt.left           = XF_BORDER_LINE_STYLES[xf_borders & 0x0000000f]
+    fmt.right          = XF_BORDER_LINE_STYLES[(xf_borders & 0x000000f0) >>  4]
+    fmt.top            = XF_BORDER_LINE_STYLES[(xf_borders & 0x00000f00) >>  8]
+    fmt.bottom         = XF_BORDER_LINE_STYLES[(xf_borders & 0x0000f000) >> 12]
+    fmt.left_color     = COLOR_CODES[(xf_borders & 0x007f0000) >> 16] || :black
+    fmt.right_color    = COLOR_CODES[(xf_borders & 0x3f800000) >> 23] || :black
     fmt.cross_down     = xf_borders & 0x40000000 > 0
     fmt.cross_up       = xf_borders & 0x80000000 > 0
-    fmt.top_color      = COLOR_CODES[xf_brdcolors & 0x0000007f] || :border
-    fmt.bottom_color   = COLOR_CODES[xf_brdcolors & 0x00003f80] || :border
-    fmt.diagonal_color = COLOR_CODES[xf_brdcolors & 0x001fc000] || :border
-    #fmt.diagonal_style = COLOR_CODES[xf_brdcolors & 0x01e00000]
-    fmt.pattern = xf_brdcolors & 0xfc000000
+		if xf_brdcolors
+    	fmt.top_color      = COLOR_CODES[xf_brdcolors & 0x0000007f] || :black
+    	fmt.bottom_color   = COLOR_CODES[(xf_brdcolors & 0x00003f80) >> 7] || :black
+    	fmt.diagonal_color = COLOR_CODES[(xf_brdcolors & 0x001fc000) >> 14] || :black
+    	#fmt.diagonal_style = COLOR_CODES[xf_brdcolors & 0x01e00000]
+    	fmt.pattern        = (xf_brdcolors & 0xfc000000) >> 26
+		end
     fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
-    fmt.pattern_bg_color = COLOR_CODES[xf_pattern & 0x3f80] || :pattern_bg
+    fmt.pattern_bg_color = COLOR_CODES[(xf_pattern & 0x3f80) >> 7] || :pattern_bg
     @workbook.add_format fmt
   end
   def read_sheet_protection worksheet, op, data

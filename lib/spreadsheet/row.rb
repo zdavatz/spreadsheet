@@ -65,6 +65,12 @@ module Spreadsheet
       @height = 12.1
     end
     ##
+    # The default Format of this Row, if you have set one.
+    # Returns the Worksheet's default or the Workbook's default Format otherwise.
+    def default_format
+      @default_format || @worksheet.default_format || @workbook.default_format
+    end
+    ##
     # Set the default Format used when writing a Cell if no explicit Format is
     # stored for the cell.
     def default_format= format
