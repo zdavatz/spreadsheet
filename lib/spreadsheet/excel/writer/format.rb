@@ -21,13 +21,22 @@ class Format < DelegateClass Spreadsheet::Format
       color_code(@format.send(key) || default)
     end
   end
+  def Format.line_style key, default
+    define_method key do
+      style_code(@format.send(key) || default)
+    end
+  end
   boolean :hidden, :locked, :merge_range, :shrink, :text_justlast, :text_wrap,
-          :cross_down, :cross_up, :left, :right, :top, :bottom
-  color :left_color,       :border
-  color :right_color,      :border
-  color :top_color,        :border
-  color :bottom_color,     :border
-  color :diagonal_color,   :border
+          :cross_down, :cross_up
+	line_style	:left, 			 :none
+	line_style	:right,			 :none
+	line_style	:top, 			 :none
+	line_style	:bottom,		 :none
+  color :left_color,       :black
+  color :right_color,      :black
+  color :top_color,        :black
+  color :bottom_color,     :black
+  color :diagonal_color,   :black
   color :pattern_fg_color, :pattern_bg
   color :pattern_bg_color, :pattern_bg
   attr_reader :format
@@ -40,6 +49,9 @@ class Format < DelegateClass Spreadsheet::Format
   end
   def color_code color
     SEDOC_ROLOC[color]
+  end
+  def style_code style
+    SELYTS_ENIL_REDROB_FX[style]
   end
   def font_index
     @writer.font_index @workbook, font.key
@@ -212,7 +224,7 @@ class Format < DelegateClass Spreadsheet::Format
     rot
   end
   def xf_type_prot type
-    type = type.to_s.downcase == 'style' ? 0xfff5 : 0x0000
+    type = type.to_s.downcase == 'style' ? 0xfff4 : 0x0000
     type |= locked
     type |= hidden << 1
     type
@@ -229,7 +241,7 @@ class Format < DelegateClass Spreadsheet::Format
     then
       atr_alc = 1
     end
-    atr_bdr = [top, bottom, left, right, cross_up, cross_down].max
+    atr_bdr = 1 
     atr_pat = 0
     if  @format.pattern_fg_color != :border \
       || @format.pattern_bg_color != :pattern_bg \
