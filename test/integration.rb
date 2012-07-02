@@ -1233,6 +1233,37 @@ module Spreadsheet
       sheet[0,0] # trigger read_worksheet
       assert_equal [[2, 4, 1, 1], [3, 3, 2, 3]], sheet.merged_cells
     end
+    def test_read_borders
+      path = File.join @data, 'test_borders.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      format  = sheet.row(0).format 0
+      assert_equal :none, format.left
+      assert_equal :thin, format.top
+      assert_equal :medium, format.right
+      assert_equal :thick, format.bottom
+      assert_equal :builtin_black, format.left_color
+      assert_equal :red, format.top_color
+      assert_equal :green, format.right_color
+      assert_equal :yellow, format.bottom_color
+    end
+    def test_write_borders
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_borders.xls'
+      sheet1 = book.create_worksheet
+      (sheet1.row(0).format 0).border = :hair
+      (sheet1.row(0).format 0).border_color = :brown
+      assert_nothing_raised do 
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      sheet2 = book2.worksheet 0
+      format = sheet2.row(0).format 0
+      assert_equal :hair, format.left
+      assert_equal :brown, format.top_color
+    end
 
     private
 
