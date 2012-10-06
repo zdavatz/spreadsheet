@@ -1,3 +1,8 @@
+=== 0.7.4 / 06.10.2012
+
+* Adds Spreadsheet::Excel::Row#to_a method to properly decode Date and DateTime data.
+* patches by https://github.com/mdgreenfield/spreadsheet
+
 === 0.7.3 / 26.06.2012
 
 * Fix Format borders
