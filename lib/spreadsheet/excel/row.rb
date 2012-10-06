@@ -42,6 +42,12 @@ class Row < Spreadsheet::Row
       enriched_data idx, at(idx)
     end
   end
+  ##
+  # Returns data as an array. If a cell is formatted as a Date or DateTime, the
+  # decoded Date or DateTime value is returned.
+  def to_a
+    self[0...length]
+  end
   private
   def _date data # :nodoc:
     return data if data.is_a?(Date)
