@@ -1,3 +1,8 @@
+=== 0.7.5 / 06.12.2012
+
+* Add error tolerant values for Iconv when writing spreadsheet
+* by andrea@spaghetticode.it
+
 === 0.7.4 / 06.10.2012
 
 * Adds Spreadsheet::Excel::Row#to_a method to properly decode Date and DateTime data.
