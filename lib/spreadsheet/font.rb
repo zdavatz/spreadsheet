@@ -64,6 +64,17 @@ module Spreadsheet
     def initialize name, opts={}
       self.name = name
       @color = :text
+      @previous_fast_key = nil
+      @size = nil
+      @weight = nil
+      @italic = nil
+      @strikeout = nil
+      @outline = nil
+      @shadow = nil
+      @escapement = nil
+      @underline = nil
+      @family = nil
+      @encoding = nil
       opts.each do |key, val|
         self.send "#{key}=", val
       end

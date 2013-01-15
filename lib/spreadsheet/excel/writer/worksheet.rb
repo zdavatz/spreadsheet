@@ -291,7 +291,7 @@ Please contact the author (hannes dot wyss at gmail dot com) with a sample file
 and minimal code that generates this warning. Thanks!
       EOS
     end
-    work = work.sort_by do |key, (pos, len)|
+    work = work.sort_by do |key, (pos, _)|
       [pos, key.is_a?(Integer) ? key : -1]
     end
     work.each do |key, (pos, len)|
@@ -598,7 +598,6 @@ and minimal code that generates this warning. Thanks!
   def write_hyperlink_table
     # TODO: theoretically it's possible to write fewer records by combining
     #       identical neighboring links in cell-ranges
-    links = []
     @worksheet.each do |row|
       row.each_with_index do |cell, idx|
         if cell.is_a? Link

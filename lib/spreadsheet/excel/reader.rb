@@ -145,7 +145,7 @@ class Reader
     #      6     2  Build year
     #      8     4  File history flags
     #     12     4  Lowest Excel version that can read all records in this file
-    pos, @bof, len, work = get_next_chunk
+    _, @bof, _, work = get_next_chunk
     ## version and datatype are common to all Excel-Versions. Later versions
     #  have additional information such as build-id and -year (from BIFF5).
     #  These are ignored for the time being.
@@ -178,7 +178,7 @@ class Reader
     #      6  var.  Sheet name: BIFF5/BIFF7: Byte string,
     #                           8-bit string length (➜ 3.3)
     #                           BIFF8: Unicode string, 8-bit string length (➜ 3.4)
-    offset, visibility, type = work.unpack("VC2")
+    offset, _, _ = work.unpack("VC2")
     name = client read_string(work[6..-1]), @workbook.encoding
     if @boundsheets
       @boundsheets[0] += 1
@@ -442,15 +442,14 @@ class Reader
     # [var.]  2∙tl  (optional, see option flags) Character array of the text
     #               mark without “#” sign, no Unicode string header, always
     #               16-bit characters, zero-terminated
-    firstrow, lastrow, firstcol, lastcol, guid, opts = work.unpack 'v4H32x4V'
+    firstrow, lastrow, firstcol, lastcol, _, opts = work.unpack 'v4H32x4V'
     has_link = opts & 0x0001
-    absolute = opts & 0x0002
     desc     = opts & 0x0014
     textmark = opts & 0x0008
     target   = opts & 0x0080
     unc      = opts & 0x0100
     link = Link.new
-    url, description = nil
+    _, description = nil
     pos = 32
     if desc > 0
       description, pos = read_hlink_string work, pos
@@ -610,7 +609,7 @@ class Reader
     #      4  2∙nc  List of nc=lc-fc+1 16-bit indexes to XF records (➜ 6.115)
     # 4+2∙nc     2  Index to last column (lc)
     row, column, *xfs = work.unpack 'v*'
-    last_column = xfs.pop # unused
+    xfs.pop #=> last_column
     xfs.each_with_index do |xf, idx| set_cell worksheet, row, column + idx, xf end
   end
   def read_mulrk worksheet, addr, work
@@ -655,7 +654,7 @@ class Reader
       @pos = addr[:offset]
       found = false
       while tuple = get_next_chunk
-        pos, op, len, work = tuple
+        pos, op, _, work = tuple
         case op
         when :eof      # ●  EOF ➜ 6.36 - we should only get here if there is just
                        #                 one Row-Block
@@ -771,7 +770,7 @@ class Reader
     # but another self-contained MERGEDCELLS record is started. The limit of 8224 bytes
     # per record results in a maximum number of 1027 merged ranges.
 
-    worksheet.merged_cells.push *read_range_address_list(work, len)
+    worksheet.merged_cells.push(*read_range_address_list(work, len))
     #
     # A cell range address list consists of a field with the number of ranges and the list
     # of the range addresses.
@@ -783,7 +782,6 @@ class Reader
   end
 
   def read_workbook
-    worksheet = nil
     previous_op = nil
     while tuple = get_next_chunk
       pos, op, len, work = tuple
@@ -1029,7 +1027,7 @@ class Reader
     #                13-7  0x3f80      Colour index (➜ 6.70)
     #                                  for pattern background
     fmt = Format.new
-    font_idx, numfmt, xf_type, xf_align, xf_rotation, xf_indent, xf_used_attr,
+    font_idx, numfmt, _, xf_align, xf_rotation, xf_indent, _,
       xf_borders, xf_brdcolors, xf_pattern = work.unpack binfmt(:xf)
     fmt.number_format = @formats[numfmt]
     ## this appears to be undocumented: the first 4 fonts seem to be accessed
@@ -1084,7 +1082,7 @@ class Reader
     # Offset  Size  Contents
     #      0     2  Index of this row
     #      2     2  Index to this column
-    row_index, column_index = work.unpack 'v2'
+    row_index, _ = work.unpack 'v2'
     unless worksheet.offsets[row_index]
       @current_row_block_offset ||= [pos]
       data = {
