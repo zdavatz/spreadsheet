@@ -1,3 +1,15 @@
+=== 0.7.6 / 15.01.2013
+
+Author: Kenichi Kamiya <kachick1@gmail.com>
+Date:   Tue Jan 15 15:52:58 2013 +0900
+
+* Remove warnings "method redefined; discarding old default_format"
+* Remove warnings "`*' interpreted as argument prefix"
+* Remove warnings "instance variable @{ivar} not initialized"
+* Remove warnings "assigned but unused variable"
+
+also see: https://github.com/zdavatz/spreadsheet/pull/21
+
 === 0.7.5 / 06.12.2012
 
 * Add error tolerant values for Iconv when writing spreadsheet
