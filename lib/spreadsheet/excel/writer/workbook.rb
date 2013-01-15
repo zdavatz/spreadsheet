@@ -193,7 +193,7 @@ class Workbook < Spreadsheet::Writer
         reader.seek lastpos = 0
         workbook.offsets.select do |key, pair|
           workbook.changes.include? key
-        end.sort_by do |key, (pos, len)|
+        end.sort_by do |key, (pos, _)|
           pos
         end.each do |key, (pos, len)|
           data = reader.read(pos - lastpos)
@@ -538,7 +538,7 @@ class Workbook < Spreadsheet::Writer
     ## if we're writing wide characters, we need to make sure we don't cut
     #  characters in half
     if wide > 0 && data.size > @recordsize_limit
-      remove = @recordsize_limit - data.size
+      remove = @recordsize_limit - bef
       remove -= remove % 2
       rest = data.slice!(remove..-1)
       write_op writer, op, data
