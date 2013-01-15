@@ -48,7 +48,7 @@ module Spreadsheet
         end
       end
     end
-    attr_reader :formats, :default_format
+    attr_reader :formats
     attr_accessor :idx, :height, :worksheet
     boolean :hidden, :collapsed
     enum :outline_level, 0, Integer
