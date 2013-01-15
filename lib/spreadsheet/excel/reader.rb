@@ -770,7 +770,7 @@ class Reader
     # but another self-contained MERGEDCELLS record is started. The limit of 8224 bytes
     # per record results in a maximum number of 1027 merged ranges.
 
-    worksheet.merged_cells.push *read_range_address_list(work, len)
+    worksheet.merged_cells.push(*read_range_address_list(work, len))
     #
     # A cell range address list consists of a field with the number of ranges and the list
     # of the range addresses.
