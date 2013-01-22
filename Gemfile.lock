@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    spreadsheet (0.7.3)
+      ruby-ole
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ruby-ole (1.2.11.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  spreadsheet!
