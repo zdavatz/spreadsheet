@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # suite.rb -- spreadsheet -- 22.12.2011 -- jsaak@napalm.hu
-
+require 'rubygems'
+require 'bundler'
 require 'find'
 
 here = File.dirname(__FILE__)
