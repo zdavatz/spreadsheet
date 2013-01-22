@@ -88,6 +88,14 @@ build a gem package as follows:
 
 The gem package is built in pkg directory.
 
+== Testing
+
+Bundler support added.
+Running tests:
+* bundle install
+* ./test/suite.rb
+
+
 
 == Authors
 
