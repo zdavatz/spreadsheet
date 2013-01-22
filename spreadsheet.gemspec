@@ -8,8 +8,11 @@ spec = Gem::Specification.new do |s|
    s.platform    = Gem::Platform::RUBY
    s.files       = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
    s.test_file   = "test/suite.rb"
-   s.executables << 'xlsopcodes'
-   s.add_dependency('ruby-ole')
+   s.executables << "xlsopcodes"
+
+   s.add_dependency "ruby-ole"
+   s.add_development_dependency "hoe"
+
    s.homepage	 = "http://scm.ywesee.com/?p=spreadsheet/.git;a=summary"
 end
 
