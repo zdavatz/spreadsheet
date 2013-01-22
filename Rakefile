@@ -3,6 +3,8 @@
 $: << File.expand_path("./lib", File.dirname(__FILE__))
 
 require 'rubygems'
+require 'bundler'
+
 require 'hoe'
 require './lib/spreadsheet.rb'
 

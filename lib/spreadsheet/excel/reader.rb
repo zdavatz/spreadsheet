@@ -1179,6 +1179,7 @@ class Reader
     %w{Book Workbook BOOK WORKBOOK book workbook}.any? do |name|
       @book = @ole.file.open(name) rescue false
     end
+    raise RuntimeError, "could not locate a workbook, possibly an empty file passed" unless @book
     @data = @book.read
     read_bof
     @workbook.ole = @book
