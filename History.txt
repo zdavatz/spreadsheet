@@ -1,3 +1,17 @@
+=== 0.7.7 / 22.01.2013
+
+Author: DeTeam <timur.deteam@gmail.com>
+Date:   Tue Jan 22 19:11:52 2013 +0400
+
+* Make tests pass
+* Readme updated
+* RuntimeError when file is empty
+* Hoe in dev deps
+* Finish with bundler
+* Add a Gemfile
+
+also see: https://github.com/zdavatz/spreadsheet/pull/24
+
 === 0.7.6 / 15.01.2013
 
 Author: Kenichi Kamiya <kachick1@gmail.com>
