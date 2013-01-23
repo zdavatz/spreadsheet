@@ -62,6 +62,7 @@ test/data/test_version_excel97.xls
 test/data/test_version_excel97_2010.xls
 test/excel/reader.rb
 test/excel/row.rb
+test/excel/writer/n_worksheet.rb
 test/excel/writer/workbook.rb
 test/excel/writer/worksheet.rb
 test/font.rb
