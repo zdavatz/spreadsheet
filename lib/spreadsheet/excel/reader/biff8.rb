@@ -81,7 +81,7 @@ module Biff8
     #      0     4  Total number of strings in the workbook (see below)
     #      4     4  Number of following strings (nm)
     #      8  var.  List of nm Unicode strings, 16-bit string length (➜ 3.4)
-    total, @sst_size = work.unpack 'V2'
+    _, @sst_size = work.unpack 'V2'
     @sst_offset = [pos, len]
     @workbook.offsets.store :sst, @sst_offset
     _read_sst work, pos, 8
@@ -113,9 +113,8 @@ module Biff8
     #                   List of rt formatting runs (➜ 3.2)
     #   [var.]      sz  (optional, only if phonetic=1)
     #                   Asian Phonetic Settings Block (➜ 3.4.2)
-    chars, offset, wide, phonetic, richtext, available, owing, skip \
-      = read_string_header work, count_length
-    string, data = read_string_body work, offset, available, wide > 0
+    chars, offset, wide, _, _, available, owing, _ = read_string_header work, count_length
+    string, _ = read_string_body work, offset, available, wide > 0
     if owing > 0
       @incomplete_string = [string, chars]
     end
