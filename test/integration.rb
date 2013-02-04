@@ -806,7 +806,7 @@ module Spreadsheet
       row.height = 40
       row.push 'x'
       row.pop
-      sheet2 = book.create_worksheet :name => 'my name'
+      book.create_worksheet :name => 'my name' #=> sheet2
       book.write path
       Spreadsheet.client_encoding = 'UTF-16LE'
       str1 = @@iconv.iconv str1
@@ -957,7 +957,7 @@ module Spreadsheet
       sheet1.update_row 7, nil, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
       sheet1.row(8).default_format = fmt
       sheet1[8,0] = @@iconv.iconv 'formatted when empty'
-      sheet2 = book.create_worksheet :name => @@iconv.iconv("my name")
+      book.create_worksheet :name => @@iconv.iconv("my name") #=> sheet2
       book.write path
       Spreadsheet.client_encoding = 'UTF-8'
       str1 = 'Shared String'
