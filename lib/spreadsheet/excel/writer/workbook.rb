@@ -203,7 +203,7 @@ class Workbook < Spreadsheet::Writer
             writer.write sheet_data[key]
           when :boundsheets
             ## boundsheets are hard to calculate. The offset below is only
-            #  correct if there are no more chaeach_with_indexnges in the workbook globals
+            #  correct if there are no more changes in the workbook globals
             #  string after this.
             oldoffset = positions.min - len
             lastpos = pos + len
