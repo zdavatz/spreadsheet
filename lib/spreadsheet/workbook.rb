@@ -12,12 +12,13 @@ module Spreadsheet
   #                   Row#default_format or Worksheet#default_format.
   class Workbook
     include Spreadsheet::Encodings
-    attr_reader :io, :worksheets, :formats, :fonts
+    attr_reader :io, :worksheets, :formats, :fonts, :palette
     attr_accessor :active_worksheet, :encoding, :default_format, :version
     def initialize io = nil, opts={:default_format => Format.new}
       @worksheets = []
       @io = io
       @fonts = []
+      @palette = {}
       @formats = []
       @formats_set = {}
       if @default_format = opts[:default_format]
@@ -47,6 +48,13 @@ module Spreadsheet
       worksheet.workbook = self
       @worksheets.push worksheet
       worksheet
+    end
+    ##
+    # Change the RGB components of the elements in the colour palette.
+    def set_custom_color idx, red, green, blue
+      raise 'Invalid format' if [red, green, blue].find { |c| ! (0..255).include?(c) }
+
+      @palette[idx] = [red, green, blue]
     end
     ##
     # Create a new Worksheet in this Workbook.
