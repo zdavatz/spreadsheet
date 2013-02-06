@@ -4,6 +4,8 @@ require 'rubygems'
 require 'bundler'
 require 'find'
 
+$VERBOSE = true
+
 here = File.dirname(__FILE__)
 
 $: << here
