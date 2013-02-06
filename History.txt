@@ -1,3 +1,12 @@
+=== 0.7.9 / 06.02.2013
+
+Author: Eugeniy Belyaev (zhekanax)
+
+* You can merge if you are interested in perl-like Workbook.set_custom_color
+  implementation. I know it is not really a proper way to deal with custom colors, but
+  nevertheless it makes it possible.
+* https://github.com/zdavatz/spreadsheet/pull/27
+
 === 0.7.8 / 06.02.2013
 
 Author: Kenichi Kamiya <kachick1@gmail.com>
