@@ -1,3 +1,13 @@
+=== 0.7.8 / 06.02.2013
+
+Author: Kenichi Kamiya <kachick1@gmail.com>
+Date:   Wed Feb 6 11:23:35 2013 +0900
+
+* Link to Travis CI on README
+* Remove warnings "assigned but unused variable" in test
+* Remove warnings "assigned but unused variable"
+* Enable $VERBOSE flag when running test
+
 === 0.7.7 / 22.01.2013
 
 Author: DeTeam <timur.deteam@gmail.com>
