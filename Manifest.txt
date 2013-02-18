@@ -1,4 +1,5 @@
 .gitignore
+.travis.yml
 GUIDE.txt
 Gemfile
 Gemfile.lock
@@ -26,6 +27,7 @@ lib/spreadsheet/excel/password_hash.rb
 lib/spreadsheet/excel/reader.rb
 lib/spreadsheet/excel/reader/biff5.rb
 lib/spreadsheet/excel/reader/biff8.rb
+lib/spreadsheet/excel/rgb.rb
 lib/spreadsheet/excel/row.rb
 lib/spreadsheet/excel/sst_entry.rb
 lib/spreadsheet/excel/workbook.rb
