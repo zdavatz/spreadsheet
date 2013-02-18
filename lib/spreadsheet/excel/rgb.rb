@@ -5,7 +5,8 @@
 
 # Future directions may include:
 #  - support for mapping RGB values to "best fit" palette values
-
+#
+# by Dan Caugherty https://github.com/dancaugherty/spreadsheet/compare/master...rgb
 
 module Spreadsheet
   module Excel
