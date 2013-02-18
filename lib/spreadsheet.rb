@@ -26,7 +26,7 @@
 
 require 'spreadsheet/excel/workbook'
 require 'spreadsheet/excel/reader'
-require 'spreadsheet/excel/rgb'
+require 'spreadsheet/excel/writer'
 
 # = Synopsis
 # The Spreadsheet Library is designed to read and write Spreadsheet Documents.
