@@ -1,3 +1,12 @@
+=== 0.8.2 / 28.02.2013
+
+Author: Roque Pinel <roque.pinel@infotechfl.com>
+Date:   Wed Feb 27 12:10:29 2013 -0500
+
+* Requiring BigDecimal for checking.
+* Made API friendly to BigDecimal precision.
+* Changes introduced by the user 'valeriusjames'.
+
 === 0.8.1 / 18.02.2013
 
 * Updated Manifest.txt to include lib/spreadsheet/excel/rgb.rb
