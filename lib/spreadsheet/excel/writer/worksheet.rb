@@ -2,6 +2,7 @@ require 'stringio'
 require 'spreadsheet/excel/writer/biff8'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/internals/biff8'
+require 'bigdecimal'
 
 module Spreadsheet
   module Excel
@@ -63,7 +64,7 @@ class Worksheet
     cent = 0
     int = 2
     higher = value * 100
-    if higher.is_a?(Float) && higher < 0xfffffffc
+    if (higher.is_a?(BigDecimal) or higher.is_a?(Float)) && higher < 0xfffffffc
       cent = 1
       if higher == higher.to_i
         value = higher.to_i
@@ -89,7 +90,7 @@ class Worksheet
   def need_number? cell
     if cell.is_a?(Numeric) && cell.abs > 0x1fffffff
       true
-    elsif cell.is_a?(Float) and not cell.nan?
+    elsif (cell.is_a?(BigDecimal) or cell.is_a?(Float)) and not cell.nan?
       higher = cell * 100
       if higher == higher.to_i
         need_number? higher.to_i
