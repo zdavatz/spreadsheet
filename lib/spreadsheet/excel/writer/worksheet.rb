@@ -2,6 +2,7 @@ require 'stringio'
 require 'spreadsheet/excel/writer/biff8'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/internals/biff8'
+require 'bigdecimal'
 
 module Spreadsheet
   module Excel
