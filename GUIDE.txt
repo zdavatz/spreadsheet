@@ -24,7 +24,7 @@ We can either access all the Worksheets in a Workbook...
 ...or access them by index or name (encoded in your client_encoding)
 
   sheet1 = book.worksheet 0
-  sheet2 = Book.worksheet 'Sheet1'
+  sheet2 = book.worksheet 'Sheet1'
 
 Now you can either iterate over all rows that contain some data. A call to
 Worksheet.each without argument will omit empty rows at the beginning of the
