@@ -1,3 +1,10 @@
+=== 0.8.3 / 12.03.2013
+ 
+uthor: Keith Walsh <keith.walsh@adtegrity.com>
+Date:   Mon Mar 11 16:48:25 2013 -0400
+
+* Typo correction in guide example.  
+
 === 0.8.2 / 28.02.2013
 
 Author: Roque Pinel <roque.pinel@infotechfl.com>
