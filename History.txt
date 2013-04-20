@@ -1,3 +1,8 @@
+=== 0.8.4 / 20.04.2013
+
+* Applied Patch by boss@airbladesoftware.com
+* https://groups.google.com/d/msg/rubyspreadsheet/73IoEwSx69w/barE7uVnIzwJ
+
 === 0.8.3 / 12.03.2013
  
 uthor: Keith Walsh <keith.walsh@adtegrity.com>
