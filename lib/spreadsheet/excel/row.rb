@@ -58,7 +58,7 @@ class Row < Spreadsheet::Row
     return data if data.is_a?(DateTime)
     base = @worksheet.date_base
     date = base + data.to_f
-    hour = (data % 1) * 24
+    hour = (data.to_f % 1) * 24
     min  = (hour % 1) * 60
     sec  = ((min % 1) * 60).round
     min = min.floor
