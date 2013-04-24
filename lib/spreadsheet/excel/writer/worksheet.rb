@@ -245,7 +245,7 @@ class Worksheet
   def write_changes reader, endpos, sst_status
 
     ## FIXME this is not smart solution to update outline_level.
-    #        without this process, outlines in row disappear in MS Excel.       
+    #        without this process, outlines in row disappear in MS Excel.
     @worksheet.row_count.times do |i|
       if @worksheet.row(i).outline_level > 0
         @worksheet.row(i).outline_level = @worksheet.row(i).outline_level
@@ -309,9 +309,10 @@ and minimal code that generates this warning. Thanks!
       reader.seek lastpos
     end
 
-    # Necessary for outline (grouping) and hiding functions 
+    # Necessary for outline (grouping) and hiding functions
     # but these below are not necessary to run
     # if [Row|Column]#hidden? = false and [Row|Column]#outline_level == 0
+    write_merged_cells
     write_colinfos
     write_guts
 
@@ -840,7 +841,7 @@ and minimal code that generates this warning. Thanks!
     if @worksheet.selected
       flags |= 0x0200
     end
-    flags |= 0x0080 # Show outline symbols, 
+    flags |= 0x0080 # Show outline symbols,
                     # but if [Row|Column]#outline_level = 0 the symbols are not shown.
     data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)
     write_op opcode(:window2), data
