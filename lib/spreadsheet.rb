@@ -26,6 +26,7 @@
 
 require 'spreadsheet/excel/workbook'
 require 'spreadsheet/excel/reader'
+require 'spreadsheet/excel/rgb'
 
 # = Synopsis
 # The Spreadsheet Library is designed to read and write Spreadsheet Documents.
@@ -42,7 +43,7 @@ module Spreadsheet
 
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '0.7.3'
+  VERSION = '0.8.5'
 
   ##
   # Default client Encoding. Change this value if your application uses a

@@ -42,6 +42,12 @@ class Row < Spreadsheet::Row
       enriched_data idx, at(idx)
     end
   end
+  ##
+  # Returns data as an array. If a cell is formatted as a Date or DateTime, the
+  # decoded Date or DateTime value is returned.
+  def to_a
+    self[0...length]
+  end
   private
   def _date data # :nodoc:
     return data if data.is_a?(Date)
@@ -52,7 +58,7 @@ class Row < Spreadsheet::Row
     return data if data.is_a?(DateTime)
     base = @worksheet.date_base
     date = base + data.to_f
-    hour = (data % 1) * 24
+    hour = (data.to_f % 1) * 24
     min  = (hour % 1) * 60
     sec  = ((min % 1) * 60).round
     min = min.floor

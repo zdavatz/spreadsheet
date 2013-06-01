@@ -18,6 +18,11 @@ class TestRow < Test::Unit::TestCase
     row = Row.new @worksheet, 0, [nil, 27627.6789]
     assert_equal Date.new(1975,8,21), row.date(1)
   end
+  def test_to_a
+    row = Row.new @worksheet, 0, [nil, 1, 27627.6789]
+    row.set_format(2, Format.new(:number_format => 'DD.MM.YYYY'))
+    assert_equal [nil, 1, Date.new(1975, 8, 21)], row.to_a
+  end
   def test_datetime
     row = Row.new @worksheet, 0, [nil, 27627.765]
     d1 = DateTime.new(1975,8,21) + 0.765

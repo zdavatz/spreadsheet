@@ -1,3 +1,93 @@
+=== 0.8.5 / 24.04.2013
+
+* Applied Patch by Joao Almeida: When editing an existing sheet, cells merge was not working.
+* https://github.com/voraz/spreadsheet/pull/14.patch
+
+=== 0.8.4 / 20.04.2013
+
+* Applied Patch by boss@airbladesoftware.com
+* https://groups.google.com/d/msg/rubyspreadsheet/73IoEwSx69w/barE7uVnIzwJ
+
+=== 0.8.3 / 12.03.2013
+ 
+uthor: Keith Walsh <keith.walsh@adtegrity.com>
+Date:   Mon Mar 11 16:48:25 2013 -0400
+
+* Typo correction in guide example.  
+
+=== 0.8.2 / 28.02.2013
+
+Author: Roque Pinel <roque.pinel@infotechfl.com>
+Date:   Wed Feb 27 12:10:29 2013 -0500
+
+* Requiring BigDecimal for checking.
+* Made API friendly to BigDecimal precision.
+* Changes introduced by the user 'valeriusjames'.
+
+=== 0.8.1 / 18.02.2013
+
+* Updated Manifest.txt to include lib/spreadsheet/excel/rgb.rb
+
+=== 0.8.0 / 18.02.2013
+
+* Adding support for converting color palette values to RGB values (not vice-versa..yet)
+* by https://github.com/dancaugherty/spreadsheet/compare/master...rgb
+
+=== 0.7.9 / 06.02.2013
+
+Author: Eugeniy Belyaev (zhekanax)
+
+* You can merge if you are interested in perl-like Workbook.set_custom_color
+  implementation. I know it is not really a proper way to deal with custom colors, but
+  nevertheless it makes it possible.
+* https://github.com/zdavatz/spreadsheet/pull/27
+
+=== 0.7.8 / 06.02.2013
+
+Author: Kenichi Kamiya <kachick1@gmail.com>
+Date:   Wed Feb 6 11:23:35 2013 +0900
+
+* Link to Travis CI on README
+* Remove warnings "assigned but unused variable" in test
+* Remove warnings "assigned but unused variable"
+* Enable $VERBOSE flag when running test
+
+=== 0.7.7 / 22.01.2013
+
+Author: DeTeam <timur.deteam@gmail.com>
+Date:   Tue Jan 22 19:11:52 2013 +0400
+
+* Make tests pass
+* Readme updated
+* RuntimeError when file is empty
+* Hoe in dev deps
+* Finish with bundler
+* Add a Gemfile
+
+also see: https://github.com/zdavatz/spreadsheet/pull/24
+
+=== 0.7.6 / 15.01.2013
+
+Author: Kenichi Kamiya <kachick1@gmail.com>
+Date:   Tue Jan 15 15:52:58 2013 +0900
+
+* Remove warnings "method redefined; discarding old default_format"
+* Remove warnings "`*' interpreted as argument prefix"
+* Remove warnings "instance variable @{ivar} not initialized"
+* Remove warnings "assigned but unused variable"
+
+also see: https://github.com/zdavatz/spreadsheet/pull/21
+
+=== 0.7.5 / 06.12.2012
+
+* Add error tolerant values for Iconv when writing spreadsheet
+* by andrea@spaghetticode.it
+
+=== 0.7.4 / 06.10.2012
+
+* Adds Spreadsheet::Excel::Row#to_a method to properly decode Date and DateTime data.
+* patches by https://github.com/mdgreenfield/spreadsheet
+
 === 0.7.3 / 26.06.2012
 
 * Fix Format borders

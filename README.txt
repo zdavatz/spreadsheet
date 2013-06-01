@@ -1,4 +1,4 @@
-Last Update: 26.06.2012 - Zeno R.R. Davatz
+Last Update: 31.05.2013 - Zeno R.R. Davatz
 
 = Spreadsheet
 
@@ -64,17 +64,17 @@ You will get a deprecated warning about iconv when using spreadsheet with Ruby
 == Dependencies
 
 * ruby 1.8
-* ruby-ole[http://code.google.com/p/ruby-ole/]
+* ruby-ole [ http://code.google.com/p/ruby-ole/ ]
 
 
 == Examples
 
 Have a look at the GUIDE[link://files/GUIDE_txt.html].
-
+Also look at: https://gist.github.com/phollyer/1214475
 
 == Installation
 
-Using RubyGems[http://www.rubygems.org]:
+Using RubyGems [ http://www.rubygems.org ]:
 
 * sudo gem install spreadsheet
 
@@ -88,6 +88,16 @@ build a gem package as follows:
 
 The gem package is built in pkg directory.
 
+== Testing
+
+Bundler support added.
+Running tests:
+* bundle install
+* ./test/suite.rb
+
+== Code Status
+
+* TravisCI [ https://travis-ci.org/zdavatz/spreadsheet ]
 
 == Authors
 
