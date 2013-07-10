@@ -55,6 +55,9 @@ class Worksheet < Spreadsheet::Worksheet
       end
     end
   end
+  def rows
+    self.to_a
+  end
   def row_updated idx, row
     res = super
     @workbook.changes.store self, true
