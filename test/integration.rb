@@ -1265,6 +1265,21 @@ module Spreadsheet
       assert_equal :brown, format.top_color
     end
 
+    def test_adding_data_to_existing_file
+      path = File.join @data, 'test_adding_data_to_existing_file.xls'
+      book = Spreadsheet.open path
+      assert_equal(1, book.worksheet(0).rows.count)
+
+      book.worksheet(0).insert_row(1, [12, 23, 34, 45])
+      temp_file = Tempfile.new('temp')
+      book.write(temp_file.path)
+
+      open_temp_book = Spreadsheet.open temp_file.path
+      assert_equal(2, book.worksheet(0).rows.count)
+
+      temp_file.unlink
+    end
+
     private
 
     # Validates the workbook's SST
