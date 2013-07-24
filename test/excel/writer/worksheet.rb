@@ -7,7 +7,7 @@ require 'spreadsheet/excel/writer/worksheet'
 module Spreadsheet
   module Excel
     module Writer
-     class TestWorksheet < Test::Unit::TestCase
+      class TestWorksheet < Test::Unit::TestCase
         def test_need_number
           sheet = Worksheet.new nil, nil
           assert_equal false, sheet.need_number?(10)

@@ -1274,8 +1274,8 @@ module Spreadsheet
       temp_file = Tempfile.new('temp')
       book.write(temp_file.path)
 
-      open_temp_book = Spreadsheet.open temp_file.path
-      assert_equal(2, book.worksheet(0).rows.count)
+      temp_book = Spreadsheet.open temp_file.path
+      assert_equal(2, temp_book.worksheet(0).rows.count)
 
       temp_file.unlink
     end
