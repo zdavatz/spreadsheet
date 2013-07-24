@@ -48,6 +48,7 @@ lib/spreadsheet/workbook.rb
 lib/spreadsheet/worksheet.rb
 lib/spreadsheet/writer.rb
 spreadsheet.gemspec
+test/data/test_adding_data_to_existing_file.xls
 test/data/test_borders.xls
 test/data/test_changes.xls
 test/data/test_copy.xls
@@ -64,7 +65,6 @@ test/data/test_version_excel97.xls
 test/data/test_version_excel97_2010.xls
 test/excel/reader.rb
 test/excel/row.rb
-test/excel/writer/n_worksheet.rb
 test/excel/writer/workbook.rb
 test/excel/writer/worksheet.rb
 test/font.rb
