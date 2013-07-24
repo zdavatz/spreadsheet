@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    spreadsheet (0.7.3)
+    spreadsheet (0.8.6)
       ruby-ole
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     hoe (3.4.1)
       rake (>= 0.8, < 11.0)
