@@ -1,3 +1,16 @@
+=== 0.8.7 / 24.07.2013
+
+Author: Yasuhiro Asaka <yasaka@ywesee.com>
+Date:   Wed Jul 24 11:31:12 2013 +0900
+
+* Remove warnings for test suite      
+* warning: mismatched indentations at 'end' with 'class' at xxx
+* warning: method redefined; discarding old xxx
+* warning: assigned but unused variable xxx
+* warning: previous definition of xxx was here
+* The source :rubygems is deprecated because HTTP
+* requests are insecure. (Gemfile)
+
 === 0.8.6 / 11.07.2013
 
 Author: Arjun Anand and Robert Stern <dev+arjuna+rstern@reenhanced.com>
