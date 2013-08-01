@@ -49,8 +49,8 @@ module Internals
     1257 => "WINDOWS-1257", #(Baltic)
     1258 => "WINDOWS-1258", #(Vietnamese)
     1361 => "WINDOWS-1361", #(Korean (Johab))
-    10000 => "MACINTOSH",
-    32768 => "MACINTOSH",
+    10000 => "MACROMAN",
+    32768 => "MACROMAN",
     32769 => "WINDOWS-1252", #(Latin I) (BIFF2-BIFF3)
   }
   SEGAPEDOC = CODEPAGES.invert
