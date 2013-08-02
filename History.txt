@@ -1,3 +1,11 @@
+=== 0.8.8 / 02.08.2013
+
+Author: Nathan Colgate <nathancolgate@gmail.com>
+Date:   Thu Aug 1 15:01:57 2013 -0500
+
+* Update excel/internals.rb to reference a valid Encoding type
+* Encoding.find("MACINTOSH") was throwing an error. Encoding.find("MACROMAN") does not.
+
 === 0.8.7 / 24.07.2013
 
 Author: Yasuhiro Asaka <yasaka@ywesee.com>
