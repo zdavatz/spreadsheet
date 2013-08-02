@@ -2,6 +2,7 @@ require 'spreadsheet/encodings'
 require 'spreadsheet/font'
 require 'spreadsheet/formula'
 require 'spreadsheet/link'
+require 'spreadsheet/note'
 require 'spreadsheet/excel/error'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/sst_entry'
@@ -866,12 +867,41 @@ class Reader
         read_merged_cells worksheet, work, pos, len
       when :protect, :password
         read_sheet_protection worksheet, op, work
+      when :note # a note references an :obj
+        read_note worksheet, work, pos, len
+      when :obj # it contains the author in the NTS structure
+        _ft, _cb, _ot, _objID = work.unpack('v4')
+        if _ot == 0x19
+          puts "\nANDRE: found Note Obj record"
+          @note = Note.new
+          @note.objID = _objID
+          @note.author = ''
+        end
+        p work
+      when :drawing # this can be followed by txo in case of a note
+        if previous == :obj
+          puts "\nANDRE: found MsDrawing record"
+          p work
+        end
+      when :txo # this contains the length of the note text
+        if previous == :drawing
+          puts "\nANDRE: found TxO record"
+          p work
+        end
+      when :continue # this contains the actual note text
+        if previous == :txo
+          puts "\nANDRE: found Continue record"
+          p work
+          #@note += unpack_string work
+          #p @note
+          #worksheet.add_note @note.row, @note.col, @note
+        end
       else
         if ROW_BLOCK_OPS.include?(op)
           set_missing_row_address worksheet, work, pos, len
         end
       end
-      previous = op
+      previous = op unless op == :continue
     end
   end
   def read_guts worksheet, work, pos, len
@@ -1064,6 +1094,16 @@ class Reader
     fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
     fmt.pattern_bg_color = COLOR_CODES[(xf_pattern & 0x3f80) >> 7] || :pattern_bg
     @workbook.add_format fmt
+  end
+  def read_note worksheet, work, pos, len
+    puts "\nANDRE: found a note record in read_worksheet\n"
+    row, col, _, _objID = work.unpack('v4')
+    @note.length = len
+    @note.row    = row
+    @note.col    = col
+    if @note.objID != _objID
+      raise "Note Obj IDs do not match"
+    end
   end
   def read_sheet_protection worksheet, op, data
     case op

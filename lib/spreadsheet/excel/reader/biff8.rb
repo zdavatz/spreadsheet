@@ -28,6 +28,18 @@ module Biff8
     end
     size + 1
   end
+  # When a String is too long for one Opcode, it is continued in a Continue
+  # Opcode. Excel may reconsider compressing the remainder of the string.
+  # This method appends the available remainder (decompressed if necessary) to
+  # the incomplete string.
+  def unpack_string work
+    opts, _ = work.unpack 'C'
+    wide = opts & 1
+    string = work[1, -1]
+    if wide == 0
+      string = wide string
+    end
+  end
   ##
   # When a String is too long for one Opcode, it is continued in a Continue
   # Opcode. Excel may reconsider compressing the remainder of the string.
@@ -125,8 +137,8 @@ module Biff8
   # the available data (unchanged).
   def read_string_body work, offset, available, wide
     data = work[offset, available]
-    string = wide ? data : wide(data)
-    [string, data]
+    widened_data = wide ? data : wide(data)
+    [widened_data, data]
   end
   ##
   # Read the header of a string. Returns the following information in an Array:
