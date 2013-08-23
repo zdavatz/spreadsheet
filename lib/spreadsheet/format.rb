@@ -104,7 +104,8 @@ module Spreadsheet
         :date         => Regexp.new(client("[YMD]", 'UTF-8')),
         :date_or_time => Regexp.new(client("[hmsYMD]", 'UTF-8')),
         :datetime     => Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')),
-        :time         => Regexp.new(client("[hms]", 'UTF-8'))
+        :time         => Regexp.new(client("[hms]", 'UTF-8')),
+        :number       => Regexp.new(client("[\#]", 'UTF-8'))
       }
       # Temp code to prevent merged formats in non-merged cells.
       @used_merge    = 0
@@ -178,22 +179,27 @@ module Spreadsheet
     ##
     # Is the cell formatted as a Date?
     def date?
-      !!@regexes[:date].match(@number_format.to_s)
+      !number? && !!@regexes[:date].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Date or Time?
     def date_or_time?
-      !!@regexes[:date_or_time].match(@number_format.to_s)
+      !number? && !!@regexes[:date_or_time].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !!@regexes[:datetime].match(@number_format.to_s)
+      !number? && !!@regexes[:datetime].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Time?
     def time?
-      !!@regexes[:time].match(@number_format.to_s)
+      !number? && !!@regexes[:time].match(@number_format.to_s)
+    end
+    ##
+    # Is the cell formatted as a number?
+    def number?
+      !!@regexes[:number].match(@number_format.to_s)
     end
   end
 end
