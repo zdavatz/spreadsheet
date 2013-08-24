@@ -1,3 +1,10 @@
+=== 0.8.9 / 24.08.2013
+
+Author: Doug Renn <renn@nestegg.com>
+Date:   Fri Aug 23 17:10:24 2013 -0600
+
+* Work around to handle number formats that are being mistaken time formats
+
 === 0.8.8 / 02.08.2013
 
 Author: Nathan Colgate <nathancolgate@gmail.com>
