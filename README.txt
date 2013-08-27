@@ -95,9 +95,9 @@ Running tests:
 * bundle install
 * ./test/suite.rb
 
-== Code Status
+== TravisCI 
 
-* TravisCI [ https://travis-ci.org/zdavatz/spreadsheet ]
+* https://travis-ci.org/zdavatz/spreadsheet
 
 == Authors
 
