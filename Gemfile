@@ -1,3 +1,8 @@
 source "https://rubygems.org"
+gem 'ruby-ole'
 
-gemspec
+group :development do
+  gem 'ruby-ole'
+  gem 'hoe', '>= 3.4'
+end
+
