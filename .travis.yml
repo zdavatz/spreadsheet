@@ -1,6 +1,7 @@
 language: ruby
 before_install:
   - gem install bundler
+  - gem regenerate_binstubs
 script: "bundle exec ruby -w ./test/suite.rb"
 rvm:
   - ruby-head
