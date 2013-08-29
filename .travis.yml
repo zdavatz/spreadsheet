@@ -2,7 +2,7 @@ language: ruby
 before_install:
   - gem install bundler
 bundler_args: --binstubs
-script: "bundle exec ruby -w ./test/suite.rb"
+script: "ruby -w ./test/suite.rb"
 rvm:
   - ruby-head
   - 2.0.0
