@@ -868,6 +868,14 @@ class Reader
         read_sheet_protection worksheet, op, work
       when :pagesetup
         read_pagesetup(worksheet, work, pos, len)
+      when :leftmargin
+        worksheet.margins[:left] = work.unpack(binfmt(:margin))
+      when :rightmargin
+        worksheet.margins[:right] = work.unpack(binfmt(:margin))
+      when :topmargin
+        worksheet.margins[:top] = work.unpack(binfmt(:margin))
+      when :bottommargin
+        worksheet.margins[:bottom] = work.unpack(binfmt(:margin))
       else
         if ROW_BLOCK_OPS.include?(op)
           set_missing_row_address worksheet, work, pos, len

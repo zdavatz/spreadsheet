@@ -28,7 +28,7 @@ module Spreadsheet
     include Spreadsheet::Encodings
     include Enumerable
     attr_accessor :name, :selected, :workbook, :password_hash, :pagesetup
-    attr_reader :rows, :columns, :merged_cells
+    attr_reader :rows, :columns, :merged_cells, :margins
     def initialize opts={}
       @default_format = nil
       @selected = opts[:selected]
@@ -37,6 +37,12 @@ module Spreadsheet
         :orig_data => [9, 100, 1, 1, 1, 0, 300, 300, 0.5, 0.5, 1],
         :orientation => :portrait,
         :adjust_to => 100
+      }
+      @margins = {
+        :top => 1,
+        :left => 0.75,
+        :right => 0.75,
+        :bottom => 1
       }
       @name = opts[:name] || 'Worksheet'
       @workbook = opts[:workbook]
