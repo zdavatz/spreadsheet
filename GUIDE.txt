@@ -233,6 +233,10 @@ responsibility to handle Conversion Errors, or to prevent them e.g. by using
 the Iconv Transliteration and Ignore flags:
 Spreadsheet.client_encoding = 'LATIN1//TRANSLIT//IGNORE'
 
+== Page setup (for printing)
+
+  sheet.pagesetup[:orientation] = :landscape # or :portrait (default)
+  sheet.pagesetup[:adjust_to] = 85 # default 100
 
 == Backward Compatibility
 Spreadsheet is designed to be a drop-in replacement for both ParseExcel and

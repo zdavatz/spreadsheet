@@ -27,12 +27,17 @@ module Spreadsheet
   class Worksheet
     include Spreadsheet::Encodings
     include Enumerable
-    attr_accessor :name, :selected, :workbook, :password_hash
+    attr_accessor :name, :selected, :workbook, :password_hash, :pagesetup
     attr_reader :rows, :columns, :merged_cells
     def initialize opts={}
       @default_format = nil
       @selected = opts[:selected]
       @dimensions = [0,0,0,0]
+      @pagesetup = {
+        :orig_data => [9, 100, 1, 1, 1, 0, 300, 300, 0.5, 0.5, 1],
+        :orientation => :portrait,
+        :adjust_to => 100
+      }
       @name = opts[:name] || 'Worksheet'
       @workbook = opts[:workbook]
       @rows = []

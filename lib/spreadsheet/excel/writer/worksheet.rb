@@ -313,6 +313,7 @@ and minimal code that generates this warning. Thanks!
     # but these below are not necessary to run
     # if [Row|Column]#hidden? = false and [Row|Column]#outline_level == 0
     write_merged_cells
+    write_pagesetup
     write_colinfos
     write_guts
 
@@ -498,6 +499,7 @@ and minimal code that generates this warning. Thanks!
     # ○  PHONETIC ➜ 5.77
     # ○  Conditional Formatting Table ➜ 4.12
     # ○  Hyperlink Table ➜ 4.13
+    write_pagesetup
     write_hyperlink_table
     # ○  Data Validity Table ➜ 4.14
     # ○  SHEETLAYOUT ➜ 5.96 (BIFF8X only)
@@ -858,6 +860,20 @@ and minimal code that generates this warning. Thanks!
       data = ([count] + window.flatten).pack('v2v*')
       write_op opcode(:mergedcells), data
     end
+  end
+
+  def write_pagesetup
+    return unless @worksheet.pagesetup
+    data = @worksheet.pagesetup[:orig_data].dup
+    if @worksheet.pagesetup[:orientation]
+      data[2] = @worksheet.pagesetup[:orientation] == :landscape ? 0 : 1
+    end
+
+    if @worksheet.pagesetup[:adjust_to]
+      data[1] = @worksheet.pagesetup[:adjust_to]
+    end
+
+    write_op opcode(:pagesetup), data.pack(binfmt(:pagesetup))
   end
 
   def write_proctection
