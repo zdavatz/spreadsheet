@@ -1,3 +1,13 @@
+### 0.9.0 / 16.09.2013
+
+* Author: Pavel <pavel.evst@gmail.com>
+Date:   Mon Sep 16 14:02:49 2013 +0700
+
+* Test cases for Worksheet#margins, Worksheet#pagesetup, Workbook#delete_worksheet. Fix bugs related to it.
+* Page margins reader/writter
+* Markdownify GUIDE
+* Add page setup options (landscape or portrait and adjust_to)
+
 ### 0.8.9 / 24.08.2013
 
 Author: Doug Renn <renn@nestegg.com>
