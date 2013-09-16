@@ -69,7 +69,7 @@ You will get a deprecated warning about iconv when using spreadsheet with Ruby
 
 ## Examples
 
-* Have a look at the GUIDE: https://github.com/zdavatz/spreadsheet/blob/master/GUIDE.txt
+* Have a look at the GUIDE: https://github.com/zdavatz/spreadsheet/blob/master/GUIDE.md
 * Also look at: https://gist.github.com/phollyer/1214475
 
 ## Installation
