@@ -1280,6 +1280,53 @@ module Spreadsheet
       temp_file.unlink
     end
 
+    def test_read_pagesetup
+      path = File.join @data, 'test_pagesetup.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet(0)
+      assert_equal(:landscape, sheet.pagesetup[:orientation])
+      assert_equal(130, sheet.pagesetup[:adjust_to])
+    end
+
+    def test_write_pagesetup
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_pagesetup.xls'
+      sheet1 = book.create_worksheet
+      sheet1.pagesetup[:orientation] = :landscape
+      sheet1.pagesetup[:adjust_to] = 93
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      sheet2 = book2.worksheet(0)
+      assert_equal(:landscape, sheet2.pagesetup[:orientation])
+      assert_equal(93, sheet2.pagesetup[:adjust_to])
+    end
+
+    def test_read_margins
+      path = File.join @data, 'test_margin.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet(0)
+      assert_equal(2.0, sheet.margins[:left])
+    end
+
+    def test_write_margins
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_margins.xls'
+      sheet1 = book.create_worksheet
+      sheet1.margins[:left] = 3
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      sheet2 = book2.worksheet(0)
+      assert_equal(3.0, sheet2.margins[:left])
+    end
+
     private
 
     # Validates the workbook's SST

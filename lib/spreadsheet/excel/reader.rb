@@ -866,6 +866,16 @@ class Reader
         read_merged_cells worksheet, work, pos, len
       when :protect, :password
         read_sheet_protection worksheet, op, work
+      when :pagesetup
+        read_pagesetup(worksheet, work, pos, len)
+      when :leftmargin
+        worksheet.margins[:left] = work.unpack(binfmt(:margin))[0]
+      when :rightmargin
+        worksheet.margins[:right] = work.unpack(binfmt(:margin))[0]
+      when :topmargin
+        worksheet.margins[:top] = work.unpack(binfmt(:margin))[0]
+      when :bottommargin
+        worksheet.margins[:bottom] = work.unpack(binfmt(:margin))[0]
       else
         if ROW_BLOCK_OPS.include?(op)
           set_missing_row_address worksheet, work, pos, len
@@ -874,6 +884,17 @@ class Reader
       previous = op
     end
   end
+
+  def read_pagesetup(worksheet, work, pos, len)
+    worksheet.pagesetup.delete_if { true }
+    data = work.unpack(binfmt(:pagesetup))
+    worksheet.pagesetup[:orientation] = data[5] == 0 ? :landscape : :portrait
+    worksheet.pagesetup[:adjust_to] = data[1]
+
+    worksheet.pagesetup[:orig_data] = data
+    # TODO: add options acording to specification
+  end
+
   def read_guts worksheet, work, pos, len
     # Offset Size Contents
     #      0    2 Width of the area to display row outlines (left of the sheet), in pixel
