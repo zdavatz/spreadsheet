@@ -40,5 +40,16 @@ module Spreadsheet
       @book.add_format f2
       assert_equal 3, @book.formats.length # Rejected duplicate insertion
     end
+
+    def test_delete_worksheet
+      original_count = @book.sheet_count
+      @sheet = @book.create_worksheet
+      changed_count = @book.sheet_count
+      @book.delete_worksheet(@book.sheet_count - 1)
+
+      assert_equal(changed_count, original_count + 1)
+      assert_equal(original_count, @book.sheet_count)
+    end
+
   end
 end

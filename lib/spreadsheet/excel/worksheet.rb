@@ -30,6 +30,14 @@ class Worksheet < Spreadsheet::Worksheet
   def date_base
     @workbook.date_base
   end
+  def margins
+    ensure_rows_read
+    super
+  end
+  def pagesetup
+    ensure_rows_read
+    super
+  end
   def each *args
     ensure_rows_read
     super

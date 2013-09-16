@@ -868,7 +868,7 @@ and minimal code that generates this warning. Thanks!
     return unless @worksheet.pagesetup
     data = @worksheet.pagesetup[:orig_data].dup
     if @worksheet.pagesetup[:orientation]
-      data[2] = @worksheet.pagesetup[:orientation] == :landscape ? 0 : 1
+      data[5] = @worksheet.pagesetup[:orientation] == :landscape ? 0 : 2
     end
 
     if @worksheet.pagesetup[:adjust_to]
@@ -881,7 +881,7 @@ and minimal code that generates this warning. Thanks!
   def write_margins
     @worksheet.margins.each do |key, value|
       next unless [:left, :top, :right, :bottom].include?(key)
-      write_op opcode(:"#{key}margin"), value.pack(binfmt(:margin))
+      write_op opcode(:"#{key}margin"), [value].pack(binfmt(:margin))
     end
   end
 

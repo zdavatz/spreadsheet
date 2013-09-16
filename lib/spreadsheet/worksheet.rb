@@ -27,8 +27,8 @@ module Spreadsheet
   class Worksheet
     include Spreadsheet::Encodings
     include Enumerable
-    attr_accessor :name, :selected, :workbook, :password_hash, :pagesetup
-    attr_reader :rows, :columns, :merged_cells, :margins
+    attr_accessor :name, :selected, :workbook, :password_hash
+    attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
     def initialize opts={}
       @default_format = nil
       @selected = opts[:selected]
