@@ -1,12 +1,12 @@
 .gitignore
 .travis.yml
-GUIDE.txt
+GUIDE.md
 Gemfile
 Gemfile.lock
-History.txt
+History.md
 LICENSE.txt
 Manifest.txt
-README.txt
+README.md
 Rakefile
 bin/xlsopcodes
 lib/parseexcel.rb
@@ -56,9 +56,11 @@ test/data/test_datetime.xls
 test/data/test_empty.xls
 test/data/test_formula.xls
 test/data/test_long_sst_record.xls
+test/data/test_margin.xls
 test/data/test_merged_and_protected.xls
 test/data/test_merged_cells.xls
 test/data/test_missing_row.xls
+test/data/test_pagesetup.xls
 test/data/test_version_excel5.xls
 test/data/test_version_excel95.xls
 test/data/test_version_excel97.xls
