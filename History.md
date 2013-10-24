@@ -1,3 +1,10 @@
+### 0.9.1 / 24.10.2013
+
+* Author: Matti Lehtonen <matti.lehtonen@puujaa.com>
+Date:   Thu Oct 24 09:41:50 2013 +0300
+
+* Add support for worksheet visibility
+
 ### 0.9.0 / 16.09.2013
 
 * Author: Pavel <pavel.evst@gmail.com>
