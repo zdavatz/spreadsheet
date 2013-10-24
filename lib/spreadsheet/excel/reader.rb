@@ -178,7 +178,7 @@ class Reader
     #      6  var.  Sheet name: BIFF5/BIFF7: Byte string,
     #                           8-bit string length (➜ 3.3)
     #                           BIFF8: Unicode string, 8-bit string length (➜ 3.4)
-    offset, _, _ = work.unpack("VC2")
+    offset, visibility, _ = work.unpack("VC2")
     name = client read_string(work[6..-1]), @workbook.encoding
     if @boundsheets
       @boundsheets[0] += 1
@@ -190,7 +190,8 @@ class Reader
     @workbook.add_worksheet Worksheet.new(:name     => name,
                                           :ole      => @book,
                                           :offset   => offset,
-                                          :reader   => self)
+                                          :reader   => self,
+                                          :visibility => WORKSHEET_VISIBILITIES[visibility])
   end
   def read_codepage work, pos, len
     codepage, _ = work.unpack 'v'

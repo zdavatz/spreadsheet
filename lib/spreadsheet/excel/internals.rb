@@ -262,6 +262,12 @@ module Internals
     :bold   => 700,
     :normal => 400,
   }
+  WORKSHEET_VISIBILITIES = {
+    0x00 => :visible,
+    0x01 => :hidden,
+    0x02 => :strong_hidden
+  }
+  SEITILIBISIV_TEEHSKROW = WORKSHEET_VISIBILITIES.invert
   LEAP_ERROR = Date.new 1900, 2, 28
   OPCODES = {
     :blank        => 0x0201, #    BLANK ➜ 6.7

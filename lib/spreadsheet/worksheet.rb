@@ -26,9 +26,11 @@ module Spreadsheet
   #                   default.
   class Worksheet
     include Spreadsheet::Encodings
+    include Spreadsheet::Datatypes
     include Enumerable
     attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
+    enum :visibility, :visible, :hidden, :strong_hidden
     def initialize opts={}
       @default_format = nil
       @selected = opts[:selected]
@@ -52,6 +54,7 @@ module Spreadsheet
       @merged_cells = []
       @protected = false
       @password_hash = 0
+      @visibility = opts[:visibility]
     end
     def active # :nodoc:
       warn "Worksheet#active is deprecated. Please use Worksheet#selected instead."

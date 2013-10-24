@@ -1327,6 +1327,29 @@ module Spreadsheet
       assert_equal(3.0, sheet2.margins[:left])
     end
 
+    def test_read_worksheet_visibility
+      path = File.join @data, 'test_worksheet_visibility.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      assert_equal(:visible, book.worksheet(0).visibility)
+      assert_equal(:hidden, book.worksheet(1).visibility)
+    end
+
+    def test_write_worksheet_visibility
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_worksheet_visibility.xls'
+      sheet1 = book.create_worksheet
+      sheet1.visibility = :hidden
+      sheet2 = book.create_worksheet
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      assert_equal(:hidden, book2.worksheet(0).visibility)
+      assert_equal(:visible, book2.worksheet(1).visibility)
+    end
+
     private
 
     # Validates the workbook's SST
