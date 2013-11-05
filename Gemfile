@@ -1,3 +1,9 @@
-source :rubygems
+source "https://rubygems.org"
+gem 'ruby-ole'
+gem 'spreadsheet'
 
-gemspec
+group :development do
+  gem 'ruby-ole'
+  gem 'hoe', '>= 3.4'
+  gem 'spreadsheet'
+end

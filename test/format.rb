@@ -19,6 +19,8 @@ module Spreadsheet
       assert_equal true, @format.date?
       @format.number_format = "YMD"
       assert_equal true, @format.date?
+      @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
+      assert_equal false, @format.date?
     end
     def test_date_or_time?
       assert_equal false, @format.date_or_time?
@@ -28,6 +30,8 @@ module Spreadsheet
       assert_equal true, @format.date_or_time?
       @format.number_format = "hmsYMD"
       assert_equal true, @format.date_or_time?
+      @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
+      assert_equal false, @format.date?
     end
     def test_datetime?
       assert_equal false, @format.datetime?
@@ -39,6 +43,8 @@ module Spreadsheet
       assert_equal false, @format.datetime?
       @format.number_format = "HSYMD"
       assert_equal true, @format.datetime?
+      @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
+      assert_equal false, @format.date?
     end
     def test_time?
       assert_equal false, @format.time?
@@ -52,6 +58,8 @@ module Spreadsheet
       assert_equal true, @format.time?
       @format.number_format = "hms"
       assert_equal true, @format.time?
+      @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
+      assert_equal false, @format.date?
     end
 		def test_borders?
 			assert_equal [:none, :none, :none, :none], @format.border

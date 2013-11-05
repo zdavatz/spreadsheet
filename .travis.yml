@@ -1,6 +1,7 @@
 language: ruby
 before_install:
   - gem install bundler
+bundler_args: --binstubs
 script: "ruby -w ./test/suite.rb"
 rvm:
   - ruby-head
@@ -23,3 +24,8 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby-18mode
     - rvm: ree
+notifications:
+  email:
+    recipients:
+      - yasaka@ywesee.com
+      - zdavatz@ywesee.com

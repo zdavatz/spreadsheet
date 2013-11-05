@@ -179,7 +179,7 @@ class Reader
     #      6  var.  Sheet name: BIFF5/BIFF7: Byte string,
     #                           8-bit string length (➜ 3.3)
     #                           BIFF8: Unicode string, 8-bit string length (➜ 3.4)
-    offset, _, _ = work.unpack("VC2")
+    offset, visibility, _ = work.unpack("VC2")
     name = client read_string(work[6..-1]), @workbook.encoding
     if @boundsheets
       @boundsheets[0] += 1
@@ -191,7 +191,8 @@ class Reader
     @workbook.add_worksheet Worksheet.new(:name     => name,
                                           :ole      => @book,
                                           :offset   => offset,
-                                          :reader   => self)
+                                          :reader   => self,
+                                          :visibility => WORKSHEET_VISIBILITIES[visibility])
   end
   def read_codepage work, pos, len
     codepage, _ = work.unpack 'v'
@@ -896,6 +897,16 @@ class Reader
           #p @note
           #worksheet.add_note @note.row, @note.col, @note
         end
+      when :pagesetup
+        read_pagesetup(worksheet, work, pos, len)
+      when :leftmargin
+        worksheet.margins[:left] = work.unpack(binfmt(:margin))[0]
+      when :rightmargin
+        worksheet.margins[:right] = work.unpack(binfmt(:margin))[0]
+      when :topmargin
+        worksheet.margins[:top] = work.unpack(binfmt(:margin))[0]
+      when :bottommargin
+        worksheet.margins[:bottom] = work.unpack(binfmt(:margin))[0]
       else
         if ROW_BLOCK_OPS.include?(op)
           set_missing_row_address worksheet, work, pos, len
@@ -904,6 +915,17 @@ class Reader
       previous = op unless op == :continue
     end
   end
+
+  def read_pagesetup(worksheet, work, pos, len)
+    worksheet.pagesetup.delete_if { true }
+    data = work.unpack(binfmt(:pagesetup))
+    worksheet.pagesetup[:orientation] = data[5] == 0 ? :landscape : :portrait
+    worksheet.pagesetup[:adjust_to] = data[1]
+
+    worksheet.pagesetup[:orig_data] = data
+    # TODO: add options acording to specification
+  end
+
   def read_guts worksheet, work, pos, len
     # Offset Size Contents
     #      0    2 Width of the area to display row outlines (left of the sheet), in pixel
