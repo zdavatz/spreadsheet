@@ -3,6 +3,7 @@ require 'spreadsheet/font'
 require 'spreadsheet/formula'
 require 'spreadsheet/link'
 require 'spreadsheet/note'
+require 'spreadsheet/noteObject'
 require 'spreadsheet/excel/error'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/sst_entry'
@@ -114,6 +115,19 @@ class Reader
     end
   end
   def postread_worksheet worksheet
+     #We now have a lot of Note and NoteObjects, but they're not linked
+     #So link the noteObject(text) to the note (with author, position)
+     #TODO
+     @noteList.each do |i|
+        matching_obj = @noteObjList.select {|j| j.objID == i.objID}
+        pp matching_obj
+        if matching_obj.length > 1
+           puts "ERROR - more than one matching object ID!"
+        end
+        i.text = matching_obj.first.text
+     end
+     puts "After addition of noteobj text to note"
+     pp @noteList
   end
   ##
   # The entry-point for reading Excel-documents. Reads the Biff-Version and
@@ -831,6 +845,8 @@ class Reader
   def read_worksheet worksheet, offset
     @pos = offset
     @detected_rows = {}
+    @noteObjList = []
+    @noteList = []
     previous = nil
     while tuple = get_next_chunk
       pos, op, len, work = tuple
@@ -873,29 +889,33 @@ class Reader
       when :obj # it contains the author in the NTS structure
         _ft, _cb, _ot, _objID = work.unpack('v4')
         if _ot == 0x19
-          puts "\nANDRE: found Note Obj record"
-          @note = Note.new
-          @note.objID = _objID
-          @note.author = ''
+          puts "\nDEBUG: found Note Obj record"
+          @noteObject         = NoteObject.new
+          @noteObject.objID   = _objID
+          pp @noteObject
+          pp _objID
         end
-        p work
+        #p work
       when :drawing # this can be followed by txo in case of a note
         if previous == :obj
-          puts "\nANDRE: found MsDrawing record"
-          p work
+          puts "\nDEBUG: found MsDrawing record"
+          #p work
         end
       when :txo # this contains the length of the note text
         if previous == :drawing
-          puts "\nANDRE: found TxO record"
-          p work
+          puts "\nDEBUG: found TxO record"
+          #p work
         end
       when :continue # this contains the actual note text
         if previous == :txo
-          puts "\nANDRE: found Continue record"
-          p work
-          #@note += unpack_string work
+          puts "\nDEBUG: found Continue record"
+          #p work
+          #TODO do we really need to unpack it?
+          #a = unpack_string work
+          @noteObject.text = work
+          #puts unpack_string work
           #p @note
-          #worksheet.add_note @note.row, @note.col, @note
+          @noteObjList << @noteObject
         end
       when :pagesetup
         read_pagesetup(worksheet, work, pos, len)
@@ -912,7 +932,8 @@ class Reader
           set_missing_row_address worksheet, work, pos, len
         end
       end
-      previous = op unless op == :continue
+      previous = op 
+      #previous = op unless op == :continue
     end
   end
 
@@ -1118,14 +1139,25 @@ class Reader
     @workbook.add_format fmt
   end
   def read_note worksheet, work, pos, len
-    puts "\nANDRE: found a note record in read_worksheet\n"
-    row, col, _, _objID = work.unpack('v4')
+    puts "\nDEBUG: found a note record in read_worksheet\n"
+    row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack('v5C')
+    if (_objAuthLenFmt == 0)
+       puts "Picking compressed charset"
+       #Skip to offset due to 'v5C' used above
+       _objAuth = work.unpack('@11C' + _objAuthLen.to_s)
+    elsif (_objAuthLenFmt == 1)
+       puts "Picking uncompressed charset"
+       _objAuth = work.unpack('@11U' + _objAuthLen.to_s)
+    end
+    _objAuth = _objAuth.pack('C*')
+    @note = Note.new
     @note.length = len
     @note.row    = row
     @note.col    = col
-    if @note.objID != _objID
-      raise "Note Obj IDs do not match"
-    end
+    @note.author = _objAuth
+    @note.objID  = _objID
+    #Pop it on the list to be sorted in postread_worksheet
+    @noteList << @note
   end
   def read_sheet_protection worksheet, op, data
     case op

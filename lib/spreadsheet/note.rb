@@ -8,16 +8,16 @@ module Spreadsheet
   #
   # Interesting Attributes
   # #author  :: The name of the author who wrote the note
-  class Note < String
+  class Note
     include Encodings
-    attr_accessor :author, :length, :objID, :row, :col
+    attr_accessor :author, :length, :objID, :row, :col, :text
     def initialize
-      super ''
       @author = nil
       @length = 0
       @objID  = nil
       @row    = -1
       @col    = -1
+      @text   = ""
     end
   end
 end
