@@ -1,3 +1,18 @@
+### 0.9.2 / 11.11.2013
+
+commit e70dc0dbbc966ce312b45b0d44d0c3b1dc10aad6
+Author: Malcolm Blyth <trashbat@co.ck>
+Date:   Mon Nov 11 15:53:58 2013 +0000
+
+*Corrected compressed string formatting - *U (UTF-8) should have been *S (16-bit string)
+*Completed addition of notes hash to worksheet
+*Bumped revision
+*Updated reader and note
+Note class no longer extends string for simplicity and debug of class (pp now works a bit more easily)
+Reader has had loads of changes (still WIP) to allow objects of class
+Note and NoteObject to be created and combined in the postread_worksheet function
+*Adding noteObject to deal with the Object (and ultimately text comment field) created by excel's madness
+
 ### 0.9.1 / 24.10.2013
 
 * Author: Matti Lehtonen <matti.lehtonen@puujaa.com>
