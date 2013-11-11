@@ -1,3 +1,6 @@
+Forked to continue comment extraction based on andrewinkelmann's fork
+
+
 Last Update: 31.05.2013 - Zeno R.R. Davatz
 
 # Spreadsheet

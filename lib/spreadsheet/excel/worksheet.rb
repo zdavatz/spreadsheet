@@ -11,7 +11,7 @@ module Spreadsheet
 class Worksheet < Spreadsheet::Worksheet
   include Spreadsheet::Excel::Offset
   offset :dimensions
-  attr_reader :offset, :ole, :links, :guts
+  attr_reader :offset, :ole, :links, :guts, :notes
   def initialize opts = {}
     @row_addresses = nil
     super
@@ -19,9 +19,13 @@ class Worksheet < Spreadsheet::Worksheet
     @dimensions = nil
     @links = {}
     @guts = {}
+    @notes = {}
   end
   def add_link row, column, link
     @links.store [row, column], link
+  end
+  def add_note row, column, note
+    @notes.store [row, column], note
   end
   def column idx
     ensure_rows_read

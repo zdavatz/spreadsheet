@@ -380,6 +380,10 @@ module Internals
     :wsbool       => 0x0081, # ○  WSBOOL ➜ 6.113
     :defcolwidth  => 0x0055, # ○  DEFCOLWIDTH ➜ 6.29
     :sort         => 0x0090, # ○  SORT ➜ 6.95
+    :note         => 0x001c,                                                                                                      
+    :obj          => 0x005d,                                                                                                      
+    :drawing      => 0x00EC,                                                                                                      
+    :txo          => 0x01B6,
   }
 =begin ## unknown opcodes
 0x00bf, 0x00c0, 0x00c1, 0x00e1, 0x00e2, 0x00eb, 0x01af, 0x01bc

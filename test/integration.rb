@@ -1280,6 +1280,13 @@ module Spreadsheet
       temp_file.unlink
     end
 
+    def test_andre
+      path = File.join @data, 'test_comment.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      sheet.ensure_rows_read
+    end
     def test_read_pagesetup
       path = File.join @data, 'test_pagesetup.xls'
       book = Spreadsheet.open path
