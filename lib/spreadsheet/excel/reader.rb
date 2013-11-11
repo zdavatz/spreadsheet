@@ -907,15 +907,13 @@ class Reader
           #puts "\nDEBUG: found Continue record"
           continueFmt = work.unpack('C')
           if (continueFmt.first == 0)
-             puts "Picking compressed charset"
+             #puts "Picking compressed charset"
              #Skip to offset due to 'v5C' used above
              _text = work.unpack('@1C*')
-             pp _text.pack('C*')
              @noteObject.text = _text.pack('C*')
           elsif (continueFmt.first == 1)
-             puts "Picking uncompressed charset"
+             #puts "Picking uncompressed charset"
              _text = work.unpack('@1S*')
-             pp _text.pack('U*')
              @noteObject.text = _text.pack('U*')
           end
           @noteObjList << @noteObject
