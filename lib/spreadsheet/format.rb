@@ -107,18 +107,20 @@ module Spreadsheet
         :time         => Regexp.new(client("[hms]", 'UTF-8')),
         :number       => Regexp.new(client("[\#]", 'UTF-8'))
       }
+
       # Temp code to prevent merged formats in non-merged cells.
-      @used_merge    = 0
-      opts.each do |key, val|
-        writer = "#{key}="
-        if @font.respond_to? writer
-          @font.send writer, val
-        else
-          self.send writer, val
-        end
-      end
+      @used_merge = 0
+      opts.each { |k,v| update_format(k,v) }
+
       yield self if block_given?
     end
+
+    def update_format(attribute, value)
+      writer = "#{attribute}="
+      @font.respond_to?(writer) ? @font.send(writer,value) : self.send(writer, value) 
+      self
+    end
+
     ##
     # Combined method for both horizontal and vertical alignment. Sets the
     # first valid value (e.g. Format#align = :justify only sets the horizontal

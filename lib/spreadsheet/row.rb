@@ -128,6 +128,14 @@ module Spreadsheet
       @worksheet.row_updated @idx, self if @worksheet
       fmt
     end
+
+    def update_format(idx, name, value)
+      @formats[idx] = format(idx).update_format(name.to_sym, value)
+      @worksheet.add_format fmt
+      @worksheet.row_updated @idx, self if @worksheet
+      end
+    end
+
     private
     def index_of_first ary # :nodoc:
       if first = ary.find do |elm| !elm.nil? end
