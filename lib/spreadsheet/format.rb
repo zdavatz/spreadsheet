@@ -110,14 +110,16 @@ module Spreadsheet
 
       # Temp code to prevent merged formats in non-merged cells.
       @used_merge = 0
-      opts.each { |k,v| update_format(k,v) }
+      update_format(opts)
 
       yield self if block_given?
     end
 
-    def update_format(attribute, value)
-      writer = "#{attribute}="
-      @font.respond_to?(writer) ? @font.send(writer,value) : self.send(writer, value) 
+    def update_format(opts = {})
+      opts.each do |attribute, value|
+        writer = "#{attribute}="
+        @font.respond_to?(writer) ? @font.send(writer,value) : self.send(writer, value) 
+      end
       self
     end
 

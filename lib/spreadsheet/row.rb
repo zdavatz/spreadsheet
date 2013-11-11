@@ -129,11 +129,10 @@ module Spreadsheet
       fmt
     end
 
-    def update_format(idx, name, value)
-      @formats[idx] = format(idx).update_format(name.to_sym, value)
-      @worksheet.add_format fmt
+    def update_format(idx, opts = {})
+      @formats[idx] = format(idx).update_format(opts)
+      @worksheet.add_format @formats[idx]
       @worksheet.row_updated @idx, self if @worksheet
-      end
     end
 
     private
