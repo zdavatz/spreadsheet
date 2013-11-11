@@ -43,6 +43,7 @@ lib/spreadsheet/format.rb
 lib/spreadsheet/formula.rb
 lib/spreadsheet/helpers.rb
 lib/spreadsheet/link.rb
+lib/spreadsheet/note.rb
 lib/spreadsheet/row.rb
 lib/spreadsheet/workbook.rb
 lib/spreadsheet/worksheet.rb
