@@ -120,14 +120,12 @@ class Reader
      #TODO
      @noteList.each do |i|
         matching_obj = @noteObjList.select {|j| j.objID == i.objID}
-        pp matching_obj
         if matching_obj.length > 1
            puts "ERROR - more than one matching object ID!"
         end
         i.text = matching_obj.first.text
+        worksheet.add_note i.row, i.col, i.text
      end
-     puts "After addition of noteobj text to note"
-     pp @noteList
   end
   ##
   # The entry-point for reading Excel-documents. Reads the Biff-Version and
@@ -889,26 +887,24 @@ class Reader
       when :obj # it contains the author in the NTS structure
         _ft, _cb, _ot, _objID = work.unpack('v4')
         if _ot == 0x19
-          puts "\nDEBUG: found Note Obj record"
+          #puts "\nDEBUG: found Note Obj record"
           @noteObject         = NoteObject.new
           @noteObject.objID   = _objID
-          pp @noteObject
-          pp _objID
         end
         #p work
       when :drawing # this can be followed by txo in case of a note
         if previous == :obj
-          puts "\nDEBUG: found MsDrawing record"
+          #puts "\nDEBUG: found MsDrawing record"
           #p work
         end
       when :txo # this contains the length of the note text
         if previous == :drawing
-          puts "\nDEBUG: found TxO record"
+          #puts "\nDEBUG: found TxO record"
           #p work
         end
       when :continue # this contains the actual note text
         if previous == :txo
-          puts "\nDEBUG: found Continue record"
+          #puts "\nDEBUG: found Continue record"
           #p work
           #TODO do we really need to unpack it?
           #a = unpack_string work
@@ -1139,14 +1135,14 @@ class Reader
     @workbook.add_format fmt
   end
   def read_note worksheet, work, pos, len
-    puts "\nDEBUG: found a note record in read_worksheet\n"
+    #puts "\nDEBUG: found a note record in read_worksheet\n"
     row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack('v5C')
     if (_objAuthLenFmt == 0)
-       puts "Picking compressed charset"
+       #puts "Picking compressed charset"
        #Skip to offset due to 'v5C' used above
        _objAuth = work.unpack('@11C' + _objAuthLen.to_s)
     elsif (_objAuthLenFmt == 1)
-       puts "Picking uncompressed charset"
+       #puts "Picking uncompressed charset"
        _objAuth = work.unpack('@11U' + _objAuthLen.to_s)
     end
     _objAuth = _objAuth.pack('C*')
