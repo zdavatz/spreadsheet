@@ -905,12 +905,19 @@ class Reader
       when :continue # this contains the actual note text
         if previous == :txo
           #puts "\nDEBUG: found Continue record"
-          #p work
-          #TODO do we really need to unpack it?
-          #a = unpack_string work
-          @noteObject.text = work
-          #puts unpack_string work
-          #p @note
+          continueFmt = work.unpack('C')
+          if (continueFmt.first == 0)
+             puts "Picking compressed charset"
+             #Skip to offset due to 'v5C' used above
+             _text = work.unpack('@1C*')
+             pp _text.pack('C*')
+             @noteObject.text = _text.pack('C*')
+          elsif (continueFmt.first == 1)
+             puts "Picking uncompressed charset"
+             _text = work.unpack('@1S*')
+             pp _text.pack('U*')
+             @noteObject.text = _text.pack('U*')
+          end
           @noteObjList << @noteObject
         end
       when :pagesetup
@@ -1138,12 +1145,12 @@ class Reader
     #puts "\nDEBUG: found a note record in read_worksheet\n"
     row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack('v5C')
     if (_objAuthLenFmt == 0)
-       #puts "Picking compressed charset"
+       puts "Picking compressed charset"
        #Skip to offset due to 'v5C' used above
-       _objAuth = work.unpack('@11C' + _objAuthLen.to_s)
+       _objAuth = work.unpack('@11C*')
     elsif (_objAuthLenFmt == 1)
-       #puts "Picking uncompressed charset"
-       _objAuth = work.unpack('@11U' + _objAuthLen.to_s)
+       puts "Picking uncompressed charset"
+       _objAuth = work.unpack('@11S*')
     end
     _objAuth = _objAuth.pack('C*')
     @note = Note.new
