@@ -1143,11 +1143,11 @@ class Reader
     #puts "\nDEBUG: found a note record in read_worksheet\n"
     row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack('v5C')
     if (_objAuthLenFmt == 0)
-       puts "Picking compressed charset"
+       #puts "Picking compressed charset"
        #Skip to offset due to 'v5C' used above
        _objAuth = work.unpack('@11C*')
     elsif (_objAuthLenFmt == 1)
-       puts "Picking uncompressed charset"
+       #puts "Picking uncompressed charset"
        _objAuth = work.unpack('@11S*')
     end
     _objAuth = _objAuth.pack('C*')
