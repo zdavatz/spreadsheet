@@ -1,3 +1,7 @@
+### 0.9.4 / 12.11.2013
+
+* Updated Manifest.txt
+
 ### 0.9.3 / 12.11.2013
 
 commit e15d8b45d7587f7ab78c7b7768de720de9961341 (refs/remotes/gguerrero/master)
