@@ -9,8 +9,6 @@ Manifest.txt
 README.md
 Rakefile
 bin/xlsopcodes
-doc/Excel97-2007BinaryFileFormatSpecification.pdf
-doc/excelfileformat.pdf
 lib/parseexcel.rb
 lib/parseexcel/parseexcel.rb
 lib/parseexcel/parser.rb
