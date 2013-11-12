@@ -1,3 +1,18 @@
+### 0.9.3 / 12.11.2013
+
+commit e15d8b45d7587f7ab78c7b7768de720de9961341 (refs/remotes/gguerrero/master)
+Author: Guillermo Guerrero <g.guerrero.bus@gmail.com>
+Date:   Tue Nov 12 11:50:30 2013 +0100
+
+* Refactor update_format for cloning format objects
+* Added lib/spreadsheet/note.rb to Manifest.txt file
+* 'update_format' methods now receive a hash of key => values to update
+
+Author: Przemysław Ciąćka <przemyslaw.ciacka@gmail.com>
+Date:   Tue Nov 12 00:07:57 2013 +0100
+
+* Added lib/spreadsheet/note.rb to Manifest.txt file
+
 ### 0.9.2 / 11.11.2013
 
 commit e70dc0dbbc966ce312b45b0d44d0c3b1dc10aad6
