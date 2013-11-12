@@ -130,7 +130,13 @@ module Spreadsheet
     end
 
     def update_format(idx, opts = {})
-      @formats[idx] = format(idx).update_format(opts)
+      if @formats[idx]
+        @formats[idx].update_format(opts)
+      else
+        fmt = default_format.clone
+        fmt.font = fmt.font.clone
+        @formats[idx] = fmt.update_format(opts)
+      end
       @worksheet.add_format @formats[idx]
       @worksheet.row_updated @idx, self if @worksheet
     end
