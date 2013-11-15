@@ -1,20 +1,17 @@
-PATH
-  remote: .
-  specs:
-    spreadsheet (0.7.3)
-      ruby-ole
-
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    hoe (3.4.1)
+    hoe (3.7.1)
       rake (>= 0.8, < 11.0)
-    rake (10.0.3)
-    ruby-ole (1.2.11.6)
+    rake (10.1.0)
+    ruby-ole (1.2.11.7)
+    spreadsheet (0.8.9)
+      ruby-ole (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  hoe
-  spreadsheet!
+  hoe (>= 3.4)
+  ruby-ole
+  spreadsheet

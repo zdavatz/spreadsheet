@@ -49,8 +49,8 @@ module Internals
     1257 => "WINDOWS-1257", #(Baltic)
     1258 => "WINDOWS-1258", #(Vietnamese)
     1361 => "WINDOWS-1361", #(Korean (Johab))
-    10000 => "MACINTOSH",
-    32768 => "MACINTOSH",
+    10000 => "MACROMAN",
+    32768 => "MACROMAN",
     32769 => "WINDOWS-1252", #(Latin I) (BIFF2-BIFF3)
   }
   SEGAPEDOC = CODEPAGES.invert
@@ -162,6 +162,7 @@ module Internals
     :labelsst   => 'v3V',
     :number     => "v3#{EIGHT_BYTE_DOUBLE}",
     :pagesetup  => "v8#{EIGHT_BYTE_DOUBLE}2v",
+    :margin     => "#{EIGHT_BYTE_DOUBLE}",
     :rk         => 'v3V',
     :row        => 'v4x4V',
     :window2    => 'v4x2v2x4',
@@ -261,6 +262,12 @@ module Internals
     :bold   => 700,
     :normal => 400,
   }
+  WORKSHEET_VISIBILITIES = {
+    0x00 => :visible,
+    0x01 => :hidden,
+    0x02 => :strong_hidden
+  }
+  SEITILIBISIV_TEEHSKROW = WORKSHEET_VISIBILITIES.invert
   LEAP_ERROR = Date.new 1900, 2, 28
   OPCODES = {
     :blank        => 0x0201, #    BLANK ➜ 6.7
@@ -373,6 +380,10 @@ module Internals
     :wsbool       => 0x0081, # ○  WSBOOL ➜ 6.113
     :defcolwidth  => 0x0055, # ○  DEFCOLWIDTH ➜ 6.29
     :sort         => 0x0090, # ○  SORT ➜ 6.95
+    :note         => 0x001c,                                                                                                      
+    :obj          => 0x005d,                                                                                                      
+    :drawing      => 0x00EC,                                                                                                      
+    :txo          => 0x01B6,
   }
 =begin ## unknown opcodes
 0x00bf, 0x00c0, 0x00c1, 0x00e1, 0x00e2, 0x00eb, 0x01af, 0x01bc

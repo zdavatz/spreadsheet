@@ -1,21 +1,107 @@
-=== 0.8.5 / 24.04.2013
+### 0.9.4 / 12.11.2013
+
+* Updated Manifest.txt
+
+### 0.9.3 / 12.11.2013
+
+commit e15d8b45d7587f7ab78c7b7768de720de9961341 (refs/remotes/gguerrero/master)
+Author: Guillermo Guerrero <g.guerrero.bus@gmail.com>
+Date:   Tue Nov 12 11:50:30 2013 +0100
+
+* Refactor update_format for cloning format objects
+* Added lib/spreadsheet/note.rb to Manifest.txt file
+* 'update_format' methods now receive a hash of key => values to update
+
+Author: Przemysław Ciąćka <przemyslaw.ciacka@gmail.com>
+Date:   Tue Nov 12 00:07:57 2013 +0100
+
+* Added lib/spreadsheet/note.rb to Manifest.txt file
+
+### 0.9.2 / 11.11.2013
+
+commit e70dc0dbbc966ce312b45b0d44d0c3b1dc10aad6
+Author: Malcolm Blyth <trashbat@co.ck>
+Date:   Mon Nov 11 15:53:58 2013 +0000
+
+*Corrected compressed string formatting - *U (UTF-8) should have been *S (16-bit string)
+*Completed addition of notes hash to worksheet
+*Bumped revision
+*Updated reader and note
+Note class no longer extends string for simplicity and debug of class (pp now works a bit more easily)
+Reader has had loads of changes (still WIP) to allow objects of class
+Note and NoteObject to be created and combined in the postread_worksheet function
+*Adding noteObject to deal with the Object (and ultimately text comment field) created by excel's madness
+
+### 0.9.1 / 24.10.2013
+
+* Author: Matti Lehtonen <matti.lehtonen@puujaa.com>
+Date:   Thu Oct 24 09:41:50 2013 +0300
+
+* Add support for worksheet visibility
+
+### 0.9.0 / 16.09.2013
+
+* Author: Pavel <pavel.evst@gmail.com>
+Date:   Mon Sep 16 14:02:49 2013 +0700
+
+* Test cases for Worksheet#margins, Worksheet#pagesetup, Workbook#delete_worksheet. Fix bugs related to it.
+* Page margins reader/writter
+* Markdownify GUIDE
+* Add page setup options (landscape or portrait and adjust_to)
+
+### 0.8.9 / 24.08.2013
+
+Author: Doug Renn <renn@nestegg.com>
+Date:   Fri Aug 23 17:10:24 2013 -0600
+
+* Work around to handle number formats that are being mistaken time formats
+
+### 0.8.8 / 02.08.2013
+
+Author: Nathan Colgate <nathancolgate@gmail.com>
+Date:   Thu Aug 1 15:01:57 2013 -0500
+
+* Update excel/internals.rb to reference a valid Encoding type
+* Encoding.find("MACINTOSH") was throwing an error. Encoding.find("MACROMAN") does not.
+
+### 0.8.7 / 24.07.2013
+
+Author: Yasuhiro Asaka <yasaka@ywesee.com>
+Date:   Wed Jul 24 11:31:12 2013 +0900
+
+* Remove warnings for test suite      
+* warning: mismatched indentations at 'end' with 'class' at xxx
+* warning: method redefined; discarding old xxx
+* warning: assigned but unused variable xxx
+* warning: previous definition of xxx was here
+* The source :rubygems is deprecated because HTTP
+* requests are insecure. (Gemfile)
+
+### 0.8.6 / 11.07.2013
+
+Author: Arjun Anand and Robert Stern <dev+arjuna+rstern@reenhanced.com>
+Date:   Wed Jul 10 13:45:30 2013 -0400 
+
+* Allow editing of an existing worksheet.
+
+### 0.8.5 / 24.04.2013
 
 * Applied Patch by Joao Almeida: When editing an existing sheet, cells merge was not working.
 * https://github.com/voraz/spreadsheet/pull/14.patch
 
-=== 0.8.4 / 20.04.2013
+### 0.8.4 / 20.04.2013
 
 * Applied Patch by boss@airbladesoftware.com
 * https://groups.google.com/d/msg/rubyspreadsheet/73IoEwSx69w/barE7uVnIzwJ
 
-=== 0.8.3 / 12.03.2013
+### 0.8.3 / 12.03.2013
  
-uthor: Keith Walsh <keith.walsh@adtegrity.com>
+Author: Keith Walsh <keith.walsh@adtegrity.com>
 Date:   Mon Mar 11 16:48:25 2013 -0400
 
 * Typo correction in guide example.  
 
-=== 0.8.2 / 28.02.2013
+### 0.8.2 / 28.02.2013
 
 Author: Roque Pinel <roque.pinel@infotechfl.com>
 Date:   Wed Feb 27 12:10:29 2013 -0500
@@ -24,16 +110,16 @@ Date:   Wed Feb 27 12:10:29 2013 -0500
 * Made API friendly to BigDecimal precision.
 * Changes introduced by the user 'valeriusjames'.
 
-=== 0.8.1 / 18.02.2013
+### 0.8.1 / 18.02.2013
 
 * Updated Manifest.txt to include lib/spreadsheet/excel/rgb.rb
 
-=== 0.8.0 / 18.02.2013
+### 0.8.0 / 18.02.2013
 
 * Adding support for converting color palette values to RGB values (not vice-versa..yet)
 * by https://github.com/dancaugherty/spreadsheet/compare/master...rgb
 
-=== 0.7.9 / 06.02.2013
+### 0.7.9 / 06.02.2013
 
 Author: Eugeniy Belyaev (zhekanax)
 
@@ -42,7 +128,7 @@ Author: Eugeniy Belyaev (zhekanax)
   nevertheless it makes it possible.
 * https://github.com/zdavatz/spreadsheet/pull/27
 
-=== 0.7.8 / 06.02.2013
+### 0.7.8 / 06.02.2013
 
 Author: Kenichi Kamiya <kachick1@gmail.com>
 Date:   Wed Feb 6 11:23:35 2013 +0900
@@ -52,7 +138,7 @@ Date:   Wed Feb 6 11:23:35 2013 +0900
 * Remove warnings "assigned but unused variable"
 * Enable $VERBOSE flag when running test
 
-=== 0.7.7 / 22.01.2013
+### 0.7.7 / 22.01.2013
 
 Author: DeTeam <timur.deteam@gmail.com>
 Date:   Tue Jan 22 19:11:52 2013 +0400
@@ -66,7 +152,7 @@ Date:   Tue Jan 22 19:11:52 2013 +0400
 
 also see: https://github.com/zdavatz/spreadsheet/pull/24
 
-=== 0.7.6 / 15.01.2013
+### 0.7.6 / 15.01.2013
 
 Author: Kenichi Kamiya <kachick1@gmail.com>
 Date:   Tue Jan 15 15:52:58 2013 +0900
@@ -78,28 +164,28 @@ Date:   Tue Jan 15 15:52:58 2013 +0900
 
 also see: https://github.com/zdavatz/spreadsheet/pull/21
 
-=== 0.7.5 / 06.12.2012
+### 0.7.5 / 06.12.2012
 
 * Add error tolerant values for Iconv when writing spreadsheet
 * by andrea@spaghetticode.it
 
-=== 0.7.4 / 06.10.2012
+### 0.7.4 / 06.10.2012
 
 * Adds Spreadsheet::Excel::Row#to_a method to properly decode Date and DateTime data.
 * patches by https://github.com/mdgreenfield/spreadsheet
 
-=== 0.7.3 / 26.06.2012
+### 0.7.3 / 26.06.2012
 
 * Fix Format borders
 * see https://github.com/zdavatz/spreadsheet/pull/6 for full details.
 * patches by uraki66@gmail.com
 
-=== 0.7.2 / 14.06.2012
+### 0.7.2 / 14.06.2012
 
 * many changes by Mina Naguib <mina.git@naguib.ca>
 * see git log for full details
 
-=== 0.7.1 / 08.05.2012
+### 0.7.1 / 08.05.2012
 
 * Author: Artem Ignatiev <zazubrik@gmail.com>
 * remove require and rake altogether
@@ -108,7 +194,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 * add rake as development dependency
 * Somehow it broken rake on my other project
 
-=== 0.7.0 / 07.05.2012
+### 0.7.0 / 07.05.2012
 
 * Author: Artem Ignatiev <zazubrik@gmail.com>
 * use both ruby 1.8 and 1.9 compatible way of getting character code when hashing
@@ -118,37 +204,37 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   not a gem specification built, refuses to load the gem.
 * Testing worksheet protection
 
-=== 0.6.9 / 28.04.2012
+### 0.6.9 / 28.04.2012
 
 * Yield is more simple here too.
 * No need to capture the block in Spreadsheet.open
 * Rather than extending a core class, let's just use #rcompact from a helper module
 
-=== 0.6.8 / 20.01.2012
+### 0.6.8 / 20.01.2012
 
 * adds the fix to allow the writing of empty rows, by ClemensP.
 * Test also by ClemensP.
 
-=== 0.6.7 / 18.01.2012
+### 0.6.7 / 18.01.2012
 
 * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points point 2.
 * Tests by Michal
 * Patches by Timon
 
-=== 0.6.6 / 18.01.2012
+### 0.6.6 / 18.01.2012
 
 * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points 8 and 9. 
 * Fixes byjsaak@napalm.hu
 * Patches by Vitaly Klimov
 
-=== 0.6.5.9 / 7.9.2011
+### 0.6.5.9 / 7.9.2011
 
 * Fixed a frozen string bug thanks to dblock (Daniel Doubrovkine),
 * dblock@dblock.org
 
   * https://github.com/dblock/spreadsheet/commit/164dcfbb24097728f1a7453702c270107e725b7c
 
-=== 0.6.5.8 / 30.8.2011
+### 0.6.5.8 / 30.8.2011
 
 * This patch is about adding a sheet_count method to workbook so that it returns
 * the total no of worksheets for easy access. Please check. By
@@ -156,50 +242,50 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
         * https://gist.github.com/1180625
 
-=== 0.6.5.7 / 20.7.2011
+### 0.6.5.7 / 20.7.2011
 
 * Fixed the bug introduced by Roel van der Hoorn and updated the test cases.
 
   * https://github.com/vanderhoorn/spreadsheet/commit/c79ab14dcf40dee1d6d5ad2b174f3fe31414ca28
 
-=== 0.6.5.6 / 20.7.2011
+### 0.6.5.6 / 20.7.2011
 
 * Added a fix from Roel van der Hoorn to sanitize_worksheets if 'sheets' is empty.
 
   * https://github.com/vanderhoorn/spreadsheet/commit/c109f2ac5486f9a38a6d93267daf560ab4b9473e
 
-=== 0.6.5.5 / 24.6.2011
+### 0.6.5.5 / 24.6.2011
 
 * updated the color code for orange to 0x0034 => :orange, thanks to the hint of Jonty
 
   * https://gist.github.com/1044700
 
-=== 0.6.5.4 / 18.4.2011
+### 0.6.5.4 / 18.4.2011
 
 * Updated worksheet.rb according to the Patch of Björn Andersson.
 
   * https://gist.github.com/925007#file_test.patch
   * http://url.ba/09p9
 
-=== 0.6.5.3 / 23.3.2011
+### 0.6.5.3 / 23.3.2011
 
 * Updated Txt lib/spreadsheet/excel/writer/biff8.rb with a Patch from Alexandre Bini
 
   * See this for full detail: http://url.ba/6r1z
 
-=== 0.6.5.2 / 14.2.2011
+### 0.6.5.2 / 14.2.2011
 
 * Updated test/integration.rb to work with Ruby ruby 1.9.2p136 (2010-12-25 revision 30365) [i686-linux]
   
   * Thanks for the hint tomiacannondale@gmail.com
 
-=== 0.6.5.1 / 17.1.2011
+### 0.6.5.1 / 17.1.2011
 
 * One enhancement thanks to Qiong Peng, Moo Yu, and Thierry Thelliez
 
   * http://dev.ywesee.com/wiki.php/Gem/Spreadsheet
 
-=== 0.6.5 / 07.12.2010
+### 0.6.5 / 07.12.2010
 
 * 2 Enhancements courtesy to ISS AG.
 
@@ -211,7 +297,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   * Both of above two points is now possible by creating a new Excel File from 
     scratch or editing an existing XLS and adding groups or hiding lines to it.
 
-=== 0.6.4.1 / 2009-09-17
+### 0.6.4.1 / 2009-09-17
 
 * 3 Bugfixes
 
@@ -239,7 +325,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     http://rubyforge.org/tracker/index.php?func=detail&aid=26513&group_id=678&atid=2677
 
 
-=== 0.6.4 / 2009-07-03
+### 0.6.4 / 2009-07-03
 
 * 5 Bugfixes
 
@@ -271,7 +357,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
   * Spreadsheet now runs on Ruby 1.9
 
-=== 0.6.3.1 / 2009-02-13
+### 0.6.3.1 / 2009-02-13
 
 * 3 Bugfixes
 
@@ -301,7 +387,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     as requested by Eric Peterson in
     http://rubyforge.org/forum/forum.php?thread_id=31346&forum_id=2920
 
-=== 0.6.3 / 2009-01-14
+### 0.6.3 / 2009-01-14
 
 * 1 Bugfix
 
@@ -319,7 +405,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     This issue was reported by Spencer Turner in
     http://rubyforge.org/tracker/index.php?func=detail&aid=23287&group_id=678&atid=2677
 
-=== 0.6.2.1 / 2008-12-18
+### 0.6.2.1 / 2008-12-18
 
 * 1 Bugfix
 
@@ -327,7 +413,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     Thanks to Eugene Mikhailov for tracking this one down in:
     http://rubyforge.org/tracker/index.php?func=detail&aid=23085&group_id=678&atid=2677
 
-=== 0.6.2 / 2008-12-11
+### 0.6.2 / 2008-12-11
 
 * 14 Bugfixes
 
@@ -394,7 +480,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     Takes care of http://rubyforge.org/forum/message.php?msg_id=62941
     Reported by David Chamberlain
 
-=== 0.6.1.9 / 2008-11-07
+### 0.6.1.9 / 2008-11-07
 
 * 1 Bugfix
 
@@ -408,7 +494,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   * Added support for appending Worksheets to a Workbook
     (Thanks to Mohammed Rabbani for the report)
 
-=== 0.6.1.8 / 2008-10-31
+### 0.6.1.8 / 2008-10-31
 
 * 1 Bugfix
 
@@ -416,7 +502,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     lead to data from the wrong Sheet being returned.
     (Thanks to Bugreporter extraordinaire Bjørn Hjelle)
 
-=== 0.6.1.7 / 2008-10-30
+### 0.6.1.7 / 2008-10-30
 
 * 1 Bugfix
 
@@ -428,7 +514,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   * Allow the substitution of an IO object with a StringIO.
     (Thanks to luxor for the report)
 
-=== 0.6.1.6 / 2008-10-28
+### 0.6.1.6 / 2008-10-28
 
 * 2 Bugfixes
 
@@ -443,7 +529,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     value
     (Thanks to Bjørn Hjelle for the report)
 
-=== 0.6.1.5 / 2008-10-24
+### 0.6.1.5 / 2008-10-24
 
 * 2 Bugfixes
 
@@ -453,7 +539,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   * Handle empty Worksheets
     (Thanks to Charles Lowe for the Patches)
 
-=== 0.6.1.4 / 2008-10-23
+### 0.6.1.4 / 2008-10-23
 
 * 1 Bugfix
 
@@ -464,7 +550,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
   * Read/Write functionality for Links (only URLs can be written as of now)
 
-=== 0.6.1.3 / 2008-10-21
+### 0.6.1.3 / 2008-10-21
 
 * 2 Bugfixes
 
@@ -474,7 +560,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     no DBCELL records terminating the Rowblocks.
     (Thanks to Bjørn Hjelle for the Bugreport)
 
-=== 0.6.1.2 / 2008-10-20
+### 0.6.1.2 / 2008-10-20
 
 * 2 Bugfixes
 
@@ -484,13 +570,13 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
     Settings when reading the SST, fixing a problem where the presence of
     Richtext could lead to an incomplete SST.
 
-=== 0.6.1.1 / 2008-10-20
+### 0.6.1.1 / 2008-10-20
 
 * 1 Bugfix
 
   * Corrected the Manifest - included column.rb
 
-=== 0.6.1 / 2008-10-17
+### 0.6.1 / 2008-10-17
 
 * 3 minor enhancements
 
@@ -498,11 +584,12 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
   * Reads and writes correct Fonts (Font-indices > 3 appear to be 1-based)
   * Reads xf data
 
-=== 0.6.0 / 2008-10-13
+### 0.6.0 / 2008-10-13
 
 * 1 major enhancement
 
   * Initial upload of the shiny new Spreadsheet Gem after three weeks of
     grueling labor in the dark binary mines of Little-Endian Biff and long
     hours spent polishing the surfaces of documentation.
+
 

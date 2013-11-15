@@ -147,11 +147,12 @@ class Workbook < Spreadsheet::Writer
       offset += worksheet.boundsheet_size
     end
     worksheets.each do |worksheet|
+      visibility = SEITILIBISIV_TEEHSKROW[worksheet.worksheet.visibility]
       data = [
         offset,   # Absolute stream position of the BOF record of the sheet
                   # represented by this record. This field is never encrypted
                   # in protected files.
-        0x00,     # Visibility: 0x00 = Visible
+        visibility,     # Visibility: 0x00 = Visible
                   #             0x01 = Hidden
                   #             0x02 = Strong hidden (see below)
         0x00,     # Sheet type: 0x00 = Worksheet

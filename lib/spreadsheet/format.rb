@@ -104,20 +104,25 @@ module Spreadsheet
         :date         => Regexp.new(client("[YMD]", 'UTF-8')),
         :date_or_time => Regexp.new(client("[hmsYMD]", 'UTF-8')),
         :datetime     => Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')),
-        :time         => Regexp.new(client("[hms]", 'UTF-8'))
+        :time         => Regexp.new(client("[hms]", 'UTF-8')),
+        :number       => Regexp.new(client("[\#]", 'UTF-8'))
       }
+
       # Temp code to prevent merged formats in non-merged cells.
-      @used_merge    = 0
-      opts.each do |key, val|
-        writer = "#{key}="
-        if @font.respond_to? writer
-          @font.send writer, val
-        else
-          self.send writer, val
-        end
-      end
+      @used_merge = 0
+      update_format(opts)
+
       yield self if block_given?
     end
+
+    def update_format(opts = {})
+      opts.each do |attribute, value|
+        writer = "#{attribute}="
+        @font.respond_to?(writer) ? @font.send(writer,value) : self.send(writer, value) 
+      end
+      self
+    end
+
     ##
     # Combined method for both horizontal and vertical alignment. Sets the
     # first valid value (e.g. Format#align = :justify only sets the horizontal
@@ -178,22 +183,27 @@ module Spreadsheet
     ##
     # Is the cell formatted as a Date?
     def date?
-      !!@regexes[:date].match(@number_format.to_s)
+      !number? && !!@regexes[:date].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Date or Time?
     def date_or_time?
-      !!@regexes[:date_or_time].match(@number_format.to_s)
+      !number? && !!@regexes[:date_or_time].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !!@regexes[:datetime].match(@number_format.to_s)
+      !number? && !!@regexes[:datetime].match(@number_format.to_s)
     end
     ##
     # Is the cell formatted as a Time?
     def time?
-      !!@regexes[:time].match(@number_format.to_s)
+      !number? && !!@regexes[:time].match(@number_format.to_s)
+    end
+    ##
+    # Is the cell formatted as a number?
+    def number?
+      !!@regexes[:number].match(@number_format.to_s)
     end
   end
 end

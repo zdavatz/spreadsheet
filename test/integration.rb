@@ -1265,6 +1265,98 @@ module Spreadsheet
       assert_equal :brown, format.top_color
     end
 
+    def test_adding_data_to_existing_file
+      path = File.join @data, 'test_adding_data_to_existing_file.xls'
+      book = Spreadsheet.open path
+      assert_equal(1, book.worksheet(0).rows.count)
+
+      book.worksheet(0).insert_row(1, [12, 23, 34, 45])
+      temp_file = Tempfile.new('temp')
+      book.write(temp_file.path)
+
+      temp_book = Spreadsheet.open temp_file.path
+      assert_equal(2, temp_book.worksheet(0).rows.count)
+
+      temp_file.unlink
+    end
+
+    def test_andre
+      path = File.join @data, 'test_comment.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet 0
+      sheet.ensure_rows_read
+    end
+    def test_read_pagesetup
+      path = File.join @data, 'test_pagesetup.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet(0)
+      assert_equal(:landscape, sheet.pagesetup[:orientation])
+      assert_equal(130, sheet.pagesetup[:adjust_to])
+    end
+
+    def test_write_pagesetup
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_pagesetup.xls'
+      sheet1 = book.create_worksheet
+      sheet1.pagesetup[:orientation] = :landscape
+      sheet1.pagesetup[:adjust_to] = 93
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      sheet2 = book2.worksheet(0)
+      assert_equal(:landscape, sheet2.pagesetup[:orientation])
+      assert_equal(93, sheet2.pagesetup[:adjust_to])
+    end
+
+    def test_read_margins
+      path = File.join @data, 'test_margin.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      sheet = book.worksheet(0)
+      assert_equal(2.0, sheet.margins[:left])
+    end
+
+    def test_write_margins
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_margins.xls'
+      sheet1 = book.create_worksheet
+      sheet1.margins[:left] = 3
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      sheet2 = book2.worksheet(0)
+      assert_equal(3.0, sheet2.margins[:left])
+    end
+
+    def test_read_worksheet_visibility
+      path = File.join @data, 'test_worksheet_visibility.xls'
+      book = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book
+      assert_equal(:visible, book.worksheet(0).visibility)
+      assert_equal(:hidden, book.worksheet(1).visibility)
+    end
+
+    def test_write_worksheet_visibility
+      book = Spreadsheet::Workbook.new
+      path = File.join @var, 'test_write_worksheet_visibility.xls'
+      sheet1 = book.create_worksheet
+      sheet1.visibility = :hidden
+      sheet2 = book.create_worksheet
+      assert_nothing_raised do
+        book.write path
+      end
+      book2 = Spreadsheet.open path
+      assert_instance_of Excel::Workbook, book2
+      assert_equal(:hidden, book2.worksheet(0).visibility)
+      assert_equal(:visible, book2.worksheet(1).visibility)
+    end
+
     private
 
     # Validates the workbook's SST

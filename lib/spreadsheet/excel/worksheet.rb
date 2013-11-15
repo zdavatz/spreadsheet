@@ -11,7 +11,7 @@ module Spreadsheet
 class Worksheet < Spreadsheet::Worksheet
   include Spreadsheet::Excel::Offset
   offset :dimensions
-  attr_reader :offset, :ole, :links, :guts
+  attr_reader :offset, :ole, :links, :guts, :notes
   def initialize opts = {}
     @row_addresses = nil
     super
@@ -19,9 +19,13 @@ class Worksheet < Spreadsheet::Worksheet
     @dimensions = nil
     @links = {}
     @guts = {}
+    @notes = {}
   end
   def add_link row, column, link
     @links.store [row, column], link
+  end
+  def add_note row, column, note
+    @notes.store [row, column], note
   end
   def column idx
     ensure_rows_read
@@ -29,6 +33,14 @@ class Worksheet < Spreadsheet::Worksheet
   end
   def date_base
     @workbook.date_base
+  end
+  def margins
+    ensure_rows_read
+    super
+  end
+  def pagesetup
+    ensure_rows_read
+    super
   end
   def each *args
     ensure_rows_read
@@ -54,6 +66,9 @@ class Worksheet < Spreadsheet::Worksheet
         Row.new self, idx
       end
     end
+  end
+  def rows
+    self.to_a
   end
   def row_updated idx, row
     res = super

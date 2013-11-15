@@ -50,6 +50,11 @@ module Spreadsheet
       worksheet
     end
     ##
+    # Delete a Worksheet from Workbook by it's index
+    def delete_worksheet worksheet_index
+      @worksheets.delete_at worksheet_index
+    end
+    ##
     # Change the RGB components of the elements in the colour palette.
     def set_custom_color idx, red, green, blue
       raise 'Invalid format' if [red, green, blue].find { |c| ! (0..255).include?(c) }
