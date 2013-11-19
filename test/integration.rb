@@ -1280,12 +1280,20 @@ module Spreadsheet
       temp_file.unlink
     end
 
-    def test_andre
+    def test_comment
       path = File.join @data, 'test_comment.xls'
       book = Spreadsheet.open path
       assert_instance_of Excel::Workbook, book
       sheet = book.worksheet 0
       sheet.ensure_rows_read
+      #Now two commented fields in sheet
+      assert_equal(true, book.worksheet(0).notes.has_key?([0,18]))
+      assert_equal(true, book.worksheet(0).notes.has_key?([0,2]))
+      assert_equal(false, book.worksheet(0).notes.has_key?([0,3]))
+      assert_equal("Another Author:\n0: switch it off\n1: switch it on",
+                   book.worksheet(0).notes[[0,18]])
+      assert_equal("Some author:\nI have a register name",
+                   book.worksheet(0).notes[[0,2]])
     end
     def test_read_pagesetup
       path = File.join @data, 'test_pagesetup.xls'
