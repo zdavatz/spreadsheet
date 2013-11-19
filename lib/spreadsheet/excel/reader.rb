@@ -1145,10 +1145,10 @@ class Reader
     if (_objAuthLenFmt == 0)
        #puts "Picking compressed charset"
        #Skip to offset due to 'v5C' used above
-       _objAuth = work.unpack('@11C*')
+       _objAuth = work.unpack('@11C' + (_objAuthLen-1).to_s + 'C')
     elsif (_objAuthLenFmt == 1)
        #puts "Picking uncompressed charset"
-       _objAuth = work.unpack('@11S*')
+       _objAuth = work.unpack('@11S' + (_objAuthLen-1).to_s + 'S')
     end
     _objAuth = _objAuth.pack('C*')
     @note = Note.new
