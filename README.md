@@ -27,6 +27,10 @@ For Non-GPLv3 commercial licencing, please see:
 
 http://www.spreadsheet.ch
 
+## XLS Binary Documentation
+* https://github.com/zdavatz/spreadsheet/blob/master/Excel97-2007BinaryFileFormatSpecification.pdf
+* https://github.com/zdavatz/spreadsheet/blob/master/excelfileformat.pdf
+
 ## Description
 
 The Spreadsheet Library is designed to read and write Spreadsheet Documents.
@@ -67,21 +71,21 @@ You will get a deprecated warning about iconv when using spreadsheet with Ruby
 ## Dependencies
 
 * ruby 1.8
-* ruby-ole [ http://code.google.com/p/ruby-ole/ ]
+* [ruby-ole](http://code.google.com/p/ruby-ole/)
 
 
 ## Examples
 
-* Have a look at the GUIDE: https://github.com/zdavatz/spreadsheet/blob/master/GUIDE.md
+* Have a look at the [GUIDE](https://github.com/zdavatz/spreadsheet/blob/master/GUIDE.md)
 * Also look at: https://gist.github.com/phollyer/1214475
 
 ## Installation
 
-Using RubyGems [ http://www.rubygems.org ]:
+Using [RubyGems](http://www.rubygems.org):
 
 * `sudo gem install spreadsheet`
 
-If you don't like RubyGems[http://www.rubygems.org], let me know which
+If you don't like [RubyGems](http://www.rubygems.org), let me know which
 installation solution you prefer and I'll include it in the future.
 
 If you can use 'rake' and 'hoe' library is also installed, you can 
