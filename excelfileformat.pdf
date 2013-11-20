@@ -15,7 +15,11 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png" />
     <link rel="logo" type="image/svg" href="https://github-media-downloads.s3.amazonaws.com/github-logo.svg" />
     <meta property="og:image" content="https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png">
+<<<<<<< HEAD
     <meta name="hostname" content="github-fe134-cp1-prd.iad.github.net">
+=======
+    <meta name="hostname" content="github-fe122-cp1-prd.iad.github.net">
+>>>>>>> 43242ff265f41a8b624aedd8d2f5ec916afe389b
     <meta name="ruby" content="ruby 1.9.3p194-tcs-github-tcmalloc (0e75de19f8) [x86_64-linux]">
     <link rel="assets" href="https://github.global.ssl.fastly.net/">
     <link rel="conduit-xhr" href="https://ghconduit.com:25035/">
@@ -26,7 +30,11 @@
     <meta name="msapplication-TileImage" content="/windows-tile.png" />
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta name="selected-link" value="repo_source" data-pjax-transient />
+<<<<<<< HEAD
     <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="62CC325F:52E6:45198C8:528D23E5" name="octolytics-dimension-request_id" />
+=======
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="2E8C1E1A:7EE2:34AEFA7:528D2B01" name="octolytics-dimension-request_id" />
+>>>>>>> 43242ff265f41a8b624aedd8d2f5ec916afe389b
     
 
     
@@ -34,18 +42,31 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
     <meta content="authenticity_token" name="csrf-param" />
+<<<<<<< HEAD
 <meta content="9qXcFQqyRfyVPNoTwq9dzjgrkIa/aNhStZ60OqyhDT4=" name="csrf-token" />
 
     <link href="https://github.global.ssl.fastly.net/assets/github-a4b8669316fca27ef860204f0bfdd26ccdbdbded.css" media="all" rel="stylesheet" type="text/css" />
     <link href="https://github.global.ssl.fastly.net/assets/github2-0dee3d8edf12d751a2006b97675f8cc9d4105a41.css" media="all" rel="stylesheet" type="text/css" />
+=======
+<meta content="RZYRPqu/cEcyM496AKocUYWPKJqSi0SQ6tHslqlg9AQ=" name="csrf-token" />
+
+    <link href="https://github.global.ssl.fastly.net/assets/github-9c32cb0e21d38269055a33f942ff9ec68a2f8919.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="https://github.global.ssl.fastly.net/assets/github2-9f76a641f02eef586a7bd46f50ee80e1b3a97eac.css" media="all" rel="stylesheet" type="text/css" />
+>>>>>>> 43242ff265f41a8b624aedd8d2f5ec916afe389b
     
 
     
 
       <script src="https://github.global.ssl.fastly.net/assets/frameworks-4de02afe87e22ddc2b3ddfcca3d6c4eb157212d2.js" type="text/javascript"></script>
+<<<<<<< HEAD
       <script src="https://github.global.ssl.fastly.net/assets/github-494eed9df9da6fbcb53bd922a4f9293b35524e29.js" type="text/javascript"></script>
       
       <meta http-equiv="x-pjax-version" content="00d2f60c3a97ce4b997ff19e88149c44">
+=======
+      <script src="https://github.global.ssl.fastly.net/assets/github-71fad640e43413f3920ffc86a8e7c03a666fc1ff.js" type="text/javascript"></script>
+      
+      <meta http-equiv="x-pjax-version" content="ad788fe94c87306986c39ce056722c44">
+>>>>>>> 43242ff265f41a8b624aedd8d2f5ec916afe389b
 
         <link data-pjax-transient rel='permalink' href='/zdavatz/spreadsheet/blob/1944e71f611b8cc095a410d237938d98409e331a/doc/excelfileformat.pdf'>
   <meta property="og:title" content="spreadsheet"/>
@@ -2578,7 +2599,11 @@
     </a>
 
     <ul class="site-footer-links">
+<<<<<<< HEAD
       <li>&copy; 2013 <span title="0.08600s from github-fe134-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+=======
+      <li>&copy; 2013 <span title="0.02818s from github-fe122-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+>>>>>>> 43242ff265f41a8b624aedd8d2f5ec916afe389b
         <li><a href="/site/terms">Terms</a></li>
         <li><a href="/site/privacy">Privacy</a></li>
         <li><a href="/security">Security</a></li>
