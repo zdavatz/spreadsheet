@@ -1,3 +1,13 @@
+### 0.9.5 / 20.11.2013
+
+Author: Malcolm Blyth <trashbat@co.ck>
+Date:   Tue Nov 19 15:14:31 2013 +0000
+
+* Bumped revision
+* Fixed author stringname error (damn this 1 based counting)
+* Updating integration test to check for comments contained within the cells. 
+* Checking also for multiple comments in a sheet
+
 ### 0.9.4 / 12.11.2013
 
 * Updated Manifest.txt
