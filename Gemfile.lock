@@ -5,8 +5,6 @@ GEM
       rake (>= 0.8, < 11.0)
     rake (10.1.0)
     ruby-ole (1.2.11.7)
-    spreadsheet (0.8.9)
-      ruby-ole (>= 1.0)
 
 PLATFORMS
   ruby
@@ -14,4 +12,3 @@ PLATFORMS
 DEPENDENCIES
   hoe (>= 3.4)
   ruby-ole
-  spreadsheet
