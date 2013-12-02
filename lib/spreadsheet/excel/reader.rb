@@ -1142,15 +1142,19 @@ class Reader
   def read_note worksheet, work, pos, len
     #puts "\nDEBUG: found a note record in read_worksheet\n"
     row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack('v5C')
-    if (_objAuthLenFmt == 0)
-       #puts "Picking compressed charset"
-       #Skip to offset due to 'v5C' used above
-       _objAuth = work.unpack('@11C' + (_objAuthLen-1).to_s + 'C')
-    elsif (_objAuthLenFmt == 1)
-       #puts "Picking uncompressed charset"
-       _objAuth = work.unpack('@11S' + (_objAuthLen-1).to_s + 'S')
+    if (_objAuthLen > 0)
+       if (_objAuthLenFmt == 0)
+          #puts "Picking compressed charset"
+          #Skip to offset due to 'v5C' used above
+          _objAuth = work.unpack('@11C' + (_objAuthLen-1).to_s + 'C')
+       elsif (_objAuthLenFmt == 1)
+          #puts "Picking uncompressed charset"
+          _objAuth = work.unpack('@11S' + (_objAuthLen-1).to_s + 'S')
+       end
+       _objAuth = _objAuth.pack('C*')
+    else
+       _objAuth = ""
     end
-    _objAuth = _objAuth.pack('C*')
     @note = Note.new
     @note.length = len
     @note.row    = row
