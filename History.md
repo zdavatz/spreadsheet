@@ -1,3 +1,11 @@
+### 0.9.6 / 02.12.2013
+
+Author: Malcolm Blyth <trashbat@co.ck>
+Date:   Mon Dec 2 11:44:25 2013 +0000
+
+* Fixed issue whereby object author being null caused a gross failure.
+* Now returns object author as an empty string
+
 ### 0.9.5 / 20.11.2013
 
 Author: Malcolm Blyth <trashbat@co.ck>
