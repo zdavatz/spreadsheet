@@ -1365,6 +1365,13 @@ module Spreadsheet
       assert_equal(:visible, book2.worksheet(1).visibility)
     end
 
+    def test_text_drawing
+      path = File.join @data, 'test_text_drawing.xls'
+      book = Spreadsheet.open path
+      assert_nothing_raised do
+        book.worksheet(0).row(0)
+      end
+    end
     private
 
     # Validates the workbook's SST
