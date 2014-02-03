@@ -60,7 +60,6 @@ Floats returned for any number.
 * Formula Support
 * Document Modification: Formulas
 * Write-Support: BIFF5
-* Ruby 1.9 Support;
 * Remove backward compatibility code
 
 Note: Spreadsheet supports Ruby 1.8.6, 1.8.7, 1.9.2, 1.9.3
@@ -70,7 +69,6 @@ You will get a deprecated warning about iconv when using spreadsheet with Ruby
 
 ## Dependencies
 
-* ruby 1.8
 * [ruby-ole](http://code.google.com/p/ruby-ole/)
 
 
