@@ -1,3 +1,11 @@
+### 0.9.7 / 04.02.2014
+
+* Avoid exception when reading text objects
+* Add test for drawings with text (currenty broken)
+* Restore xlsopcodes script which had been mangled in previous commits
+* Remove ruby 1.9 from roadmap, it's already working fine
+* Fix excel file format documentation which had been mangled in previous commits
+
 ### 0.9.6 / 02.12.2013
 
 Author: Malcolm Blyth <trashbat@co.ck>
