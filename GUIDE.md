@@ -169,6 +169,12 @@ end
 book.write '/path/to/output/excel-file.xls'
 ```
 
+Or you can directly access the cell that you want and add your text on it:
+
+```ruby
+sheet.rows[2][1] = "X"
+```
+
 ## Date and DateTime
 Excel does not know a separate Datatype for Dates. Instead it encodes Dates
 into standard floating-point numbers and recognizes a Date-Cell by its
