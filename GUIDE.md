@@ -323,7 +323,7 @@ Again, you will have to manually uninstall the spreadsheet-excel library.
 
 If you perform fancy formatting, you may run into trouble as the
 Format implementation has changed considerably. If that is the case, please
-drop me a line at hannes.wyss@gmail.com and I will try to help you. Don't
+drop me a line at "zdavatz at ywesee dot com" and I will try to help you. Don't
 forget to include the offending code-snippet!
 
 All compatibility code is deprecated and will be removed in version 1.0.0
