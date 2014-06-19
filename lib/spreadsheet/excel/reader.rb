@@ -9,6 +9,10 @@ require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/sst_entry'
 require 'spreadsheet/excel/worksheet'
 
+require 'stringio'
+require 'zip'
+require 'nokogiri'
+
 module Spreadsheet
   module Excel
 ##
@@ -107,6 +111,7 @@ class Reader
     @opts[:memoization]
   end
   def postread_workbook
+    finish_theme
     sheets = @workbook.worksheets
     sheets.each_with_index do |sheet, idx|
       offset = sheet.offset
@@ -309,6 +314,7 @@ class Reader
     font.outline    = opts & 0x0010
     font.shadow     = opts & 0x0020
     font.color      = COLOR_CODES[color] || :text
+    font.color_index = color
     font.escapement = ESCAPEMENT_TYPES[escapement]
     font.underline  = UNDERLINE_TYPES[underline]
     font.family     = FONT_FAMILIES[family]
@@ -836,8 +842,19 @@ class Reader
         read_format work, pos, len
       when :font       # ●● FONT ➜ 6.43
         read_font work, pos, len
+      when :palette
+        read_palette work
+      when :xfext
+        read_xfext work
+      when :theme
+        read_theme work
+      when :continuefrt12
+        case previous_op
+          when :theme
+            continue_theme work
+        end
       end
-      previous_op = op unless op == :continue
+      previous_op = op unless [:continue, :continuefrt12].include?(op)
     end
   end
   def read_worksheet worksheet, offset
@@ -1106,7 +1123,8 @@ class Reader
     fmt.number_format = @formats[numfmt]
     ## this appears to be undocumented: the first 4 fonts seem to be accessed
     #  with a 0-based index, but all subsequent font indices are 1-based.
-    fmt.font = @workbook.font(font_idx > 3 ? font_idx - 1 : font_idx)
+    adjusted_font_idx = font_idx > 3 ? font_idx - 1 : font_idx
+    fmt.font = @workbook.font(adjusted_font_idx)
     fmt.horizontal_align = NGILA_H_FX[xf_align & 0x07]
     fmt.text_wrap = xf_align & 0x08 > 0
     fmt.vertical_align = NGILA_V_FX[xf_align & 0x70]
@@ -1136,8 +1154,117 @@ class Reader
     	fmt.pattern        = (xf_brdcolors & 0xfc000000) >> 26
 		end
     fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
+    fmt.pattern_fg_color_xf_index = xf_pattern & 0x007f
     fmt.pattern_bg_color = COLOR_CODES[(xf_pattern & 0x3f80) >> 7] || :pattern_bg
     @workbook.add_format fmt
+  end
+  def read_xfext work
+    # XFEXT: XF Extension (87Dh)
+    # Offset        Name  Size
+    #      4          rt     2 ￼Record type; this matches the BIFF rt in the first two bytes of the record; =087Dh
+    #      6    grbitFrt     2  FRT cell reference flag; =0 currently
+    #      8  (Reserved)     8  Currently not used, and set to 0
+    #     16     version     2  Record version; =0 currently – Office Excel 2007 will ignore this record on load if not 0.
+    #     18        ixfe     2  Index of to XF record this extension modifies
+    #     20  (Reserved)     2  Currently not used, and set to 0
+    #     22       cexts     2  Number of extension properties that follow
+    #     24         rgb   var  Array of extension properties.
+    xf_id, num = work.unpack('@14vxxv')
+    offset = 20
+    xf = @workbook.format(xf_id)
+
+    num.times do
+      # 0  extType  2  Indicates extension property type
+      # 2  cb       2  Length of this extension in bytes including header.
+      type, ext_len = work.unpack("@#{offset}vv")
+
+      case (type_key = XF_EXTENSION_TYPES[type])
+        when :rgb_fg_color # xfextRGBForeColor
+          # 4  rgbColor  4 ￼rgb color (alpha is ignored)
+          rgb = work.unpack("@#{offset + 4}N")
+          color = rgb_hex(rgb)
+          xf.extension[:rgb_fg_color] = color
+          #puts "adding xf_ext for xf #{xf_id}, xfextRGBForeColor #{color}, original #{rgb}"
+        when :fg_color, :text_color # xfextForeColor, xfextTextColor
+          # 4   xclrType    2 ￼ Color type
+          # 6   nTintShade  2   (signed) tint and shade value
+          # 8   xclrValue   4   Color value – value based on color type
+          # 10  (Reserved)  8   Reserved; not used
+          color_type, tint, color_value = work.unpack("@#{offset + 4}vs<V")
+
+          color = case (color_type_sym = XF_EXTENSION_COLOR_TYPES[color_type])
+                    when :auto
+                      'ffffff'
+                    when :indexed, :themed
+                      color_value
+                    when :rgb
+                      color_rgb_value = work.unpack("@#{offset + 8}N").first
+                      rgb_hex(color_rgb_value)
+                    else
+                      raise 'not_implemented'
+                  end
+
+          # This value is used to represent how the color should be tinted or shaded.
+          # This value is ranges from (-1.0 to 1.0). Positive values make the color value lighter,
+          # negative values make the color value darker. A 0.0 value means do not tint/shade the color.
+          tint = tint.to_f * (1.0 / (tint < 0 ? 32768.0 : 32767.0)) # Scaling signed short to range of -1..1
+
+          xf.extension[type_key] = { color_type: color_type_sym, tint: tint, color: color }
+          #puts "adding fx_ext for #{xf_id} type :#{type_key}, color type :#{color_type}, color ##{color} tint #{tint}"
+        else
+          nil # not implemented yet
+      end
+
+      offset += ext_len
+    end
+  end
+  def read_palette work
+    # Offset  Size  Contents
+    #      0     2  Number of following colours (nm). Contains 16 in BIFF3-BIFF4 and 56 in BIFF5-BIFF8.
+    #      2  4∙nm  List of nm RGB colours (➜ 2.5.4)
+    palette_length = work.unpack('v1').first
+    palette_bin    = work.unpack("xxN#{palette_length}") # Excel uses big-endian for colors
+
+    result = palette_bin.map { |color_bin| rgb_hex(color_bin) }
+
+    result.each_with_index do |color, idx|
+      idx = idx + 8 # built-in color indexes start at 0x08
+      #puts "adding color #{color} at idx #{idx}"
+      @workbook.palette[idx] = color
+    end
+  end
+  def read_theme work
+    # Theme (896h), Microsoft Office Excel 97-2007 Binary File Format (.xls) Specification Page 264 of 349
+    # Offset  Name            Size   Contents
+    # 4       rt              2      Record type; this matches the BIFF rt in the first two bytes of the record; =0896h
+    # 6       grbitFrt        2      FRT cell reference flag; =0 currently
+    # 8       (Reserved)      8      Currently not used, and set to 0
+    # 16      dwThemeVersion  8      default theme version; =0 if custom theme
+    # 24      rgb             var    beginning of serialized package bytes
+
+    # If the theme version is 0 then the document uses a custom theme which will be serialized to a byte stream containing the zip package with the theme contents
+    # Don't have time to implement this yet, so this is to warn me if support for this feature is really needed
+    return unless work.unpack('v v x8 V')[2] == 0
+    @theme = work.byteslice(16..-1)
+  end
+  def continue_theme work
+    @theme << work.byteslice(12..-1)
+  end
+  def finish_theme
+    File.open('/Users/Marti/Sites/mediacatalog/feeds/theme.zip', 'wb') { |o| o.write @theme }
+    buffer = StringIO.new(@theme)
+    zip = Zip::InputStream.new(buffer)
+
+    while (e = zip.get_next_entry).present?
+      xml = e.get_input_stream.read if e.name == 'theme/theme/theme1.xml'
+    end
+
+    Nokogiri::XML(xml).xpath('.//a:clrScheme/*').each do |e|
+      key = "a_#{e.name}".to_sym
+      vals = { val: e.child.attr('val') }
+      vals[:lastClr] = e.child.attr('lastClr') if e.child.attr('lastClr').present?
+      @workbook.theme[key] = vals
+    end
   end
   def read_note worksheet, work, pos, len
     #puts "\nDEBUG: found a note record in read_worksheet\n"

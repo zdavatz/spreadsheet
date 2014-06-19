@@ -14,6 +14,8 @@ spec = Gem::Specification.new do |s|
    s.executables << "xlsopcodes"
 
    s.add_dependency "ruby-ole"
+   s.add_dependency 'rubyzip', '>= 1.0.0'
+   s.add_dependency 'nokogiri', '>= 1.4.4'
    s.add_development_dependency "hoe"
 
    s.homepage	 = "https://github.com/zdavatz/spreadsheet/"

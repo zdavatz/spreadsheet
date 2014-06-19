@@ -12,13 +12,14 @@ module Spreadsheet
   #                   Row#default_format or Worksheet#default_format.
   class Workbook
     include Spreadsheet::Encodings
-    attr_reader :io, :worksheets, :formats, :fonts, :palette
+    attr_reader :io, :worksheets, :formats, :fonts, :palette, :theme
     attr_accessor :active_worksheet, :encoding, :default_format, :version
     def initialize io = nil, opts={:default_format => Format.new}
       @worksheets = []
       @io = io
       @fonts = []
       @palette = {}
+      @theme = {}
       @formats = []
       @formats_set = {}
       if @default_format = opts[:default_format]
