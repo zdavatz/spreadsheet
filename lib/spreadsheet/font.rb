@@ -19,6 +19,7 @@ module Spreadsheet
     ##
     # Font color
     colors :color
+    attr_accessor :color_index
     ##
     # Font weight
     # Valid values: :normal, :bold or any positive Integer.
@@ -64,6 +65,7 @@ module Spreadsheet
     def initialize name, opts={}
       self.name = name
       @color = :text
+      @color_index = nil
       @previous_fast_key = nil
       @size = nil
       @weight = nil

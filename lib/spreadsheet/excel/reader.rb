@@ -9,6 +9,10 @@ require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/sst_entry'
 require 'spreadsheet/excel/worksheet'
 
+require 'stringio'
+require 'zip'
+require 'nokogiri'
+
 module Spreadsheet
   module Excel
 ##
@@ -113,6 +117,7 @@ class Reader
     @opts[:memoization]
   end
   def postread_workbook
+    finish_theme if @theme
     sheets = @workbook.worksheets
     sheets.each_with_index do |sheet, idx|
       offset = sheet.offset
@@ -315,6 +320,7 @@ class Reader
     font.outline    = opts & 0x0010
     font.shadow     = opts & 0x0020
     font.color      = COLOR_CODES[color] || :text
+    font.color_index = color
     font.escapement = ESCAPEMENT_TYPES[escapement]
     font.underline  = UNDERLINE_TYPES[underline]
     font.family     = FONT_FAMILIES[family]
@@ -842,8 +848,19 @@ class Reader
         read_format work, pos, len
       when :font       # ●● FONT ➜ 6.43
         read_font work, pos, len
+      when :palette
+        read_palette work
+      when :xfext
+        read_xfext work
+      when :theme
+        read_theme work
+      when :continuefrt12
+        case previous_op
+          when :theme
+            continue_theme work
+        end
       end
-      previous_op = op unless op == :continue
+      previous_op = op unless [:continue, :continuefrt12].include?(op)
     end
   end
   def read_worksheet worksheet, offset
@@ -1112,7 +1129,8 @@ class Reader
     fmt.number_format = @formats[numfmt]
     ## this appears to be undocumented: the first 4 fonts seem to be accessed
     #  with a 0-based index, but all subsequent font indices are 1-based.
-    fmt.font = @workbook.font(font_idx > 3 ? font_idx - 1 : font_idx)
+    adjusted_font_idx = font_idx > 3 ? font_idx - 1 : font_idx
+    fmt.font = @workbook.font(adjusted_font_idx)
     fmt.horizontal_align = NGILA_H_FX[xf_align & 0x07]
     fmt.text_wrap = xf_align & 0x08 > 0
     fmt.vertical_align = NGILA_V_FX[xf_align & 0x70]
@@ -1139,11 +1157,193 @@ class Reader
     	fmt.bottom_color   = COLOR_CODES[(xf_brdcolors & 0x00003f80) >> 7] || :black
     	fmt.diagonal_color = COLOR_CODES[(xf_brdcolors & 0x001fc000) >> 14] || :black
     	#fmt.diagonal_style = COLOR_CODES[xf_brdcolors & 0x01e00000]
-    	fmt.pattern        = (xf_brdcolors & 0xfc000000) >> 26
+    	fmt.pattern        = ptrn_idx = (xf_brdcolors & 0xfc000000) >> 26
+    	fmt.pattern_name   = XF_PATTERN_TYPES[ptrn_idx]
 		end
-    fmt.pattern_fg_color = COLOR_CODES[xf_pattern & 0x007f] || :border
-    fmt.pattern_bg_color = COLOR_CODES[(xf_pattern & 0x3f80) >> 7] || :pattern_bg
+    fmt.pattern_fg_color_idx = fg_idx = xf_pattern & 0x007f
+    fmt.pattern_fg_color = COLOR_CODES[fg_idx] || :border
+
+    fmt.pattern_bg_color_idx = bg_idx = (xf_pattern & 0x3f80) >> 7
+    fmt.pattern_bg_color = COLOR_CODES[bg_idx] || :pattern_bg
+
     @workbook.add_format fmt
+  end
+  def read_xfext work
+    # XFEXT: XF Extension (87Dh)
+    # Offset        Name  Size
+    #      4          rt     2 ￼Record type; this matches the BIFF rt in the first two bytes of the record; =087Dh
+    #      6    grbitFrt     2  FRT cell reference flag; =0 currently
+    #      8  (Reserved)     8  Currently not used, and set to 0
+    #     16     version     2  Record version; =0 currently – Office Excel 2007 will ignore this record on load if not 0.
+    #     18        ixfe     2  Index of to XF record this extension modifies
+    #     20  (Reserved)     2  Currently not used, and set to 0
+    #     22       cexts     2  Number of extension properties that follow
+    #     24         rgb   var  Array of extension properties.
+    xf_id, num = work.unpack('@14vxxv')
+    offset = 20
+    xf = @workbook.format(xf_id)
+
+    unless xf
+      puts "Extension reader could not find corresponding XF with id #{xf_id}"
+      return
+    end
+
+    num.times do
+      # 0  extType  2  Indicates extension property type
+      # 2  cb       2  Length of this extension in bytes including header.
+      type, ext_len = work.unpack("@#{offset}vv")
+
+      case (type_key = XF_EXTENSION_TYPES[type])
+        when :rgb_fg_color, :rgb_bg_color
+          # 4  rgbColor  4 ￼rgb color (alpha is ignored)
+          rgb = work.unpack("@#{offset + 4}N")
+          color = rgb_hex(rgb)
+          xf.extension[type_key] = color
+          #puts "adding xf_ext for xf #{xf_id}, xfextRGBForeColor #{color}, original #{rgb}"
+
+        when :fg_color, :bg_color, :text_color # xfextForeColor, xfextTextColor
+          # 4   xclrType    2 ￼ Color type
+          # 6   nTintShade  2   (signed) tint and shade value
+          # 8   xclrValue   4   Color value – value based on color type
+          # 10  (Reserved)  8   Reserved; not used
+          color_type, tint_raw, color_value = work.unpack("@#{offset + 4}vs<V")
+
+          color_type_sym = XF_EXTENSION_COLOR_TYPES[color_type]
+          color_value = work.unpack("@#{offset + 8}N").first if color_type_sym == :rgb
+          color = detect_color(color_value, color_type_sym)
+
+          xf.extension[type_key] = { color_type: color_type_sym, tint: calculate_tint(tint_raw), color: color }
+          #puts "adding fx_ext for #{xf_id} type :#{type_key}, color type :#{color_type}, color ##{color} tint #{tint}"
+
+        when :gradient_tint
+          # 4   type             4  Gradient type. Two gradient types are currently supported – linear (0) and rectangular (1)
+          # 8   numDegree        8  Gradient angle. Used for linear gradients to determine the angle at which the gradient strokes will be drawn (vertical, horizontal, or diagonal)
+          # 16  numFillToLeft    8  Left coordinate. Used for rectangular gradients to determine the coordinates of the rectangle where the gradient should converge
+          # 24  numFillToRight   8  Right coordinate. Used for rectangular gradients to determine the coordinates of the rectangle where the gradient should converge
+          # 32  numFillToTop     8  Top coordinate. Used for rectangular gradients to determine the coordinates of the rectangle where the gradient should converge
+          # 40  numFillToBottom  8  Bottom coordinate. Used for rectangular gradients to determine the coordinates of the rectangle where the gradient should converge
+          # 48  cGradStops       4  The number of gradient stop definitions to follow. A valid gradient must have at least one gradient stop and no more than 256
+          # 52  rgGradStops      *  Array of gradient stops
+
+          type, num_degree, num_fill_to_left, num_fill_to_right, num_fill_to_top, num_fill_to_bottom, c_grad_stops = work.unpack("@#{offset + 4}NEEEEEL")
+          gradient_type_sym = detect_gradient_type(type)
+
+          result = {
+              type:   gradient_type_sym,
+              degree: num_degree
+          }
+
+          if gradient_type_sym == :rectangular
+            result = result.merge(
+              fill_to_left:   num_fill_to_left,
+              fill_to_right:  num_fill_to_right,
+              fill_to_top:    num_fill_to_top,
+              fill_to_bottom: num_fill_to_bottom
+            )
+          end
+
+          color_stops = []
+          c_grad_stops.times do |n|
+            grad_array_len = 22 * n
+            # 0   xclrType     2  Color type. See previous definition for Excel color types/values
+            # 2   xclrValue    4  Color value. See previous definition for Excel color types/values
+            # 6   numPosition  8  Position within the gradient range where this gradient stop‘s color should begin
+            # 14  numTint      8  Tint and shade value. Same as nTintShade but expressed as double. This value is used to represent how the color should be tinted or shaded. This value is ranges from (-1.0 to 1.0). Positive values make the color value lighter, negative values make the color value darker. A 0.0 value means do not tint/shade the color.
+            x_clr_type, x_clr_value, num_position, num_tint = work.unpack("@#{offset + 52 + grad_array_len}sNEE")
+            color_type_sym = XF_EXTENSION_COLOR_TYPES[x_clr_type]
+            color_stops << {
+                color_type: color_type_sym,
+                color: detect_color(x_clr_value, color_type_sym),
+                position: num_position,
+                tint: num_tint
+            }
+          end
+          result = result.merge(stops: color_stops)
+
+          xf.extension[type_key] = result
+        else
+          nil # not implemented yet
+      end
+
+      offset += ext_len
+    end
+  end
+
+  def detect_gradient_type(val)
+    case val
+      when 0 then :linear
+      when 1 then :rectangular
+      else val
+    end
+  end
+
+  def detect_color(color_value, color_type_sym)
+    case color_type_sym
+      when :auto
+        'ffffff'
+      when :indexed, :themed
+        color_value
+      when :rgb
+        rgb_hex(color_value)
+      else
+        raise 'not_implemented'
+    end
+  end
+
+  def calculate_tint(tint_raw)
+    # This value is used to represent how the color should be tinted or shaded.
+    # This value is ranges from (-1.0 to 1.0). Positive values make the color value lighter,
+    # negative values make the color value darker. A 0.0 value means do not tint/shade the color.
+    tint_raw.to_f * (1.0 / (tint_raw < 0 ? 32768.0 : 32767.0)) # Scaling signed short to range of -1..1
+  end
+
+  def read_palette work
+    # Offset  Size  Contents
+    #      0     2  Number of following colours (nm). Contains 16 in BIFF3-BIFF4 and 56 in BIFF5-BIFF8.
+    #      2  4∙nm  List of nm RGB colours (➜ 2.5.4)
+    palette_length = work.unpack('v1').first
+    palette_bin    = work.unpack("xxN#{palette_length}") # Excel uses big-endian for colors
+
+    result = palette_bin.map { |color_bin| rgb_hex(color_bin) }
+
+    result.each_with_index do |color, idx|
+      idx = idx + 8 # built-in color indexes start at 0x08
+      #puts "adding color #{color} at idx #{idx}"
+      @workbook.palette[idx] = color
+    end
+  end
+  def read_theme work
+    # Theme (896h), Microsoft Office Excel 97-2007 Binary File Format (.xls) Specification Page 264 of 349
+    # Offset  Name            Size   Contents
+    # 4       rt              2      Record type; this matches the BIFF rt in the first two bytes of the record; =0896h
+    # 6       grbitFrt        2      FRT cell reference flag; =0 currently
+    # 8       (Reserved)      8      Currently not used, and set to 0
+    # 16      dwThemeVersion  8      default theme version; =0 if custom theme
+    # 24      rgb             var    beginning of serialized package bytes
+
+    # If the theme version is 0 then the document uses a custom theme which will be serialized to a byte stream containing the zip package with the theme contents
+    # Don't have time to implement this yet, so this is to warn me if support for this feature is really needed
+    return unless work.unpack('vvx8V')[2] == 0
+    @theme = work.byteslice(16..-1)
+  end
+  def continue_theme work
+    @theme << work.byteslice(12..-1)
+  end
+  def finish_theme
+    zip = Zip::InputStream.new(StringIO.new(@theme))
+
+    while (e = zip.get_next_entry)
+      xml = e.get_input_stream.read if e.name == 'theme/theme/theme1.xml'
+    end
+
+    Nokogiri::XML(xml).xpath('.//a:clrScheme/*').each do |e|
+      key = "a_#{e.name}".to_sym
+      vals = { val: e.child.attr('val') }
+      vals[:lastClr] = e.child.attr('lastClr') if e.child.attr('lastClr')
+      @workbook.theme[key] = vals
+    end
+
+    @theme = nil
   end
   def read_note worksheet, work, pos, len
     #puts "\nDEBUG: found a note record in read_worksheet\n"
