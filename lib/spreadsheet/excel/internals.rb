@@ -34,10 +34,10 @@ module Internals
     866 => "IBM866", #(Cyrillic (Russian))
     869 => "IBM869", #(Greek (Modern))
     874 => "WINDOWS-874", #(Thai)
-    932 => "WINDOWS-932", #(Japanese Shift-JIS)
-    936 => "WINDOWS-936", #(Chinese Simplified GBK)
-    949 => "WINDOWS-949", #(Korean (Wansung))
-    950 => "WINDOWS-950", #(Chinese Traditional BIG5)
+    932 => "Windows-31J", #(Japanese Shift-JIS)
+    936 => "GBK", #(Chinese Simplified GBK)
+    949 => "CP949", #(Korean (Wansung))
+    950 => "CP950", #(Chinese Traditional BIG5)
     1200 => "UTF-16LE", #(BIFF8)
     1250 => "WINDOWS-1250", #(Latin II) (Central European)
     1251 => "WINDOWS-1251", #(Cyrillic)
@@ -380,9 +380,9 @@ module Internals
     :wsbool       => 0x0081, # ○  WSBOOL ➜ 6.113
     :defcolwidth  => 0x0055, # ○  DEFCOLWIDTH ➜ 6.29
     :sort         => 0x0090, # ○  SORT ➜ 6.95
-    :note         => 0x001c,                                                                                                      
-    :obj          => 0x005d,                                                                                                      
-    :drawing      => 0x00EC,                                                                                                      
+    :note         => 0x001c,
+    :obj          => 0x005d,
+    :drawing      => 0x00EC,
     :txo          => 0x01B6,
   }
 =begin ## unknown opcodes
@@ -441,7 +441,7 @@ module Internals
 		0x0d	=>	:slanted_medium_dash_dotted
 	}
 # ensure reader always gets a valid line style
-	XF_BORDER_LINE_STYLES.default = :none 
+	XF_BORDER_LINE_STYLES.default = :none
 	SELYTS_ENIL_REDROB_FX = XF_BORDER_LINE_STYLES.invert
 	SELYTS_ENIL_REDROB_FX.default = 0x00
   OPCODE_SIZE = 4
