@@ -1,3 +1,11 @@
+### 0.9.8 / 19.08.2014
+
+Author: PikachuEXE <pikachuexe@gmail.com>
+Date:   Tue Aug 19 09:54:30 2014 +0800
+
+* Fix Encoding for MRI 2.1.0
+
+
 ### 0.9.7 / 04.02.2014
 
 * Avoid exception when reading text objects
