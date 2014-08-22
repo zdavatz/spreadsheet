@@ -66,7 +66,9 @@ module Spreadsheet
           yield open(fh)
         end
       else
-        open File.open(io_or_path, mode)
+        File.open(io_or_path, mode) do |fh|
+          return open(fh)
+        end
       end
     end
 
