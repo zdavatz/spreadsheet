@@ -24,6 +24,8 @@
 #             8006 Zürich
 ###           Switzerland
 
+require 'spreadsheet/errors'
+
 require 'spreadsheet/excel/workbook'
 require 'spreadsheet/excel/reader'
 require 'spreadsheet/excel/rgb'

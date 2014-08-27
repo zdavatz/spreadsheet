@@ -273,7 +273,9 @@ class Workbook < Spreadsheet::Writer
     if RUBY_VERSION >= '1.9' && enc.is_a?(Encoding)
       enc = enc.name.upcase
     end
-    cp = SEGAPEDOC[enc] or raise "Invalid or Unknown Codepage '#{enc}'"
+    cp = SEGAPEDOC.fetch(enc) do
+      raise Spreadsheet::Errors::UnknownCodepage, "Invalid or Unknown Codepage '#{enc}'"
+    end
     write_op writer, 0x0042, [cp].pack('v')
   end
   def write_eof workbook, writer

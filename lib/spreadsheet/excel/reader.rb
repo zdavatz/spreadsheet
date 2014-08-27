@@ -71,10 +71,16 @@ class Reader
     value
   end
   def encoding codepage_id
-    name = CODEPAGES.fetch(codepage_id) {
-      raise "Unknown Codepage 0x%04x" % codepage_id }
+    name = CODEPAGES.fetch(codepage_id) do
+      raise Spreadsheet::Errors::UnknownCodepage, "Unknown Codepage 0x%04x" % codepage_id
+    end
+
     if RUBY_VERSION >= '1.9'
-      Encoding.find name
+      begin
+        Encoding.find name
+      rescue ArgumentError
+        raise Spreadsheet::Errors::UnsupportedEncoding, "Unsupported encoding with name '#{name}'"
+      end
     else
       name
     end
@@ -933,7 +939,7 @@ class Reader
           set_missing_row_address worksheet, work, pos, len
         end
       end
-      previous = op 
+      previous = op
       #previous = op unless op == :continue
     end
   end
