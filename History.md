@@ -1,10 +1,17 @@
+### 0.9.9 / 28.08.2014
+
+Author: PikachuEXE <pikachuexe@gmail.com>
+Date:   Wed Aug 27 09:55:41 2014 +0800
+
+* Add custom error classes
+* Raise custom error for unknown code page or unsupported encoding
+
 ### 0.9.8 / 19.08.2014
 
 Author: PikachuEXE <pikachuexe@gmail.com>
 Date:   Tue Aug 19 09:54:30 2014 +0800
 
 * Fix Encoding for MRI 2.1.0
-
 
 ### 0.9.7 / 04.02.2014
 
