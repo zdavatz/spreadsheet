@@ -19,6 +19,7 @@ lib/spreadsheet/column.rb
 lib/spreadsheet/compatibility.rb
 lib/spreadsheet/datatypes.rb
 lib/spreadsheet/encodings.rb
+lib/spreadsheet/errors.rb
 lib/spreadsheet/excel.rb
 lib/spreadsheet/excel/error.rb
 lib/spreadsheet/excel/internals.rb

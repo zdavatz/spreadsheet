@@ -1,3 +1,7 @@
+### 1.0.0 / 29.08.2014
+
+* added spreadsheet/errors.rb to Manifest.txt
+
 ### 0.9.9 / 28.08.2014
 
 Author: PikachuEXE <pikachuexe@gmail.com>
