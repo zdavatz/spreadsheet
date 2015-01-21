@@ -102,11 +102,11 @@ class Worksheet < Spreadsheet::Worksheet
     compact = @rows.compact
     first_rows = compact.collect do |row| row.first_used end.compact.min
     first_addrs = @row_addresses.compact.collect do |addr|
-      addr[:first_used] end.min
+      addr[:first_used] end.compact.min
     @dimensions[2] = [ first_rows, first_addrs ].compact.min || 0
     last_rows = compact.collect do |row| row.first_unused end.max
     last_addrs = @row_addresses.compact.collect do |addr|
-      addr[:first_unused] end.max
+      addr[:first_unused] end.compact.max
     @dimensions[3] = [last_rows, last_addrs].compact.max || 0
     @dimensions
   end
