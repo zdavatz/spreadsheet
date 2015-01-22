@@ -1,3 +1,10 @@
+### 1.0.1 / 22.01.2015
+
+Author: Sergey Konotopov <lalalalalala@gmail.com>
+Date:   Wed Jan 21 13:19:56 2015 +0300
+
+* Fixing Excel::Worksheet#dimensions
+
 ### 1.0.0 / 29.08.2014
 
 * added spreadsheet/errors.rb to Manifest.txt

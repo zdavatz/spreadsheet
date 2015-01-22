@@ -17,7 +17,7 @@
 #
 #   Contact Information:
 #
-#     E-Mail: mhatakeyama@ywesee.com, zdavatz@ywesee.com
+#     E-Mail: zdavatz@ywesee.com
 #     P-Mail: ywesee GmbH
 #             Zeno R.R. Davatz
 #             Winterthurerstrasse 52
@@ -45,7 +45,7 @@ module Spreadsheet
 
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '1.0.0'
+  VERSION = '1.0.1'
 
   ##
   # Default client Encoding. Change this value if your application uses a
