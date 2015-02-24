@@ -279,6 +279,16 @@ book.write "out.xls"
 Notes
 * The outline_level should be under 8, which is due to the Excel data format.
 
+## Allow access to rendered output instead of just writing a file
+
+```ruby
+file_contents = StringIO.new
+view_context.write_excel_format file_contents
+send_data file_contents.string.force_encoding('binary'), filename: "the-output-file.xls"
+```
+
+Also see: https://github.com/zdavatz/spreadsheet/issues/125#issuecomment-75541041
+
 ## More about Encodings
 Spreadsheet assumes it's running on Ruby 1.8 with Iconv-support. It is your
 responsibility to handle Conversion Errors, or to prevent them e.g. by using
