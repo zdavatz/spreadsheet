@@ -283,8 +283,7 @@ Notes
 
 ```ruby
 file_contents = StringIO.new
-view_context.write_excel_format file_contents
-send_data file_contents.string.force_encoding('binary'), filename: "the-output-file.xls"
+book.write file_contents # => Now file_contents contains the rendered file output
 ```
 
 Also see: https://github.com/zdavatz/spreadsheet/issues/125#issuecomment-75541041
