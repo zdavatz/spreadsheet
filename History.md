@@ -1,3 +1,12 @@
+### 1.0.2 / 05.03.2015
+
+Author: cantin <cantin2010@gmail.com>
+Date:   Thu Mar 5 16:13:59 2015 +0800
+
+* add Rational support
+* add rational requirement
+* use old rational syntax in test
+
 ### 1.0.1 / 22.01.2015
 
 Author: Sergey Konotopov <lalalalalala@gmail.com>
