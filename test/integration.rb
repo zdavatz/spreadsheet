@@ -1145,7 +1145,7 @@ module Spreadsheet
       r3 = Rational(20, 3)
       r4 = Rational(1238237, 378122)
       r5 = Rational(200)
-      r6 = Rational(10.12)
+      r6 = Rational(1012, 100)
 
       book = Spreadsheet::Workbook.new
       sheet = book.create_worksheet
