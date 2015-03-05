@@ -11,7 +11,7 @@ The code can be found here:
 
 https://github.com/zdavatz/spreadsheet
 
-For Non-GPLv3 commercial licencing, please see:
+For Non-GPLv3 commercial licensing, please see:
 
 http://www.spreadsheet.ch
 
