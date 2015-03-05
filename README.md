@@ -3,8 +3,6 @@
 ## Getting Started
 [![Build Status](https://secure.travis-ci.org/zdavatz/spreadsheet.png)](http://travis-ci.org/zdavatz/spreadsheet)
 
-https://github.com/zdavatz/spreadsheet
-
 The Mailing List can be found here:
 
 http://groups.google.com/group/rubyspreadsheet
@@ -12,14 +10,6 @@ http://groups.google.com/group/rubyspreadsheet
 The code can be found here:
 
 https://github.com/zdavatz/spreadsheet
-
-For a viewable directory of all recent changes, please see:
-
-http://scm.ywesee.com/?p=spreadsheet/.git;a=summary
-
-To get a graphical overview of the Library please see
-
-http://spreadsheet.rubyforge.org/spreadsheet.jpeg
 
 For Non-GPLv3 commercial licencing, please see:
 
