@@ -1,5 +1,6 @@
 # Spreadsheet
 
+## Getting Started
 [![Build Status](https://secure.travis-ci.org/zdavatz/spreadsheet.png)](http://travis-ci.org/zdavatz/spreadsheet)
 
 https://github.com/zdavatz/spreadsheet
