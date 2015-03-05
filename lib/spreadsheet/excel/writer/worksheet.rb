@@ -3,6 +3,7 @@ require 'spreadsheet/excel/writer/biff8'
 require 'spreadsheet/excel/internals'
 require 'spreadsheet/excel/internals/biff8'
 require 'bigdecimal'
+require 'rational' #for Ruby 1.8.x
 
 module Spreadsheet
   module Excel
