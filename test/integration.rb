@@ -1138,6 +1138,36 @@ module Spreadsheet
       assert_equal date1, sheet.row(0).date(0)
       assert_equal datetime1, sheet.row(1).datetime(0)
     end
+
+    def test_rational
+      r1 = Rational(0x1fffffff + 1)
+      r2 = Rational(0xfffffffc + 1)
+      r3 = Rational(20, 3)
+      r4 = Rational(1238237, 378122)
+      r5 = Rational(200)
+      r6 = Rational(10.12)
+
+      book = Spreadsheet::Workbook.new
+      sheet = book.create_worksheet
+      sheet.insert_row 0, [r1, r2, r3]
+      sheet.insert_row 1, [r4, r5, r6]
+
+      path = File.join @var, 'test_rational.xls'
+      book.write path
+
+      assert_nothing_raised do
+        book = Spreadsheet.open path
+      end
+
+      sheet = book.worksheet(0)
+      assert_equal r1, sheet[0, 0]
+      assert_equal r2, sheet[0, 1]
+      assert_equal r3, sheet[0, 2]
+      assert_equal r4, sheet[1, 0]
+      assert_equal r5, sheet[1, 1]
+      assert_equal r6, sheet[1, 2]
+    end
+
     def test_sharedfmla
       path = File.join @data, 'test_formula.xls'
       book = Spreadsheet.open path
