@@ -4,7 +4,7 @@ GEM
     hoe (3.7.1)
       rake (>= 0.8, < 11.0)
     rake (10.1.0)
-    ruby-ole (1.2.11.7)
+    ruby-ole (1.2.11.8)
 
 PLATFORMS
   ruby
