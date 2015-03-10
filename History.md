@@ -1,3 +1,13 @@
+### 1.0.3 / 10.03.2015
+
+Author: Robert Eshleman <c.robert.eshleman@gmail.com>
+Date:   Mon Mar 9 09:47:59 2015 -0400
+
+* Update `ruby-ole` to `1.2.11.8`
+** `ruby-ole` <= `1.2.11.7` throws a duplicated key warning in Ruby 2.2.
+** This commit updates `ruby-ole` to `1.2.11.8`, which fixes this warning.
+** Related discussion: [aquasync/ruby-ole#15] - [aquasync/ruby-ole#15]: https://github.com/aquasync/ruby-ole/issues/15
+
 ### 1.0.2 / 05.03.2015
 
 Author: cantin <cantin2010@gmail.com>
