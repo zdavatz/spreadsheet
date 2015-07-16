@@ -50,7 +50,7 @@ Floats returned for any number.
 * Write-Support: BIFF5
 * Remove backward compatibility code
 
-Note: Spreadsheet supports Ruby 1.8.6, 1.8.7, 1.9.2, 1.9.3
+Note: Spreadsheet supports Ruby 1.8.6, 1.8.7, 1.9.2, 1.9.3, 2.0.0, 2.1.1, 2.2.2
 
 You will get a deprecated warning about iconv when using spreadsheet with Ruby
 1.9.3. So replacing iconv is on the Roadmap as well ;).
