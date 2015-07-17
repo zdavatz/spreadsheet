@@ -63,6 +63,9 @@ class Workbook < Spreadsheet::Workbook
   def date_base
     @date_base ||= DateTime.new 1899, 12, 31
   end
+  def inspect
+    self.worksheets
+  end
   def shared_string idx
     @sst[idx.to_i].content
   end
