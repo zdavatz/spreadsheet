@@ -1,3 +1,10 @@
+### 1.0.4 / 18.07.2015
+
+Author: Edmund Mai <edmundm@crowdtap.com>
+Date:   Fri Jul 17 15:32:47 2015 -0400
+
+* Fixes slow Spreadsheet.open response in console
+
 ### 1.0.3 / 10.03.2015
 
 Author: Robert Eshleman <c.robert.eshleman@gmail.com>
