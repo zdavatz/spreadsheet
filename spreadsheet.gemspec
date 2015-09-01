@@ -1,4 +1,7 @@
-require File.join(File.dirname(__FILE__), 'lib', 'spreadsheet')
+# require File.join(File.dirname(__FILE__), 'lib', 'spreadsheet')
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'spreadsheet'
 
 spec = Gem::Specification.new do |s|
    s.name        = "spreadsheet"
