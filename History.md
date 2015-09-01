@@ -1,3 +1,10 @@
+### 1.0.5 / 01.09.2015
+
+Author: kunashir <kunashir@list.ru>
+Date:   Tue Sep 1 13:12:49 2015 +0300
+
+* add format for nubmer with out #
+
 ### 1.0.4 / 18.07.2015
 
 Author: Edmund Mai <edmundm@crowdtap.com>
