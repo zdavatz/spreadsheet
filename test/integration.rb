@@ -67,6 +67,12 @@ module Spreadsheet
       assert_equal 0, sheet.column_count
       assert_nothing_raised do sheet.inspect end
     end
+    def test_missing_format
+      path = File.join @data, 'test_missing_format.xls'
+      assert_nothing_thrown do
+        workbook = Spreadsheet.open(path, "rb")
+      end
+    end
     def test_version_excel97__excel2010__utf16
       Spreadsheet.client_encoding = 'UTF-16LE'
       assert_equal 'UTF-16LE', Spreadsheet.client_encoding

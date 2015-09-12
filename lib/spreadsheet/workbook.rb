@@ -89,7 +89,7 @@ module Spreadsheet
     def format idx
       case idx
       when Integer
-        @formats[idx] || @default_format
+        @formats[idx] || @default_format || Format.new
       when String
         @formats.find do |fmt| fmt.name == idx end
       end
