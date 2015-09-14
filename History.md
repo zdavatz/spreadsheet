@@ -1,3 +1,10 @@
+### 1.0.6 / 14.09.2015
+
+Author: Yann Plancqueel <yplancqueel@gmail.com>
+Date:   Sat Sep 12 15:32:49 2015 +0200
+
+* bugfix opening a spreadsheet with missing format
+
 ### 1.0.5 / 01.09.2015
 
 Author: kunashir <kunashir@list.ru>
