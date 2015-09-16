@@ -848,8 +848,29 @@ and minimal code that generates this warning. Thanks!
     end
     flags |= 0x0080 # Show outline symbols,
                     # but if [Row|Column]#outline_level = 0 the symbols are not shown.
+    
+    if @worksheet.has_frozen_panel?
+      # See:
+      # OpenOffice.org's Documentation of the Microsoft Excel File FormatExcel 
+      # Versions 2, 3, 4, 5, 95, 97, 2000, XP, 2003
+      # https://www.openoffice.org/sc/excelfileformat.pdf
+      # section 5.110.2
+      flags |= 0x0008 #Panes are frozen (freeze)
+    end
     data = [ flags, 0, 0, 0, 0, 0 ].pack binfmt(:window2)
+        
     write_op opcode(:window2), data
+    if @worksheet.has_frozen_panel?
+      # See:
+      # OpenOffice.org's Documentation of the Microsoft Excel File FormatExcel 
+      # Versions 2, 3, 4, 5, 95, 97, 2000, XP, 2003
+      # https://www.openoffice.org/sc/excelfileformat.pdf
+      # section 5.75
+      puts "[Spreadsheet Freeze] Freeze is being activated"
+      pane_data = [@worksheet.froze_left, @worksheet.froze_top, @worksheet.froze_top, @worksheet.froze_left, 3].pack binfmt(:colinfo)
+      write_op opcode(:pane), pane_data
+    end
+    
   end
 
   def write_merged_cells
