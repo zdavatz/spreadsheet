@@ -30,8 +30,11 @@ module Spreadsheet
     include Enumerable
     attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
+    attr_reader :froze_top, :froze_left
     enum :visibility, :visible, :hidden, :strong_hidden
     def initialize opts={}
+      @froze_top = 0
+      @froze_left = 0
       @default_format = nil
       @selected = opts[:selected]
       @dimensions = [0,0,0,0]
@@ -55,6 +58,14 @@ module Spreadsheet
       @protected = false
       @password_hash = 0
       @visibility = opts[:visibility]
+    end
+    def has_frozen_panel?
+      @froze_top > 0 or @froze_left > 0
+    end
+
+    def freeze!(top, left)
+      @froze_top = top.to_i
+      @froze_left = left.to_i
     end
     def active # :nodoc:
       warn "Worksheet#active is deprecated. Please use Worksheet#selected instead."
