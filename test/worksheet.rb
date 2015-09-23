@@ -108,5 +108,18 @@ module Spreadsheet
       assert_equal 6, @book.formats.length
 
     end
+    
+    def test_freeze_panel!
+      assert_equal 0, @sheet.froze_top
+      assert_equal 0, @sheet.froze_left
+      assert_equal false, @sheet.has_frozen_panel?
+      
+      @sheet.freeze!(2, 3)
+      assert_equal 2, @sheet.froze_top
+      assert_equal 3, @sheet.froze_left
+      assert_equal true, @sheet.has_frozen_panel?
+      
+    end
+    
   end
 end
