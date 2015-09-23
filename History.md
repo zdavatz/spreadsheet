@@ -1,3 +1,15 @@
+### 1.0.7 / 23.09.2015
+
+Author: Leopoldo Lee Agdeppa III <leopoldo.agdeppa@gmail.com>
+Date:   Wed Sep 23 08:24:16 2015 +0800
+
+* Update worksheet.rb
+* Adding Test for Freeze panels
+* Update worksheet.rb
+* Added freeze (freeze panel) functionality
+* Update worksheet.rb
+* Freeze (freeze window) functionality added to worksheet
+
 ### 1.0.6 / 14.09.2015
 
 Author: Yann Plancqueel <yplancqueel@gmail.com>
