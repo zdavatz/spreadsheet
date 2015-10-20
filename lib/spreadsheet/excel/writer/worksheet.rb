@@ -866,7 +866,6 @@ and minimal code that generates this warning. Thanks!
       # Versions 2, 3, 4, 5, 95, 97, 2000, XP, 2003
       # https://www.openoffice.org/sc/excelfileformat.pdf
       # section 5.75
-      puts "[Spreadsheet Freeze] Freeze is being activated"
       pane_data = [@worksheet.froze_left, @worksheet.froze_top, @worksheet.froze_top, @worksheet.froze_left, 3].pack binfmt(:colinfo)
       write_op opcode(:pane), pane_data
     end
