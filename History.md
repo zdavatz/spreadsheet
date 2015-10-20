@@ -1,3 +1,12 @@
+### 1.0.8 / 20.10.2015
+
+commit e9bd1dd34998803b63460f4951e9aa34e569bd8f
+Author: Pierre Laprée <pilap82@users.noreply.github.com>
+Date:   Tue Oct 20 03:12:22 2015 +0200
+
+* Remove stray `puts`
+* A `puts` instruction pollutes the log and doesn't serve any purpose. As such, we propose its removal.
+
 ### 1.0.7 / 23.09.2015
 
 Author: Leopoldo Lee Agdeppa III <leopoldo.agdeppa@gmail.com>
