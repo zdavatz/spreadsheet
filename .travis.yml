@@ -1,12 +1,15 @@
 language: ruby
+sudo: false
+cache: bundler
 before_install:
   - gem install bundler
 bundler_args: --binstubs
-script: "ruby -w ./test/suite.rb"
+script: "bundle exec ruby test/suite.rb"
 rvm:
   - ruby-head
   - 2.0.0
-  - 2.1.1
+  - 2.2.3
+  - 2.1.7
   - 1.9.3
   - 1.9.2
   - 1.8.7
