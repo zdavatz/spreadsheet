@@ -2,16 +2,17 @@
 This guide is meant to get you started using Spreadsheet. By the end of it,
 you should be able to read and write Spreadsheets.
 
-
-## Reading is easy!
-First, make sure all that code is loaded:
+Before you can do anything, you first need to make sure all that code is
+loaded:
 
 ```ruby
 require 'spreadsheet'
 ```
 
-Worksheets come in various Encodings. You need to tell Spreadsheet which
-Encoding you want to deal with. The Default is UTF-8
+## Reading is easy!
+
+Worksheets come in various encodings. You need to tell Spreadsheet which
+encoding you want to deal with. The default is UTF-8
 
 ```ruby
 Spreadsheet.client_encoding = 'UTF-8'
@@ -23,13 +24,13 @@ Let's open a workbook:
 book = Spreadsheet.open '/path/to/an/excel-file.xls'
 ```
 
-We can either access all the Worksheets in a Workbook...
+We can either access all the worksheets in a workbook...
 
 ```ruby
 book.worksheets
 ```
 
-...or access them by index or name (encoded in your client_encoding)
+...or access them by index or name (encoded in your `client_encoding`).
 
 ```ruby
 sheet1 = book.worksheet 0
@@ -37,8 +38,8 @@ sheet2 = book.worksheet 'Sheet1'
 ```
 
 Now you can either iterate over all rows that contain some data. A call to
-Worksheet.each without argument will omit empty rows at the beginning of the
-Worksheet:
+`Worksheet.each` without arguments will omit empty rows at the beginning of the
+worksheet:
 
 ```ruby
 sheet1.each do |row|
@@ -46,7 +47,7 @@ sheet1.each do |row|
 end
 ```
 
-Or you can tell Worksheet how many rows should be omitted at the beginning.
+Or you can tell a worksheet how many rows should be omitted at the beginning.
 The following starts at the 3rd row, regardless of whether or not it or the
 preceding rows contain any data:
 
@@ -62,17 +63,17 @@ Or you can access rows directly, by their index (0-based):
 row = sheet1.row(3)
 ```
 
-To access the values stored in a Row, treat the Row like an Array.
+To access the values stored in a row, treat the row like an array.
 
 ```ruby
 row[0]
 ```
 
--> this will return a String, a Float, an Integer, a Formula, a Link or a Date
-or DateTime object - or nil if the cell is empty.
+This will return a `String`, a `Float`, an `Integer`, a `Formula`, a `Link` or a `Date`
+or `DateTime` object - or `nil` if the cell is empty.
 
-More information about the formatting of a cell can be found in the Format
-with the equivalent index
+More information about the formatting of a cell can be found in the format
+with the equivalent index:
 
 ```ruby
 row.format 2
