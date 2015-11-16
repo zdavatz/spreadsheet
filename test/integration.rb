@@ -1408,6 +1408,37 @@ module Spreadsheet
         book.worksheet(0).row(0)
       end
     end
+
+    def test_compact
+      path = File.join @data, 'test_compact_many_rows.xls'
+      book = Spreadsheet.open path
+      sheets = book.worksheets
+      assert_equal 1, sheets.size
+      sheet = book.worksheet 0
+      assert_instance_of Excel::Worksheet, sheet
+      assert_equal sheet, book.worksheet('Planilha1')
+      assert_equal sheet.dimensions, [0, 65534, 0, 25]
+      sheet.compact!
+      assert_equal sheet.dimensions, [0, 502, 0, 1]
+      path = File.join @data, 'test_sizes.xls'
+      book = Spreadsheet.open path
+      sheet = book.worksheet 0
+      assert_instance_of Excel::Worksheet, sheet
+      assert_equal sheet.dimensions, [1, 38, 1, 15]
+      sheet.compact!
+      assert_equal sheet.dimensions, [1, 3, 1, 3]
+      sheet = book.worksheet 1
+      assert_instance_of Excel::Worksheet, sheet
+      assert_equal sheet.dimensions, [1, 3, 1, 3]
+      sheet.compact!
+      assert_equal sheet.dimensions, [1, 3, 1, 3]
+      sheet = book.worksheet 2
+      assert_instance_of Excel::Worksheet, sheet
+      assert_equal sheet.dimensions, [0, 4, 0, 4]
+      sheet.compact!
+      assert_equal sheet.dimensions, [0, 2, 0, 2]
+    end
+
     private
 
     # Validates the workbook's SST

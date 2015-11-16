@@ -311,6 +311,53 @@ module Spreadsheet
       # FIXME enlarge or dup check
       @merged_cells.push [start_row, end_row, start_col, end_col]
     end
+
+    def compact!
+      recalculate_dimensions
+      
+      # detect first non-nil non-empty row if given first row is empty or nil
+      if row(@dimensions[0]).empty? || row(@dimensions[0]).compact.join('').empty?
+        (@dimensions[0]...@dimensions[1]).each do |i|
+          break unless row(i).empty? || row(i).compact.join('').empty?
+          @dimensions[0] = i
+        end
+      end
+
+      # detect last non-nil non-empty row if given last row is empty or nil
+      if row(@dimensions[1] - 1).empty? || row(@dimensions[1] - 1).compact.join('').empty?
+        i = @dimensions[1] - 1
+        @dimensions[1] = @dimensions[0]
+        # divide and conquer
+        while(i - @dimensions[1] > 1) do
+          if row(i).empty? || row(i).compact.join('').empty?
+            i = @dimensions[1] + (((i - @dimensions[1]) + 1) / 2).to_i
+          else
+            _i = ((i - @dimensions[1]) / 2).to_i + 1
+            @dimensions[1] = i
+            i = i + _i
+          end
+        end
+        @dimensions[1] = i + 1
+      end
+
+      # detect first non-empty non-nil column if first column is empty or nil
+      if (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[@dimensions[2]].nil?}
+        (@dimensions[2]..@dimensions[3]).each do |i|
+          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && (row(j)[i].nil? || row(j)[i].empty?)}
+          @dimensions[2] = i
+        end
+      end
+
+      # detect last non-empty non-nil column if last column is empty or nil
+      if (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[@dimensions[3]].nil?}
+        (@dimensions[2]..@dimensions[3]).reverse_each do |i|
+          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && (row(j)[i].nil? || row(j)[i].empty?)}
+          @dimensions[3] = i
+        end
+        @dimensions[3] = @dimensions[3]
+      end
+    end
+
     private
     def index_of_first ary # :nodoc:
       return unless ary
