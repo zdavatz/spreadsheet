@@ -1,3 +1,11 @@
+### 1.0.9 / 18.11.2015
+
+Author: 545ch4 <s@rprojekt.org>
+Date:   Mon Nov 16 10:26:27 2015 +0100
+
+* Add smart method compact! to worksheet
+* Use compact! to reduce the number of rows and columns by striping empty one at both ends.
+
 ### 1.0.8 / 20.10.2015
 
 commit e9bd1dd34998803b63460f4951e9aa34e569bd8f
