@@ -105,7 +105,8 @@ module Spreadsheet
         :date_or_time => Regexp.new(client("[hmsYMD]", 'UTF-8')),
         :datetime     => Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')),
         :time         => Regexp.new(client("[hms]", 'UTF-8')),
-        :number       => Regexp.new(client("([\#]|0+)", 'UTF-8'))
+        :number       => Regexp.new(client("([\#]|0+)", 'UTF-8')),
+        :locale       => Regexp.new(client(/\A\[\$\-\d+\]/.to_s, 'UTF-8')),
       }
 
       # Temp code to prevent merged formats in non-merged cells.
@@ -183,27 +184,35 @@ module Spreadsheet
     ##
     # Is the cell formatted as a Date?
     def date?
-      !number? && !!@regexes[:date].match(@number_format.to_s)
+      !number? && matches_format?(:date)
     end
     ##
     # Is the cell formatted as a Date or Time?
     def date_or_time?
-      !number? && !!@regexes[:date_or_time].match(@number_format.to_s)
+      !number? && matches_format?(:date_or_time)
     end
     ##
     # Is the cell formatted as a DateTime?
     def datetime?
-      !number? && !!@regexes[:datetime].match(@number_format.to_s)
+      !number? && matches_format?(:datetime)
     end
     ##
     # Is the cell formatted as a Time?
     def time?
-      !number? && !!@regexes[:time].match(@number_format.to_s)
+      !number? && matches_format?(:time)
     end
     ##
     # Is the cell formatted as a number?
     def number?
-      !!@regexes[:number].match(@number_format.to_s)
+      matches_format?(:number)
+    end
+    ##
+    # Does the cell match a particular preset format?
+    def matches_format?(name)
+      # Excel number formats may optionally include a locale identifier like this:
+      #   [$-409]
+      format = @number_format.to_s.sub(@regexes[:locale], '')
+      !!@regexes[name].match(format)
     end
   end
 end

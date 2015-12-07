@@ -19,6 +19,8 @@ module Spreadsheet
       assert_equal true, @format.date?
       @format.number_format = "YMD"
       assert_equal true, @format.date?
+      @format.number_format = "[$-409]YMD"
+      assert_equal true, @format.date?
       @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
       assert_equal false, @format.date?
       @format.number_format = "0.00;[RED]\\-0.00"
@@ -31,6 +33,8 @@ module Spreadsheet
       @format.number_format = "YMD"
       assert_equal true, @format.date_or_time?
       @format.number_format = "hmsYMD"
+      assert_equal true, @format.date_or_time?
+      @format.number_format = "[$-409]hmsYMD"
       assert_equal true, @format.date_or_time?
       @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
       assert_equal false, @format.date_or_time?
@@ -61,6 +65,8 @@ module Spreadsheet
       @format.number_format = "h"
       assert_equal true, @format.time?
       @format.number_format = "hm"
+      assert_equal true, @format.time?
+      @format.number_format = "[$-409]hms"
       assert_equal true, @format.time?
       @format.number_format = "hms"
       assert_equal true, @format.time?
