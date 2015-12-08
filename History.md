@@ -1,3 +1,10 @@
+### 1.1.0 / 08.12.2015
+
+Author: Matthew Boeh <matt@crowdcompass.com>
+Date:   Mon Dec 7 11:18:55 2015 -0800
+
+* Disregard locale indicators when determining whether a cell contains a date/time.
+
 ### 1.0.9 / 18.11.2015
 
 Author: 545ch4 <s@rprojekt.org>
