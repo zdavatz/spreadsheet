@@ -106,7 +106,7 @@ module Spreadsheet
         :datetime     => Regexp.new(client("([YMD].*[HS])|([HS].*[YMD])", 'UTF-8')),
         :time         => Regexp.new(client("[hms]", 'UTF-8')),
         :number       => Regexp.new(client("([\#]|0+)", 'UTF-8')),
-        :locale       => Regexp.new(client(/\A\[\$\-\d+\]/.to_s, 'UTF-8')),
+        :locale       => Regexp.new(client(/\A\[\$\-\D*\d+\]/.to_s, 'UTF-8')),
       }
 
       # Temp code to prevent merged formats in non-merged cells.

@@ -21,6 +21,8 @@ module Spreadsheet
       assert_equal true, @format.date?
       @format.number_format = "[$-409]YMD"
       assert_equal true, @format.date?
+      @format.number_format = "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy"
+      assert_equal true, @format.date?
       @format.number_format = "\\$#,##0.00_);[RED]\"($\"#,##0.00\\)"
       assert_equal false, @format.date?
       @format.number_format = "0.00;[RED]\\-0.00"
