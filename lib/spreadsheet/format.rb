@@ -101,10 +101,10 @@ module Spreadsheet
       @pattern_fg_color = :border
       @pattern_bg_color = :pattern_bg
       @regexes = {
-        :date         => Regexp.new(client('[YMD]|(?:y|\bmm+\b|d)', 'UTF-8')),
+        :date         => Regexp.new(client('[YMD]|(?:y|d|(?:[^m]|\A)mm+(?:[^m]|\z))', 'UTF-8')),
         :date_or_time => Regexp.new(client('[hmsYMD]', 'UTF-8')),
         :datetime     => Regexp.new(client('(?:[YMD].*[HS])|(?:[HS].*[YMD])', 'UTF-8')),
-        :time         => Regexp.new(client('h|(?:[^m]|^)m(?:[^m]|$)|s', 'UTF-8')),
+        :time         => Regexp.new(client('h|s|(?:[^m]|\A)m(?:[^m]|\z)', 'UTF-8')),
         :number       => Regexp.new(client('(?:[\#]|0+)', 'UTF-8')),
         :locale       => Regexp.new(client('\A\[\$\-\h*\d+\]', 'UTF-8')),
       }
