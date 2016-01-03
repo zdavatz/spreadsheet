@@ -50,6 +50,7 @@ module Internals
     1258 => "WINDOWS-1258", #(Vietnamese)
     1361 => "WINDOWS-1361", #(Korean (Johab))
     10000 => "MACROMAN",
+    21010 => "UTF-16LE",
     32768 => "MACROMAN",
     32769 => "WINDOWS-1252", #(Latin I) (BIFF2-BIFF3)
   }
