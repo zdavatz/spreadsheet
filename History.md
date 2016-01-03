@@ -1,3 +1,10 @@
+### 1.1.1 / 03.01.2016
+
+Author: ChouAndy <chouandy@ecoworkinc.com>
+Date:   Sun Jan 3 17:26:18 2016 +0800
+
+Fixed Unknown Codepage 0x5212
+
 ### 1.1.0 / 08.12.2015
 
 Author: Matthew Boeh <matt@crowdcompass.com>

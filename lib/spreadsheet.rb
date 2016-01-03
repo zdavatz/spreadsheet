@@ -45,7 +45,7 @@ module Spreadsheet
 
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '1.1.0'
+  VERSION = '1.1.1'
 
   ##
   # Default client Encoding. Change this value if your application uses a
