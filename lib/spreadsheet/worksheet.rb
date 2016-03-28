@@ -343,7 +343,7 @@ module Spreadsheet
       # detect first non-empty non-nil column if first column is empty or nil
       if (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[@dimensions[2]].nil?}
         (@dimensions[2]..@dimensions[3]).each do |i|
-          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && (row(j)[i].nil? || row(j)[i].empty?)}
+          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[i].to_s.empty?}
           @dimensions[2] = i
         end
       end
@@ -351,7 +351,7 @@ module Spreadsheet
       # detect last non-empty non-nil column if last column is empty or nil
       if (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[@dimensions[3]].nil?}
         (@dimensions[2]..@dimensions[3]).reverse_each do |i|
-          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && (row(j)[i].nil? || row(j)[i].empty?)}
+          break unless (@dimensions[0]..@dimensions[1]).inject(true){|t, j| t && row(j)[i].to_s.empty?}
           @dimensions[3] = i
         end
         @dimensions[3] = @dimensions[3]
