@@ -1437,6 +1437,13 @@ module Spreadsheet
       assert_equal sheet.dimensions, [0, 4, 0, 4]
       sheet.compact!
       assert_equal sheet.dimensions, [0, 2, 0, 2]
+      path = File.join @data, 'test_compact_format_date.xls'
+      book = Spreadsheet.open path
+      sheet = book.worksheet 0
+      assert_instance_of Excel::Worksheet, sheet
+      assert_nothing_raised do
+        sheet.compact!
+      end
     end
 
     private
