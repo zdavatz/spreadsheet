@@ -1,3 +1,9 @@
+### 1.1.2 / 29.03.2016
+Author: Aleksandr Boykov <aleksandr.boykov@parelio.com>
+Date:   Mon Mar 28 14:07:35 2016 -0400
+
+fixes compact! method when the excel document has dates
+
 ### 1.1.1 / 03.01.2016
 
 Author: ChouAndy <chouandy@ecoworkinc.com>
