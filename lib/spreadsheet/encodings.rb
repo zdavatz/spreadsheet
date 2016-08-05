@@ -26,22 +26,27 @@ module Spreadsheet
     else
       require 'iconv'
       @@iconvs = {}
+
+      def build_output_encoding(to_encoding)
+        [to_encoding, Spreadsheet.enc_translit, Spreadsheet.enc_ignore].compact.join('//')
+      end
+
       def client string, internal='UTF-16LE'
         string = string.dup
         key = [Spreadsheet.client_encoding, internal]
         iconv = @@iconvs[key] ||= Iconv.new(Spreadsheet.client_encoding, internal)
         iconv.iconv string
       end
-      def internal string, client=Spreadsheet.client_encoding
+      def internal string, client=Spreadsheet.client_encoding, to_encoding = 'UTF-16LE'
         string = string.dup
-        key = ['UTF-16LE', client]
-        iconv = @@iconvs[key] ||= Iconv.new('UTF-16LE//TRANSLIT//IGNORE', client)
+        key = [to_encoding, client]
+        iconv = @@iconvs[key] ||= Iconv.new(build_output_encoding(to_encoding), client)
         iconv.iconv string
       end
-      def utf8 string, client=Spreadsheet.client_encoding
+      def utf8 string, client=Spreadsheet.client_encoding, to_encoding = 'UTF-8'
         string = string.dup
-        key = ['UTF-8', client]
-        iconv = @@iconvs[key] ||= Iconv.new('UTF-8//TRANSLIT//IGNORE', client)
+        key = [to_encoding, client]
+        iconv = @@iconvs[key] ||= Iconv.new(build_output_encoding(to_encoding), client)
         iconv.iconv string
       end
     end
@@ -55,3 +60,4 @@ module Spreadsheet
     end
   end
 end
+

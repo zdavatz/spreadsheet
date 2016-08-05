@@ -52,10 +52,12 @@ module Spreadsheet
   # different Encoding:
   # Spreadsheet.client_encoding = 'ISO-LATIN-1//TRANSLIT//IGNORE'
   @client_encoding = 'UTF-8'
+  @enc_translit = 'TRANSLIT'
+  @enc_ignore = 'IGNORE'
 
   class << self
 
-    attr_accessor :client_encoding
+    attr_accessor :client_encoding, :enc_translit, :enc_ignore
 
     ##
     # Parses a Spreadsheet Document and returns a Workbook object. At present,
