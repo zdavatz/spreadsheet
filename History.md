@@ -1,3 +1,13 @@
+### 1.1.3 / 06.08.2016
+
+Author: Alexandre Balon-Perin <abalonperin@gilt.jp>
+Date:   Fri Aug 5 17:19:29 2016 +0900
+
+* Fix issue with iconv on Ubuntu 12.04
+* This fix is related to a bug in the iconv implementation packaged in libc6 on Ubuntu 12.04
+* For some reasons, the encoding options //TRANSLIT//IGNORE are improperly applied.
+* When //TRANSLIT is specified, instead of rescuing errors related to //TRANSLIT and checking if the //IGNORE is set, the code simply crashes.
+
 ### 1.1.2 / 29.03.2016
 Author: Aleksandr Boykov <aleksandr.boykov@parelio.com>
 Date:   Mon Mar 28 14:07:35 2016 -0400
