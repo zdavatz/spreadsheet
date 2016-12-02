@@ -11,7 +11,7 @@ spec = Gem::Specification.new do |s|
    s.author      = "Masaomi Hatakeyama, Zeno R.R. Davatz"
    s.email       = "mhatakeyama@ywesee.com, zdavatz@ywesee.com"
    s.platform    = Gem::Platform::RUBY
-   s.license     = "GPLv3"
+   s.license     = "GPL-v3"
    s.files       = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
    s.test_file   = "test/suite.rb"
    s.executables << "xlsopcodes"
