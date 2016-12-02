@@ -3,22 +3,23 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'spreadsheet'
 
-spec = Gem::Specification.new do |s|
-   s.name        = "spreadsheet"
-   s.version     =  Spreadsheet::VERSION
-   s.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
-   s.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
-   s.author      = "Masaomi Hatakeyama, Zeno R.R. Davatz"
-   s.email       = "mhatakeyama@ywesee.com, zdavatz@ywesee.com"
-   s.platform    = Gem::Platform::RUBY
-   s.license     = "GPL-v3"
-   s.files       = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
-   s.test_file   = "test/suite.rb"
-   s.executables << "xlsopcodes"
+spec = Gem::Specification.new do |spec|
+   spec.name        = "spreadsheet"
+   spec.version     =  Spreadsheet::VERSION
+   spec.homepage    = "https://github.com/zdavatz/spreadsheet"
+   spec.summary     = "The Spreadsheet Library is designed to read and write Spreadsheet Documents"
+   spec.description = "As of version 0.6.0, only Microsoft Excel compatible spreadsheets are supported"
+   spec.author      = "Masaomi Hatakeyama, Zeno R.R. Davatz"
+   spec.email       = "mhatakeyama@ywesee.com, zdavatz@ywesee.com"
+   spec.platform    = Gem::Platform::RUBY
+   spec.license     = "GPL-3.0"
+   spec.files       = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
+   spec.test_file   = "test/suite.rb"
+   spec.executables << "xlsopcodes"
 
-   s.add_dependency "ruby-ole"
-   s.add_development_dependency "hoe"
+   spec.add_dependency "ruby-ole"
+   spec.add_development_dependency "hoe"
 
-   s.homepage	 = "https://github.com/zdavatz/spreadsheet/"
+   spec.homepage    = 'https://github.com/zdavatz/spreadsheet/'
 end
 
