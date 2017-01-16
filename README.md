@@ -77,7 +77,7 @@ installation solution you prefer and I'll include it in the future.
 If you can use 'rake' and 'hoe' library is also installed, you can 
 build a gem package as follows:
 
-* `rake gem`
+* `gem build spreadsheet.gemspec`
 
 The gem package is built in pkg directory.
 
