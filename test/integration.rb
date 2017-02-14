@@ -1068,6 +1068,18 @@ module Spreadsheet
       row = sheet.row(4)
       assert_equal 'Daniel J. Berger', row[0]
     end
+    def test_delete_row
+      path = File.join @data, 'test_delete_row.xls'
+      book = Spreadsheet.open path
+      sheet1 = book.worksheet 0
+      assert_equal "row1", sheet1[0,1]
+      assert_equal "row2", sheet1[1,1]
+      pre_count = sheet1.row_count
+      sheet1.delete_row 0
+      assert_equal pre_count - 1, sheet1.row_count
+      assert_equal "row2", sheet1[0,1]
+      assert_equal "", sheet1[1,1]
+    end
     def test_bignum
       smallnum = 0x1fffffff
       bignum = smallnum + 1
