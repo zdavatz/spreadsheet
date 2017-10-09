@@ -1,22 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.1.1)
-    hoe (3.15.3)
-      rake (>= 0.8, < 12.0)
-    method_source (0.8.2)
-    minitest (5.10.1)
+    hoe (3.14.2)
+      rake (>= 0.8, < 11.0)
+    minitest (5.8.2)
     nokogiri (1.5.11)
-    power_assert (0.4.1)
-    pry (0.10.4)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
-    rake (11.3.0)
-    ruby-ole (1.2.12)
-    rubyzip (1.2.0)
-    slop (3.6.0)
-    test-unit (3.2.3)
+    power_assert (0.2.4)
+    rake (10.4.2)
+    ruby-ole (1.2.11.8)
+    rubyzip (1.2.1)
+    test-unit (3.1.5)
       power_assert
 
 PLATFORMS
@@ -26,7 +19,6 @@ DEPENDENCIES
   hoe (>= 3.4)
   minitest
   nokogiri (= 1.5.11)
-  pry
   ruby-ole
   rubyzip
   test-unit
