@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 gem 'ruby-ole'
 gem 'rubyzip'
-gem 'nokogiri'
+gem 'nokogiri', '1.5.11'
 
 if RUBY_VERSION.to_f > 2.0
   gem 'test-unit'
