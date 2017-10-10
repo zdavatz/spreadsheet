@@ -8,7 +8,7 @@ GEM
     power_assert (0.2.4)
     rake (10.4.2)
     ruby-ole (1.2.11.8)
-    rubyzip (1.2.1)
+    rubyzip (0.9.9)
     test-unit (3.1.5)
       power_assert
 
@@ -20,7 +20,7 @@ DEPENDENCIES
   minitest
   nokogiri (= 1.5.11)
   ruby-ole
-  rubyzip
+  rubyzip (~> 0.9)
   test-unit
 
 BUNDLED WITH

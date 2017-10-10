@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 gem 'ruby-ole'
-gem 'rubyzip'
+gem 'rubyzip', '~> 0.9'
 gem 'nokogiri', '1.5.11'
 
 if RUBY_VERSION.to_f > 2.0
