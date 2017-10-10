@@ -385,6 +385,54 @@ module Internals
     :obj          => 0x005d,
     :drawing      => 0x00EC,
     :txo          => 0x01B6,
+    :xfext        => 0x087D, # Microsoft Office Excel 97-2007 Binary File Format (.xls) Specification Page 289
+    :theme        => 0x0896, # Microsoft Office Excel 97-2007 Binary File Format (.xls) Specification Page 264
+    :continuefrt12 => 0x087F, #
+  }
+  XF_EXTENSION_TYPES = {
+      0  => :rgb_fg_color,        # Sets cell interior forecolor to RGB
+      1  => :rgb_bg_color,        # Sets cell interior backcolor to RGB
+      2  => :reserved,            # Reserved; not used
+      3  => :reserved,            # Reserved; not used
+      4  => :fg_color,            # Sets cell interior forecolor
+      5  => :bg_color,            # Sets cell interior backcolor
+      6  => :gradient_tint,       # Sets cell interior to a specified gradient
+      7  => :border_color_top,    # Sets specified cell border color
+      8  => :border_color_bottom, # Sets specified cell border color
+      9  => :border_color_left,   # Sets specified cell border color
+      10 => :border_color_right,  # Sets specified cell border color
+      11 => :border_color_diag,   # Sets specified cell border color
+      12 => :reserved,            # Reserved; not used
+      13 => :text_color,          # Sets cell text color
+      14 => :font_scheme,         # Set cell font to use specified font scheme
+      15 => :indent,              # Set cell indentation level ( indents > 15)
+  }
+  XF_EXTENSION_COLOR_TYPES = {
+      0 => :auto,    # Automatic foreground/background colors
+      1 => :indexed, # xclrValue = BIFF8 indexed palette color (icv)
+      2 => :rgb,     # xclrValue = RGB color
+      3 => :themed,  # xclrValue = Theme color index
+  }
+  XF_PATTERN_TYPES = {
+      0x00 => nil,
+      0x01 => :solid,
+      0x02 => :mediumGray,
+      0x03 => :darkGray,
+      0x04 => :lightGray,
+      0x05 => :darkHorizontal,
+      0x06 => :darkVertical,
+      0x07 => :darkDown,
+      0x08 => :darkUp,
+      0x09 => :darkGrid,
+      0x0A => :darkTrellis,
+      0x0B => :lightHorizontal,
+      0x0C => :lightVertical,
+      0x0D => :lightDown,
+      0x0E => :lightUp,
+      0x0F => :lightGrid,
+      0x10 => :lightTrellis,
+      0x11 => :gray125,
+      0x12 => :gray0625,
   }
 =begin ## unknown opcodes
 0x00bf, 0x00c0, 0x00c1, 0x00e1, 0x00e2, 0x00eb, 0x01af, 0x01bc
@@ -453,6 +501,10 @@ module Internals
   end
   def opcode key
     OPCODES[key]
+  end
+  def rgb_hex rgb
+    # convert to hex and cut off unused last byte (2.5.4 RGB Colours) '80FF' -> '000080FF'
+    sprintf('%08x', rgb)[0..5]
   end
 end
   end

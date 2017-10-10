@@ -4,9 +4,11 @@ GEM
     hoe (3.14.2)
       rake (>= 0.8, < 11.0)
     minitest (5.8.2)
+    nokogiri (1.5.11)
     power_assert (0.2.4)
     rake (10.4.2)
     ruby-ole (1.2.11.8)
+    rubyzip (0.9.9)
     test-unit (3.1.5)
       power_assert
 
@@ -16,8 +18,10 @@ PLATFORMS
 DEPENDENCIES
   hoe (>= 3.4)
   minitest
+  nokogiri (= 1.5.11)
   ruby-ole
+  rubyzip (~> 0.9)
   test-unit
 
 BUNDLED WITH
-   1.10.6
+   1.15.1
