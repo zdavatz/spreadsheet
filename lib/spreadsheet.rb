@@ -1,3 +1,4 @@
+
 ### Spreadsheet - A Library for reading and writing Spreadsheet Documents.
 #
 #   Copyright (C) 2008-2010 ywesee GmbH
@@ -45,7 +46,7 @@ module Spreadsheet
 
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '1.1.4'
+  VERSION = '1.1.5'
 
   ##
   # Default client Encoding. Change this value if your application uses a
