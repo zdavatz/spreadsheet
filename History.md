@@ -1,9 +1,11 @@
-### 1.1.4 / 20.11.2017
+### 1.1.5 / 20.11.2017
 
 Author: Paco Guzmán <pacoguzman@users.noreply.github.com>
 Date:   Sun Nov 19 18:10:57 2017 +0100
 
 * Avoid creating a class variable, that variable cannot be garbage collected and it retains a lot of memory
+
+### 1.1.4 / 02.12.2016
 
 Author: Richard Lee <dlackty@gmail.com>
 Date:   Mon Jan 16 03:52:42 2017 +0800
