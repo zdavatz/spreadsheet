@@ -1,3 +1,20 @@
+### 1.1.4 / 20.11.2017
+
+Author: Paco Guzmán <pacoguzman@users.noreply.github.com>
+Date:   Sun Nov 19 18:10:57 2017 +0100
+
+* Avoid creating a class variable, that variable cannot be garbage collected and it retains a lot of memory
+
+Author: Richard Lee <dlackty@gmail.com>
+Date:   Mon Jan 16 03:52:42 2017 +0800
+
+* Update Travis CI rubies
+
+Author: Zeno R.R. Davatz <zdavatz@ywesee.com>
+Date:   Fri Dec 2 10:36:20 2016 +0100
+
+* updated Gem to use the correct License on Rubygems to GPL-3.0 as stated in the LICENSE File.
+
 ### 1.1.3 / 06.08.2016
 
 Author: Alexandre Balon-Perin <abalonperin@gilt.jp>
@@ -9,6 +26,7 @@ Date:   Fri Aug 5 17:19:29 2016 +0900
 * When //TRANSLIT is specified, instead of rescuing errors related to //TRANSLIT and checking if the //IGNORE is set, the code simply crashes.
 
 ### 1.1.2 / 29.03.2016
+
 Author: Aleksandr Boykov <aleksandr.boykov@parelio.com>
 Date:   Mon Mar 28 14:07:35 2016 -0400
 
