@@ -28,8 +28,7 @@ class Workbook < Spreadsheet::Workbook
   attr_accessor :bof, :ole
   attr_writer :date_base
   def Workbook.open io, opts = {}
-    @reader = Reader.new opts
-    @reader.read io
+    Reader.new(opts).read(io)    
   end
   def initialize *args
     super
