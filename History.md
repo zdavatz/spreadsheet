@@ -1,3 +1,11 @@
+### 1.1.6 / 12.03.2018
+
+Author: Todd Hambley <thambley@travelleaders.com>
+Date:   Mon Mar 12 14:20:39 2018 -0400
+
+* fix reject for ruby 1.8.7
+* fix using invalid code pages when writing workbook
+
 ### 1.1.5 / 20.11.2017
 
 Author: Paco Guzmán <pacoguzman@users.noreply.github.com>
