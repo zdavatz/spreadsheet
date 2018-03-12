@@ -54,7 +54,7 @@ module Internals
     32768 => "MACROMAN",
     32769 => "WINDOWS-1252", #(Latin I) (BIFF2-BIFF3)
   }
-  SEGAPEDOC = CODEPAGES.invert
+  SEGAPEDOC = CODEPAGES.reject { |k| k >= 21010 }.invert
   # color_codes according to http://support.softartisans.com/kbview_1205.aspx
   # synonyms are in comments when reverse lookup
   COLOR_CODES = {
