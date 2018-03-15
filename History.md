@@ -1,3 +1,13 @@
+### 1.1.7 / 15.03.2018
+
+commit 34ece5f4e7ab2907c4a8809d96ef2a33b7ccd4b5
+Author: Maarten Brouwers <github@murb.nl>
+Date:   Thu Mar 15 15:10:23 2018 +0100
+
+* shadowing outer local variable - i
+    
+* Running rake resulted in the following warning: `lib/spreadsheet/worksheet.rb:345: warning: shadowing outer local variable - i`; this patch fixes that.
+
 ### 1.1.6 / 12.03.2018
 
 Author: Todd Hambley <thambley@travelleaders.com>
