@@ -325,19 +325,19 @@ module Spreadsheet
 
       # detect last non-nil non-empty row if given last row is empty or nil
       if row(@dimensions[1] - 1).empty? || row(@dimensions[1] - 1).compact.join('').empty?
-        i = @dimensions[1] - 1
+        row_size = @dimensions[1] - 1
         @dimensions[1] = @dimensions[0]
         # divide and conquer
-        while(i - @dimensions[1] > 1) do
-          if row(i).empty? || row(i).compact.join('').empty?
-            i = @dimensions[1] + (((i - @dimensions[1]) + 1) / 2).to_i
+        while(row_size - @dimensions[1] > 1) do
+          if row(row_size).empty? || row(row_size).compact.join('').empty?
+            row_size = @dimensions[1] + (((row_size - @dimensions[1]) + 1) / 2).to_i
           else
-            _i = ((i - @dimensions[1]) / 2).to_i + 1
-            @dimensions[1] = i
-            i = i + _i
+            _i = ((row_size - @dimensions[1]) / 2).to_i + 1
+            @dimensions[1] = row_size
+            row_size = row_size + _i
           end
         end
-        @dimensions[1] = i + 1
+        @dimensions[1] = row_size + 1
       end
 
       # detect first non-empty non-nil column if first column is empty or nil
