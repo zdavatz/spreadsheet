@@ -1,4 +1,3 @@
-$c -resize 1024x1024 -extent 2048x1536 "$SCREENDIR/iPadLandscape2048x1536@2x.png2
 # require File.join(File.dirname(__FILE__), 'lib', 'spreadsheet')
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
