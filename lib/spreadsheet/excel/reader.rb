@@ -129,7 +129,7 @@ class Reader
         if matching_obj.length > 1
            puts "ERROR - more than one matching object ID!"
         end
-        i.text = matching_obj.first.text
+        i.text = matching_obj.first.try :text
         worksheet.add_note i.row, i.col, i.text
      end
   end
