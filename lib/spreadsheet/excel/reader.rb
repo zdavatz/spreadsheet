@@ -125,11 +125,12 @@ class Reader
      #So link the noteObject(text) to the note (with author, position)
      #TODO
      @noteList.each do |i|
-        matching_obj = @noteObjList.select {|j| j.objID == i.objID}
-        if matching_obj.length > 1
+        matching_objs = @noteObjList.select { |j| j.objID == i.objID }
+        if matching_objs.length > 1
            puts "ERROR - more than one matching object ID!"
         end
-        i.text = matching_obj.first.text
+        matching_obj = matching_objs.first
+        i.text = matching_obj.nil? ? '' : matching_obj.text
         worksheet.add_note i.row, i.col, i.text
      end
   end
