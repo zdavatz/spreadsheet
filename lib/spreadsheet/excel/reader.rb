@@ -125,9 +125,7 @@ class Reader
      #So link the noteObject(text) to the note (with author, position)
      #TODO
      @noteList.each do |i|
-        matching_objs = @noteObjList.lazy
-                                    .select { |j| j.objID == i.objID }
-                                    .take(2).to_a
+        matching_objs = @noteObjList.select { |j| j.objID == i.objID }
         if matching_objs.length > 1
            puts "ERROR - more than one matching object ID!"
         end
