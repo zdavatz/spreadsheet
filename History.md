@@ -1,6 +1,21 @@
+### 1.1.8 / 20.08.2018
+Author: VitaliyAdamkov <adamkov@tex.ua>
+Date:   Mon Aug 20 09:48:31 2018 +0300
+
+* Cancel :lazy usage
+* Use lazy select to speed up a little
+* Omit rails :try usage
+* stub for :postread_worksheet method
+* sometimes it selects empty array..
+
+Author: 545ch4 <s@rprojekt.org>
+Date:   Wed Mar 28 15:33:04 2018 +0200
+
+* [ruby-2.4] Fix weird first line of spreadsheet.gemspec
+* Doesn't seem to be a valid .gemspec command/field.
+
 ### 1.1.7 / 15.03.2018
 
-commit 34ece5f4e7ab2907c4a8809d96ef2a33b7ccd4b5
 Author: Maarten Brouwers <github@murb.nl>
 Date:   Thu Mar 15 15:10:23 2018 +0100
 
