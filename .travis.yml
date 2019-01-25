@@ -3,6 +3,8 @@ sudo: false
 cache: bundler
 before_install:
   - gem install bundler
+before_install:
+  - gem install bundler -v 1.17.3 --no-rdoc --no-ri
 bundler_args: --binstubs
 script: "bundle exec ruby test/suite.rb"
 rvm:
