@@ -399,10 +399,10 @@ class Reader
       end
       formula.value = value
     elsif rtype == 0
-      pos, op, len, work = get_next_chunk
+      pos, op, _len, work = get_next_chunk
       if op == :sharedfmla
         ## TODO: formula-support in 0.8.0
-        pos, op, len, work = get_next_chunk
+        pos, op, _len, work = get_next_chunk
       end
       if op == :string
         formula.value = client read_string(work, 2), @workbook.encoding
@@ -852,6 +852,7 @@ class Reader
     @detected_rows = {}
     @noteObjList = []
     @noteList = []
+    @noteObject = nil
     previous = nil
     while tuple = get_next_chunk
       pos, op, len, work = tuple

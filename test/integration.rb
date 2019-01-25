@@ -70,7 +70,7 @@ module Spreadsheet
     def test_missing_format
       path = File.join @data, 'test_missing_format.xls'
       assert_nothing_thrown do
-        workbook = Spreadsheet.open(path, "rb")
+        Spreadsheet.open(path, "rb")
       end
     end
     def test_version_excel97__excel2010__utf16
@@ -749,7 +749,7 @@ module Spreadsheet
       sheet1 = book.create_worksheet
       str1 = 'My Shared String'
       str2 = 'Another Shared String'
-      assert_equal 1, (str1.size + str2.size) % 2, 
+      assert_equal 1, (str1.size + str2.size) % 2,
         "str3 should start at an odd offset to test splitting of wide strings"
       str3 = '–––––––––– ' * 1000
       str4 = '1234567890 ' * 1000
@@ -1211,8 +1211,8 @@ module Spreadsheet
       book = Spreadsheet::Workbook.new
       sheet = book.create_worksheet
       (0..200).each { |i| sheet.row(i).push "ëçáéíóú" }
-      assert_nothing_raised do 
-        book.write StringIO.new("", "w+") 
+      assert_nothing_raised do
+        book.write StringIO.new("", "w+")
       end
     end
 
@@ -1257,7 +1257,7 @@ module Spreadsheet
       str1 = "Frozen String.".freeze
       sheet1[0,0] = str1
       sheet1.row(0).push str1
-      assert_nothing_raised do 
+      assert_nothing_raised do
         book.write path
       end
     end
@@ -1290,7 +1290,7 @@ module Spreadsheet
       sheet1 = book.create_worksheet
       (sheet1.row(0).format 0).border = :hair
       (sheet1.row(0).format 0).border_color = :brown
-      assert_nothing_raised do 
+      assert_nothing_raised do
         book.write path
       end
       book2 = Spreadsheet.open path
@@ -1391,7 +1391,7 @@ module Spreadsheet
       path = File.join @var, 'test_write_worksheet_visibility.xls'
       sheet1 = book.create_worksheet
       sheet1.visibility = :hidden
-      sheet2 = book.create_worksheet
+      _sheet2 = book.create_worksheet
       assert_nothing_raised do
         book.write path
       end
