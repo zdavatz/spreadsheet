@@ -3,7 +3,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'spreadsheet'
 
-spec = Gem::Specification.new do |spec|
+Gem::Specification.new do |spec|
    spec.name        = "spreadsheet"
    spec.version     =  Spreadsheet::VERSION
    spec.homepage    = "https://github.com/zdavatz/spreadsheet"
@@ -22,4 +22,3 @@ spec = Gem::Specification.new do |spec|
 
    spec.homepage    = 'https://github.com/zdavatz/spreadsheet/'
 end
-

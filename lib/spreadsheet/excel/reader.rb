@@ -852,6 +852,7 @@ class Reader
     @detected_rows = {}
     @noteObjList = []
     @noteList = []
+    @noteObject = nil
     previous = nil
     while tuple = get_next_chunk
       pos, op, len, work = tuple

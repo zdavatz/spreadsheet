@@ -1,12 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    hoe (3.14.2)
-      rake (>= 0.8, < 11.0)
+    hoe (3.17.1)
+      rake (>= 0.8, < 13.0)
     minitest (5.8.2)
     power_assert (0.2.4)
-    rake (10.4.2)
-    ruby-ole (1.2.11.8)
+    rake (10.5.0)
+    ruby-ole (1.2.12.1)
     test-unit (3.1.5)
       power_assert
 
@@ -20,4 +20,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   1.10.6
+   1.17.2
