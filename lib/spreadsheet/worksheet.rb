@@ -153,9 +153,13 @@ module Spreadsheet
     # If the argument skip is given, #each iterates from that row until but
     # omitting the first unused Row, effectively skipping the first _skip_ Rows
     # from the top of the Worksheet.
-    def each skip=dimensions[0]
-      skip.upto(dimensions[1] - 1) do |idx|
-        yield row(idx)
+    def each(skip=dimensions[0], &block)
+      rows = skip.upto(dimensions[1] - 1).map { |index| row(index) }.to_enum
+
+      if block_given?
+        rows.each(&block)
+      else
+        rows
       end
     end
     def encoding # :nodoc:
@@ -314,7 +318,7 @@ module Spreadsheet
 
     def compact!
       recalculate_dimensions
-      
+
       # detect first non-nil non-empty row if given first row is empty or nil
       if row(@dimensions[0]).empty? || row(@dimensions[0]).compact.join('').empty?
         (@dimensions[0]...@dimensions[1]).each do |i|
