@@ -108,18 +108,35 @@ module Spreadsheet
       assert_equal 6, @book.formats.length
 
     end
-    
+
     def test_freeze_panel!
       assert_equal 0, @sheet.froze_top
       assert_equal 0, @sheet.froze_left
       assert_equal false, @sheet.has_frozen_panel?
-      
+
       @sheet.freeze!(2, 3)
       assert_equal 2, @sheet.froze_top
       assert_equal 3, @sheet.froze_left
       assert_equal true, @sheet.has_frozen_panel?
-      
+
     end
-    
+
+    def test_each_with_skip
+      @sheet[0, 0] = 'foo'
+      @sheet[1, 0] = 'bar'
+
+      assert_equal @sheet.each(1).count, 1
+      assert_equal @sheet.each(1).first[0], 'bar'
+    end
+
+    def test_each_with_index
+      @sheet[0, 0] = 'foo'
+      @sheet[1, 0] = 'bar'
+
+      @sheet.each.with_index do |row, index|
+        assert_equal row[0], @sheet[index, 0]
+      end
+    end
+
   end
 end
