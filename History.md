@@ -1,3 +1,11 @@
+### 1.2.0 17.2.2019
+Author: James McLaren <jamesmclaren555@gmail.com>
+* spreadsheet-1.2.0.gem released
+
+### 1.1.9 26.1.2019
+Author: Nick Weiland <nickweiland@gmail.com>
+* spreadsheet-1.1.9.gem released.
+
 ### 1.1.8 / 20.08.2018
 Author: VitaliyAdamkov <adamkov@tex.ua>
 Date:   Mon Aug 20 09:48:31 2018 +0300
