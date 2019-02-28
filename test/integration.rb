@@ -36,7 +36,7 @@ module Spreadsheet
     end
     def teardown
       Spreadsheet.client_encoding = 'UTF-8'
-      FileUtils.rm_r @var
+      FileUtils.rm_rf @var
     end
     def test_copy__identical__file_paths
       path = File.join @data, 'test_copy.xls'
