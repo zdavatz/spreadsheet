@@ -1,3 +1,10 @@
+### 1.2.1 28.2.2019
+Author: taichi <taichi730@gmail.com>
+Date:   Thu Feb 28 10:30:46 2019 +0900
+
+* Merge pull request #231 from taichi-ishitani/separated_version_file  
+* Merge pull request #230 from taichi-ishitani/frozen_string_literal_support
+    
 ### 1.2.0 17.2.2019
 Author: James McLaren <jamesmclaren555@gmail.com>
 * spreadsheet-1.2.0.gem released
