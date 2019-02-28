@@ -49,6 +49,7 @@ lib/spreadsheet/link.rb
 lib/spreadsheet/note.rb
 lib/spreadsheet/noteObject.rb
 lib/spreadsheet/row.rb
+lib/spreadsheet/version.rb
 lib/spreadsheet/workbook.rb
 lib/spreadsheet/worksheet.rb
 lib/spreadsheet/writer.rb

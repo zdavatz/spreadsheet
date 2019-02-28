@@ -25,6 +25,7 @@
 #             8006 Zürich
 ###           Switzerland
 
+require 'spreadsheet/version'
 require 'spreadsheet/errors'
 
 require 'spreadsheet/excel/workbook'
@@ -43,10 +44,6 @@ require 'spreadsheet/excel/rgb'
 #  sheet = book.worksheet 0
 #  sheet.each do |row| puts row[0] end
 module Spreadsheet
-
-  ##
-  # The version of Spreadsheet you are using.
-  VERSION = '1.2.0'
 
   ##
   # Default client Encoding. Change this value if your application uses a
