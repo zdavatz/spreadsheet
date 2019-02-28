@@ -196,7 +196,7 @@ module Biff8
   ##
   # Insert null-characters into a compressed UTF-16 string
   def wide string
-    data = ''
+    data = ''.dup
     string.each_byte do |byte| data << byte.chr << 0.chr end
     data
   end
