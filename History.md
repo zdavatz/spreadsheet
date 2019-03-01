@@ -1,4 +1,14 @@
-### 1.2.1 28.2.2019
+### 1.2.2 01.03.2019
+Author: taichi <taichi730@gmail.com>
+Date:   Fri Mar 1 13:00:28 2019 +0900
+
+* fixed unit test errors caused by frozen-string-literal
+* removed ruby 2.3.8 with frozen-string-literal from CI regression
+  (It seems that standard libraries for this version does not support the
+  feature enough.)
+* enable '--enable-frozen-string-literal' option on CI test
+
+### 1.2.1 28.02.2019
 Author: taichi <taichi730@gmail.com>
 Date:   Thu Feb 28 10:30:46 2019 +0900
 
