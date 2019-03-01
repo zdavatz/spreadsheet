@@ -27,8 +27,6 @@ rvm:
   - ree
 matrix:
   include:
-    - rvm: 2.3.8
-      env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
     - rvm: 2.4.5
       env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
     - rvm: 2.5.3
