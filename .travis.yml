@@ -2,12 +2,17 @@ language: ruby
 sudo: false
 cache: bundler
 before_install:
-  - gem install bundler -v 1.17.3 --no-document
+  - "if $(ruby -e 'exit(RUBY_VERSION >= \"2.3.0\")'); then env -u RUBYOPT gem update --system; fi"
+  - "if $(ruby -e 'exit(RUBY_VERSION >= \"2.3.0\")'); then env -u RUBYOPT gem install bundler --no-document; fi"
+  - "if $(ruby -e 'exit(RUBY_VERSION <  \"2.3.0\")'); then gem install bundler -v 1.17.3 --no-document; fi"
 bundler_args: --binstubs
 script: "bundle exec ruby test/suite.rb"
 rvm:
   - ruby-head
-  - 2.3.3
+  - 2.6.1
+  - 2.5.3
+  - 2.4.5
+  - 2.3.8
   - 2.2.6
   - 2.1.10
   - 2.0.0
@@ -21,6 +26,15 @@ rvm:
   - jruby-18mode
   - ree
 matrix:
+  include:
+    - rvm: 2.3.8
+      env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
+    - rvm: 2.4.5
+      env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
+    - rvm: 2.5.3
+      env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
+    - rvm: 2.6.1
+      env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
   allow_failures:
     - rvm: ruby-head
     - rvm: rbx-19mode
@@ -29,8 +43,11 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby-18mode
     - rvm: ree
-notifications:
-  email:
-    recipients:
-      - yasaka@ywesee.com
-      - zdavatz@ywesee.com
+#notifications:
+#  email:
+#    recipients:
+#      - yasaka@ywesee.com
+#      - zdavatz@ywesee.com
+
+email:
+  false # temp
