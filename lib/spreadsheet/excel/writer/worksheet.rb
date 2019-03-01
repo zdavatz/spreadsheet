@@ -20,7 +20,7 @@ class Worksheet
   def initialize workbook, worksheet
     @workbook = workbook
     @worksheet = worksheet
-    @io = StringIO.new ''
+    @io = StringIO.new ''.dup
     @biff_version = 0x0600
     @bof = 0x0809
     @build_id = 3515
@@ -642,7 +642,7 @@ and minimal code that generates this warning. Thanks!
   ##
   # Write multiple consecutive cells with RK values (see #write_rk)
   def write_mulrk row, idx, multiples
-    fmt = 'v2'
+    fmt = ['v2']
     data = [
       row.idx, # Index to row
       idx, # Index to first column (fc)
@@ -655,7 +655,7 @@ and minimal code that generates this warning. Thanks!
     end
     # Index to last column (lc)
     data.push idx + multiples.size - 1
-    write_op opcode(:mulrk), data.pack(fmt << 'v')
+    write_op opcode(:mulrk), data.pack((fmt << 'v').join)
   end
   def write_multiples row, idx, multiples
     case multiples.last
