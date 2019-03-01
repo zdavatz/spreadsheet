@@ -209,7 +209,7 @@ class Workbook < Spreadsheet::Writer
             oldoffset = positions.min - len
             lastpos = pos + len
             bytechange = 0
-            buffer = StringIO.new ''
+            buffer = StringIO.new ''.dup
             if tuple = workbook.offsets[:sst]
               write_sst_changes workbook, buffer, writer.pos,
                                 sst_total, sst_strings
@@ -396,7 +396,7 @@ class Workbook < Spreadsheet::Writer
     sanitize_worksheets workbook.worksheets
     collect_formats workbook
     sheets = worksheets workbook
-    buffer1 = StringIO.new ''
+    buffer1 = StringIO.new ''.dup
     # ●  BOF Type = workbook globals (➜ 6.8)
     write_bof workbook, buffer1, :globals
     # ○  File Protection Block ➜ 4.19
@@ -441,7 +441,7 @@ class Workbook < Spreadsheet::Writer
     # ○  USESELFS ➜ 5.106
     buffer1.rewind
     # ●● BOUNDSHEET ➜ 5.95
-    buffer2 = StringIO.new ''
+    buffer2 = StringIO.new ''.dup
     # ○  COUNTRY ➜ 5.22
     # ○  Link Table ➜ 4.10.3
     # ○○ NAME ➜ 6.66

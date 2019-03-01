@@ -506,7 +506,7 @@ module Spreadsheet
       assert_equal 3, sheets.size
       sheet = book.worksheet 0
       assert_instance_of Excel::Worksheet, sheet
-      str = "S\000h\000e\000e\000t\0001\000"
+      str = "S\000h\000e\000e\000t\0001\000".dup
       if RUBY_VERSION >= '1.9'
         str.force_encoding 'UTF-16LE' if str.respond_to?(:force_encoding)
       end
@@ -730,7 +730,7 @@ module Spreadsheet
       book = Spreadsheet::Excel::Workbook.new
       sheet = book.create_worksheet :name => 'My Worksheet'
       sheet[0,0] = 'my cell'
-      data = StringIO.new ''
+      data = StringIO.new ''.dup
       assert_nothing_raised do
         book.write data
       end
@@ -829,7 +829,7 @@ module Spreadsheet
       assert_equal 2, book.worksheets.size
       sheet = book.worksheets.first
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
-      name = "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000"
+      name = "W\000o\000r\000k\000s\000h\000e\000e\000t\0001\000".dup
       name.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
       assert_equal name, sheet.name
       assert_not_nil sheet.offset
@@ -926,7 +926,7 @@ module Spreadsheet
       assert_equal 40, sheet1.row(11).height
       assert_instance_of Spreadsheet::Excel::Worksheet, sheet
       sheet = book.worksheets.last
-      name = "m\000y\000 \000n\000a\000m\000e\000"
+      name = "m\000y\000 \000n\000a\000m\000e\000".dup
       name.force_encoding 'UTF-16LE' if name.respond_to?(:force_encoding)
       assert_equal name, sheet.name
       assert_not_nil sheet.offset
@@ -1212,7 +1212,7 @@ module Spreadsheet
       sheet = book.create_worksheet
       (0..200).each { |i| sheet.row(i).push "ëçáéíóú" }
       assert_nothing_raised do
-        book.write StringIO.new("", "w+")
+        book.write StringIO.new("".dup, "w+")
       end
     end
 

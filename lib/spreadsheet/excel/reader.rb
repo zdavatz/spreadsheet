@@ -56,7 +56,7 @@ class Reader
       ## remove two bits
       integer, = work.unpack 'V'
       integer &= 0xfffffffc
-      value, = ("\0\0\0\0" << [integer].pack('V')).unpack EIGHT_BYTE_DOUBLE
+      value, = ("\0\0\0\0" +  [integer].pack('V')).unpack EIGHT_BYTE_DOUBLE
     else
       ## I can't find a format for unpacking a little endian signed integer.
       #  'V' works for packing, but not for unpacking. But the following works
