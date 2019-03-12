@@ -1,3 +1,9 @@
+### 1.2.3 12.03.2019
+Author: taichi <taichi730@gmail.com>
+Date:   Tue Mar 12 22:29:12 2019 +0900
+
+* Remove workaround for ruby-ole gem
+
 ### 1.2.2 01.03.2019
 Author: taichi <taichi730@gmail.com>
 Date:   Fri Mar 1 13:00:28 2019 +0900
