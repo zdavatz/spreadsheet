@@ -41,11 +41,5 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby-18mode
     - rvm: ree
-#notifications:
-#  email:
-#    recipients:
-#      - yasaka@ywesee.com
-#      - zdavatz@ywesee.com
-
 email:
-  false # temp
+  false
