@@ -109,5 +109,5 @@ Copyright (c) 2010 ywesee GmbH (mhatakeyama@ywesee.com, zdavatz@ywesee.com)
 ## License
 
 This library is distributed under the GPLv3.
-Please see the [LICENSE] (https://github.com/zdavatz/spreadsheet/blob/master/LICENSE.txt) file.
+Please see the [LICENSE](https://github.com/zdavatz/spreadsheet/blob/master/LICENSE.txt) file.
 
