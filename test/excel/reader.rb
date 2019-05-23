@@ -25,6 +25,17 @@ module Spreadsheet
           reader.setup not_empty_io
         end
       end
+
+      def test_not_frozen_stream_error_on_setup
+        reader = Spreadsheet::Excel::Reader.new
+        data = File.expand_path File.join('test', 'data')
+        path = File.join data, 'test_empty.xls'
+        content_string = File.read path
+        frozen_io = StringIO.new(content_string.freeze)
+        assert_nothing_thrown do
+          reader.setup(frozen_io)
+        end
+      end
     end
   end
 end

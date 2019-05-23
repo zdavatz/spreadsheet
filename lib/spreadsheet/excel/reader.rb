@@ -1275,11 +1275,7 @@ class Reader
   end
   def setup io
     ## Reading from StringIO fails without forced encoding
-    if io.respond_to?(:string) && (str = io.string) \
-      && str.respond_to?(:force_encoding)
-      str.force_encoding 'ASCII-8BIT'
-    end
-    ##
+    io.set_encoding('ASCII-8BIT') if io.respond_to?(:set_encoding)
     io.rewind
     @ole = Ole::Storage.open io
     @workbook = Workbook.new io, {}
