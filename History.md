@@ -1,3 +1,10 @@
+### 1.2.4 24.05.2019
+Author: Cyril Champier <cyril.champier@doctolib.com>
+Date:   Fri May 24 12:56:52 2019 +0200
+
+* correct ruby version check
+* can read frozen string io
+
 ### 1.2.3 12.03.2019
 Author: taichi <taichi730@gmail.com>
 Date:   Tue Mar 12 22:29:12 2019 +0900
