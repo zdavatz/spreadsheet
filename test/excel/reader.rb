@@ -27,6 +27,8 @@ module Spreadsheet
       end
 
       def test_not_frozen_stream_error_on_setup
+        return if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.3.0')
+
         reader = Spreadsheet::Excel::Reader.new
         data = File.expand_path File.join('test', 'data')
         path = File.join data, 'test_empty.xls'
