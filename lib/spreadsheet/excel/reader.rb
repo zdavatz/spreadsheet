@@ -1275,11 +1275,11 @@ class Reader
   end
   def setup io
     ## Reading from StringIO fails without forced encoding
-    if io.respond_to?(:string) && (str = io.string) \
-      && str.respond_to?(:force_encoding)
-      str.force_encoding 'ASCII-8BIT'
+    if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3.0')
+      io.set_encoding('ASCII-8BIT')
+    elsif io.respond_to?(:string) && (str = io.string) && str.respond_to?(:force_encoding)
+      str.force_encoding('ASCII-8BIT')
     end
-    ##
     io.rewind
     @ole = Ole::Storage.open io
     @workbook = Workbook.new io, {}
