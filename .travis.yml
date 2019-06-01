@@ -9,11 +9,11 @@ bundler_args: --binstubs
 script: "bundle exec ruby test/suite.rb"
 rvm:
   - ruby-head
-  - 2.6.1
-  - 2.5.3
+  - 2.6.3
+  - 2.5.5
   - 2.4.5
   - 2.3.8
-  - 2.2.6
+  - 2.2.10
   - 2.1.10
   - 2.0.0
   - 1.9.3
@@ -29,9 +29,9 @@ matrix:
   include:
     - rvm: 2.4.5
       env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       env: RUBYOPT='--enable-frozen-string-literal --debug-frozen-string-literal' USE_LATEST_RUBY_OLE=yes
   allow_failures:
     - rvm: ruby-head
