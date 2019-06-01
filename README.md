@@ -29,9 +29,10 @@ Hannes Wyss. Spreadsheet can read, write and modify Spreadsheet Documents.
 
 ## Notes from Users
 
-Alfred: a@boxbot.org: I think it should be noted in the README file that the library doesn't
-recognize cell formats in Excel created documents, which results in
-Floats returned for any number.
+* [Alfred](mailto:a@boxbot.org): The library doesn't recognize cell formats in Excel
+created documents, which results in Floats returned for any number.
+* [Tom](https://github.com/tom-lord): This library *only* supports XLS format;
+it does **not** support XLSX format.
 
 ## What's new?
 
