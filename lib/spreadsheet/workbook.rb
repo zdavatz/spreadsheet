@@ -76,7 +76,7 @@ module Spreadsheet
     # Returns the count of total worksheets present.
     # Takes no arguments. Just returns the length of @worksheets array.
     def sheet_count
-    @worksheets.length
+      @worksheets.length
     end
     ##
     # The Font at _idx_
