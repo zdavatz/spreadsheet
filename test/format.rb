@@ -25,6 +25,8 @@ module Spreadsheet
       assert_equal false, @format.date?
       @format.number_format = "0.00;[RED]\\-0.00"
       assert_equal false, @format.date?
+      @format.number_format = "[$-C0A]dd\\-mmm\\-yy"
+      assert_equal true, @format.date?
     end
     def test_date_or_time?
       assert_equal false, @format.date_or_time?
