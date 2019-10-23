@@ -1,3 +1,9 @@
+### 1.2.5 23.10.2019
+Author: Jesús Manuel García Muñoz <jesus@bebanjo.com>
+Date:   Wed Oct 23 20:26:01 2019 +0200
+
+* Fixes unrecognized date format
+
 ### 1.2.4 24.05.2019
 Author: Cyril Champier <cyril.champier@doctolib.com>
 Date:   Fri May 24 12:56:52 2019 +0200
