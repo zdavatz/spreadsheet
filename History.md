@@ -1,3 +1,9 @@
+### 1.2.6 22.1.2020
+Author: tetsuya-ogawa <tetsuya.ogawa87@gmail.com>
+Date:   Wed Jan 22 15:18:00 2020 +0900
+
+* add instance method "<<" to Spreadsheet::Worksheet
+
 ### 1.2.5 23.10.2019
 Author: Jesús Manuel García Muñoz <jesus@bebanjo.com>
 Date:   Wed Oct 23 20:26:01 2019 +0200
