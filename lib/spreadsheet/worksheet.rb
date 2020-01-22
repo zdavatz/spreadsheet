@@ -232,6 +232,9 @@ module Spreadsheet
       updated_from idx
       res
     end
+    def << cells=[]
+      insert_row last_row_index + 1, cells
+    end
     def inspect
       names = instance_variables
       names.delete '@rows'
