@@ -337,3 +337,13 @@ drop me a line at "zdavatz at ywesee dot com" and I will try to help you. Don't
 forget to include the offending code-snippet!
 
 All compatibility code is deprecated and will be removed in version 1.0.0
+
+## Cautionary note about cell content length
+For offline versions of Excel there is a limitation on the maximum length of
+the contents that can be written to a single cell of 32KB. Spreadsheet will
+allow you to exceed that limit, however Excel will interpret this as file
+corruption.
+
+Other spreadsheet authoring tools (Office 365, LibreOffice) are able to open
+files exceeding this limit, however saving the file in those tools will likely
+result in cell content being truncated back to 32KB.  
