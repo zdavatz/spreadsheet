@@ -1,3 +1,10 @@
+### 1.2.7 20.1.2021
+Author: Niklaus Giger <ngiger@ywesee.com>
+Date:   Wed Jan 20 15:52:17 2021 +0100
+
+* Remove .travis.ci, hoe, obsolete Warning
+* Added GithubActions
+
 ### 1.2.6 22.1.2020
 Author: tetsuya-ogawa <tetsuya.ogawa87@gmail.com>
 Date:   Wed Jan 22 15:18:00 2020 +0900
@@ -37,9 +44,9 @@ Date:   Fri Mar 1 13:00:28 2019 +0900
 Author: taichi <taichi730@gmail.com>
 Date:   Thu Feb 28 10:30:46 2019 +0900
 
-* Merge pull request #231 from taichi-ishitani/separated_version_file  
+* Merge pull request #231 from taichi-ishitani/separated_version_file
 * Merge pull request #230 from taichi-ishitani/frozen_string_literal_support
-    
+
 ### 1.2.0 17.2.2019
 Author: James McLaren <jamesmclaren555@gmail.com>
 * spreadsheet-1.2.0.gem released
@@ -70,7 +77,7 @@ Author: Maarten Brouwers <github@murb.nl>
 Date:   Thu Mar 15 15:10:23 2018 +0100
 
 * shadowing outer local variable - i
-    
+
 * Running rake resulted in the following warning: `lib/spreadsheet/worksheet.rb:345: warning: shadowing outer local variable - i`; this patch fixes that.
 
 ### 1.1.6 / 12.03.2018
@@ -249,7 +256,7 @@ Date:   Tue Nov 19 15:14:31 2013 +0000
 
 * Bumped revision
 * Fixed author stringname error (damn this 1 based counting)
-* Updating integration test to check for comments contained within the cells. 
+* Updating integration test to check for comments contained within the cells.
 * Checking also for multiple comments in a sheet
 
 ### 0.9.4 / 12.11.2013
@@ -323,7 +330,7 @@ Date:   Thu Aug 1 15:01:57 2013 -0500
 Author: Yasuhiro Asaka <yasaka@ywesee.com>
 Date:   Wed Jul 24 11:31:12 2013 +0900
 
-* Remove warnings for test suite      
+* Remove warnings for test suite
 * warning: mismatched indentations at 'end' with 'class' at xxx
 * warning: method redefined; discarding old xxx
 * warning: assigned but unused variable xxx
@@ -334,7 +341,7 @@ Date:   Wed Jul 24 11:31:12 2013 +0900
 ### 0.8.6 / 11.07.2013
 
 Author: Arjun Anand and Robert Stern <dev+arjuna+rstern@reenhanced.com>
-Date:   Wed Jul 10 13:45:30 2013 -0400 
+Date:   Wed Jul 10 13:45:30 2013 -0400
 
 * Allow editing of an existing worksheet.
 
@@ -349,11 +356,11 @@ Date:   Wed Jul 10 13:45:30 2013 -0400
 * https://groups.google.com/d/msg/rubyspreadsheet/73IoEwSx69w/barE7uVnIzwJ
 
 ### 0.8.3 / 12.03.2013
- 
+
 Author: Keith Walsh <keith.walsh@adtegrity.com>
 Date:   Mon Mar 11 16:48:25 2013 -0400
 
-* Typo correction in guide example.  
+* Typo correction in guide example.
 
 ### 0.8.2 / 28.02.2013
 
@@ -454,7 +461,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 * use both ruby 1.8 and 1.9 compatible way of getting character code when hashing
 * Fix syntax for ruby-1.9
 * return gemspec so that bundler can find it
-  When bundler loads gemspec, it evaluates it, and if the return value is 
+  When bundler loads gemspec, it evaluates it, and if the return value is
   not a gem specification built, refuses to load the gem.
 * Testing worksheet protection
 
@@ -477,7 +484,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
 ### 0.6.6 / 18.01.2012
 
-* http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points 8 and 9. 
+* http://dev.ywesee.com/wiki.php/Gem/Spreadsheet points 8 and 9.
 * Fixes byjsaak@napalm.hu
 * Patches by Vitaly Klimov
 
@@ -530,7 +537,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 ### 0.6.5.2 / 14.2.2011
 
 * Updated test/integration.rb to work with Ruby ruby 1.9.2p136 (2010-12-25 revision 30365) [i686-linux]
-  
+
   * Thanks for the hint tomiacannondale@gmail.com
 
 ### 0.6.5.1 / 17.1.2011
@@ -543,12 +550,12 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
 * 2 Enhancements courtesy to ISS AG.
 
-  * Outlining (Grouping) of lines and columns is now possible. The outlining 
+  * Outlining (Grouping) of lines and columns is now possible. The outlining
     maximum is 8. This means you can do 8 subgroups in a group.
 
-  * Hiding and Unhiding of lines and columns is now possible. 
+  * Hiding and Unhiding of lines and columns is now possible.
 
-  * Both of above two points is now possible by creating a new Excel File from 
+  * Both of above two points is now possible by creating a new Excel File from
     scratch or editing an existing XLS and adding groups or hiding lines to it.
 
 ### 0.6.4.1 / 2009-09-17
@@ -820,7 +827,7 @@ also see: https://github.com/zdavatz/spreadsheet/pull/21
 
   * Corrected the Font-Encoding values in Excel::Internals
     (Thanks to Bjørn Hjelle for the Bugreport)
-  * Spreadsheet now skips Richtext-Formatting runs and Asian Phonetic 
+  * Spreadsheet now skips Richtext-Formatting runs and Asian Phonetic
     Settings when reading the SST, fixing a problem where the presence of
     Richtext could lead to an incomplete SST.
 
