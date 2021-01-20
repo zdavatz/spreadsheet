@@ -3,6 +3,8 @@
 require 'rubygems'
 require 'bundler'
 require 'find'
+require 'simplecov'
+SimpleCov.start
 
 $VERBOSE = true
 

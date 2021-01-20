@@ -1,7 +1,4 @@
-# require File.join(File.dirname(__FILE__), 'lib', 'spreadsheet')
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'spreadsheet/version'
+require_relative 'lib/spreadsheet/version'
 
 Gem::Specification.new do |spec|
    spec.name        = "spreadsheet"
@@ -18,7 +15,9 @@ Gem::Specification.new do |spec|
    spec.executables << "xlsopcodes"
 
    spec.add_dependency "ruby-ole"
-   spec.add_development_dependency "hoe"
+   spec.add_development_dependency "rake"
+   spec.add_development_dependency "test-unit"
+   spec.add_development_dependency "simplecov"
 
    spec.homepage    = 'https://github.com/zdavatz/spreadsheet/'
 end

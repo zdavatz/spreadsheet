@@ -1,3 +1,4 @@
 tags
 *.swp
 /Gemfile.lock
+coverage

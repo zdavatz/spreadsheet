@@ -1,11 +1,5 @@
 require 'spreadsheet'
 
-warn <<-EOS
-[DEPRECATED] By requiring 'spreadsheet/excel' you are loading a Compatibility
-             layer which provides a drop-in replacement for Spreadsheet::Excel
-             versions <= 0.3.5.1. This code will be removed in Spreadsheet
-             version 1.0.0
-EOS
 ##
 # Spreadsheet::Excel Compatibility Layer.
 # Drop-in replacement for Spreadsheet::Excel version <= 0.3.5.1
