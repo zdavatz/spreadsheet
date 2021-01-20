@@ -88,10 +88,6 @@ Running tests:
 * `bundle install`
 * ./test/suite.rb
 
-## TravisCI 
-
-* https://travis-ci.org/zdavatz/spreadsheet
-
 ## Authors
 
 Original Code:
@@ -103,7 +99,7 @@ ParseExcel:
 Copyright (c) 2003 by Hannes Wyss (hannes.wyss@gmail.com)
 
 New Code:
-Copyright (c) 2010 ywesee GmbH (mhatakeyama@ywesee.com, zdavatz@ywesee.com)
+Copyright (c) 2010 ywesee GmbH (ngiger@ywesee.com, mhatakeyama@ywesee.com, zdavatz@ywesee.com)
 
 
 ## License
