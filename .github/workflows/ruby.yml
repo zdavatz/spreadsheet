@@ -1,0 +1,35 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+# Using a matrix fails, because /setup-ruby always invokes bundle install without any additional args
+# Fixed by adding not defining the debugger group in the Gemfile
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu]
+        # https://github.com/ruby/setup-ruby
+        ruby: [2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.0, jruby, truffleruby, head]
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || endsWith(matrix.ruby, 'truffleruby') || endsWith(matrix.ruby, 'jruby') }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - name: Run tests via test/suite.rb
+      run: bundle exec ruby test/suite.rb
