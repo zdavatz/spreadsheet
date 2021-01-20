@@ -75,10 +75,9 @@ Using [RubyGems](http://www.rubygems.org):
 If you don't like [RubyGems](http://www.rubygems.org), let me know which
 installation solution you prefer and I'll include it in the future.
 
-If you can use 'rake' and 'hoe' library is also installed, you can 
-build a gem package as follows:
+Tu build the gem you can do:
 
-* `rake gem`
+* `gem build spreadsheet`
 
 The gem package is built in pkg directory.
 
