@@ -1,7 +1,7 @@
 # Spreadsheet
 ## Getting Started
 [![Join the chat at https://gitter.im/zdavatz/spreadsheet](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zdavatz/spreadsheet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://secure.travis-ci.org/zdavatz/spreadsheet.png)](http://travis-ci.org/zdavatz/spreadsheet)
+[![Build Status](https://github.com/zdavatz/spreadsheet/workflows/Ruby/badge.svg)](https://github.com/zdavatz/spreadsheet/workflows/Ruby/badge.svg)
 
 The Mailing List can be found here:
 
