@@ -233,7 +233,7 @@ module Spreadsheet
       res
     end
     def << cells=[]
-      insert_row last_row_index + 1, cells
+      insert_row @rows.size, cells
     end
     def inspect
       names = instance_variables
