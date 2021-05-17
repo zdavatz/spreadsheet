@@ -28,6 +28,7 @@ module Spreadsheet
     include Spreadsheet::Encodings
     include Spreadsheet::Datatypes
     include Enumerable
+    INVALID_NAME_CHARACTERS = %r{[\\\/\*\?\:\[\]]}.freeze
     attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
     attr_reader :froze_top, :froze_left
@@ -49,7 +50,7 @@ module Spreadsheet
         :right => 0.75,
         :bottom => 1
       }
-      @name = opts[:name] || 'Worksheet'
+      @name = (opts[:name] || 'Worksheet').gsub(INVALID_NAME_CHARACTERS, '_')
       @workbook = opts[:workbook]
       @rows = []
       @columns = []

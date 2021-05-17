@@ -138,5 +138,10 @@ module Spreadsheet
       end
     end
 
+    def test_name
+      worksheet = Worksheet.new(name: '\a/b*c?d:e[f]')
+      assert_equal '_a_b_c_d_e_f_', worksheet.name
+    end
+
   end
 end
