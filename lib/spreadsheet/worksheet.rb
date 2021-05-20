@@ -28,7 +28,6 @@ module Spreadsheet
     include Spreadsheet::Encodings
     include Spreadsheet::Datatypes
     include Enumerable
-    INVALID_NAME_CHARACTERS = %r{[\\\/\*\?\:\[\]]}.freeze
     attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
     attr_reader :froze_top, :froze_left
@@ -50,7 +49,7 @@ module Spreadsheet
         :right => 0.75,
         :bottom => 1
       }
-      @name = (opts[:name] || 'Worksheet').gsub(INVALID_NAME_CHARACTERS, '_')
+      @name = sanitize_invalid_characters(opts[:name] || 'Worksheet')
       @workbook = opts[:workbook]
       @rows = []
       @columns = []
@@ -367,6 +366,9 @@ module Spreadsheet
     end
 
     private
+    def sanitize_invalid_characters(name) # :nodoc:
+      name.gsub(Regexp.new('[\\\/\*\?\:\[\]]'.encode(Spreadsheet.client_encoding)), '_')
+    end
     def index_of_first ary # :nodoc:
       return unless ary
       ary.index(ary.find do |elm| elm end)
