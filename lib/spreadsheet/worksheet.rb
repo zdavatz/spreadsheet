@@ -49,7 +49,7 @@ module Spreadsheet
         :right => 0.75,
         :bottom => 1
       }
-      @name = opts[:name] || 'Worksheet'
+      @name = sanitize_invalid_characters(opts[:name] || 'Worksheet')
       @workbook = opts[:workbook]
       @rows = []
       @columns = []
@@ -366,6 +366,9 @@ module Spreadsheet
     end
 
     private
+    def sanitize_invalid_characters(name) # :nodoc:
+      name.gsub(Regexp.new('[\\\/\*\?\:\[\]]'.encode(Spreadsheet.client_encoding)), '_')
+    end
     def index_of_first ary # :nodoc:
       return unless ary
       ary.index(ary.find do |elm| elm end)
