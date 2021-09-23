@@ -1,5 +1,9 @@
+### 1.3.0 23.9.2021
+Author: Brian Chan <i@b123400.net>
+* Issues #138 #262, see github.com/zdavatz/spreadsheet
+
 ### 1.2.9 21.5.2021
-Author Mark Edmondson <mark.edmondson@gmail.com>
+Author: Mark Edmondson <mark.edmondson@gmail.com>
 * See git log for changes.
 
 ### 1.2.8 27.2.2021 

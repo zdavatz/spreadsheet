@@ -3,5 +3,5 @@
 module Spreadsheet
   ##
   # The version of Spreadsheet you are using.
-  VERSION = '1.2.9'
+  VERSION = '1.3.0'
 end
