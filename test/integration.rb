@@ -1401,6 +1401,30 @@ module Spreadsheet
       assert_equal(:visible, book2.worksheet(1).visibility)
     end
 
+    def test_append_and_reopen
+      filename = path = File.join @var, 'test.xls'
+      sheet_name = 'Test Sheet'
+
+      # Create excel
+      excel = Spreadsheet::Workbook.new(filename)
+      sheet = excel.create_worksheet(name: sheet_name)
+      sheet.row(1).replace ['Data']
+      excel.write(filename)
+
+      # Append something
+      excel = Spreadsheet.open(filename, 'a+')
+      sheet = excel.worksheet(sheet_name)
+      sheet.row(2).replace ['Data2']
+      filename = "test2.xls"
+      excel.write(filename)
+
+      # Reopen
+      excel = Spreadsheet.open filename
+      sheet = excel.worksheet sheet_name
+    ensure
+      File.delete filename if File.exist? filename
+    end
+
     def test_text_drawing
       path = File.join @data, 'test_text_drawing.xls'
       book = Spreadsheet.open path
