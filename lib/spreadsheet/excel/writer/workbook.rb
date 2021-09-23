@@ -164,93 +164,6 @@ class Workbook < Spreadsheet::Writer
     end
   end
   ##
-  # Copy unchanged data verbatim, adjust offsets and write new records for
-  # changed data.
-  def write_changes workbook, io
-    sanitize_worksheets workbook.worksheets
-    collect_formats workbook, :existing_document => true
-    reader = workbook.ole
-    sheet_data = {}
-    sst_status, sst_total, sst_strings = complete_sst_update? workbook
-    sst = {}
-    sst_strings.each_with_index do |str, idx| sst.store str, idx end
-    sheets = worksheets(workbook)
-    positions = []
-    newsheets = []
-    sheets.each do |sheet|
-      @sst[sheet] = sst
-      pos, len = workbook.offsets[sheet.worksheet]
-      if pos
-        positions.push pos
-        sheet.write_changes reader, pos + len, sst_status
-      else
-        newsheets.push sheet
-        sheet.write_from_scratch
-      end
-      sheet_data[sheet.worksheet] = sheet.data
-    end
-    Ole::Storage.open io do |ole|
-      ole.file.open 'Workbook', 'w' do |writer|
-        reader.seek lastpos = 0
-        workbook.offsets.select do |key, pair|
-          workbook.changes.include? key
-        end.sort_by do |key, (pos, _)|
-          pos
-        end.each do |key, (pos, len)|
-          data = reader.read(pos - lastpos)
-          writer.write data
-          case key
-          when Spreadsheet::Worksheet
-            writer.write sheet_data[key]
-          when :boundsheets
-            ## boundsheets are hard to calculate. The offset below is only
-            #  correct if there are no more changes in the workbook globals
-            #  string after this.
-            oldoffset = positions.min - len
-            lastpos = pos + len
-            bytechange = 0
-            buffer = StringIO.new ''.dup
-            if tuple = workbook.offsets[:sst]
-              write_sst_changes workbook, buffer, writer.pos,
-                                sst_total, sst_strings
-              pos, len = tuple
-              if offset = workbook.offsets[:extsst]
-                len += offset[1].to_i
-              end
-              bytechange = buffer.size - len
-              write_boundsheets workbook, writer, oldoffset + bytechange
-              reader.seek lastpos
-              writer.write reader.read(pos - lastpos)
-              buffer.rewind
-              writer.write buffer.read
-            elsif sst.empty? || workbook.biff_version < 8
-              write_boundsheets workbook, writer, oldoffset + bytechange
-            else
-              write_sst workbook, buffer, writer.pos
-              write_boundsheets workbook, writer, oldoffset + buffer.size
-              pos = lastpos
-              len = positions.min - lastpos
-              if len > OPCODE_SIZE
-                reader.seek pos
-                writer.write reader.read(len - OPCODE_SIZE)
-              end
-              buffer.rewind
-              writer.write buffer.read
-              write_eof workbook, writer
-            end
-          else
-            send "write_#{key}", workbook, writer
-          end
-          lastpos = [pos + len, reader.size - 1].min
-          reader.seek lastpos
-        end
-        writer.write reader.read
-        newsheets.each do |sheet|
-          writer.write sheet.data
-        end
-      end
-    end
-  end
   def write_datemode workbook, writer
     mode = @date_base.year == 1899 ? 0x00 : 0x01
     data = [
@@ -639,8 +552,7 @@ class Workbook < Spreadsheet::Writer
     write_op writer, 0x003d, data.pack('v*')
   end
   ##
-  # The main writer method. Calls #write_from_scratch or #write_changes
-  # depending on the class and state of _workbook_.
+  # The main writer method. Calls #write_from_scratch.
   def write_workbook workbook, io
     unless workbook.is_a?(Excel::Workbook) && workbook.io
       @date_base = Date.new 1899, 12, 31
@@ -650,7 +562,8 @@ class Workbook < Spreadsheet::Writer
       if workbook.changes.empty?
         super
       else
-        write_changes workbook, io
+        @date_base = Date.new 1899, 12, 31
+        write_from_scratch workbook, io
       end
     end
   ensure
