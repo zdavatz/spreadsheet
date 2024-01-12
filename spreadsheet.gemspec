@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
    spec.test_file   = "test/suite.rb"
    spec.executables << "xlsopcodes"
 
+   spec.add_dependency "bigdecimal"
    spec.add_dependency "ruby-ole"
    spec.add_development_dependency "rake"
    spec.add_development_dependency "test-unit"
