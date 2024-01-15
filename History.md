@@ -1,3 +1,8 @@
+### 1.3.1 15.1.2024
+commit dd69d23f00427066cda8d2b30355e044b8c07eff
+Author: Mark Young <mark.young@atg.auto>
+* Fix spreadsheet.gemspec issues.
+
 ### 1.3.0 23.9.2021
 Author: Brian Chan <i@b123400.net>
 * Issues #138 #262, see github.com/zdavatz/spreadsheet
