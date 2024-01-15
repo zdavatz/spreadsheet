@@ -21,4 +21,5 @@ Gem::Specification.new do |spec|
    spec.add_development_dependency "simplecov"
 
    spec.homepage    = 'https://github.com/zdavatz/spreadsheet/'
+   spec.metadata["changelog_uri"] = spec.homepage + "/blob/master/History.md"
 end
