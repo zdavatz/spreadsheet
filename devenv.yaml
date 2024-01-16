@@ -1,0 +1,8 @@
+inputs:
+  nixpkgs:
+    url: github:NixOS/nixpkgs/nixos-23.11
+  nixpkgs-ruby:
+    url: github:bobvanderlinden/nixpkgs-ruby
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
