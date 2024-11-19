@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
 
    spec.homepage    = 'https://github.com/zdavatz/spreadsheet/'
    spec.metadata["changelog_uri"] = spec.homepage + "/blob/master/History.md"
+   spec.metadata["funding_uri"] = "https://github.com/sponsors/zdavatz"
 end
