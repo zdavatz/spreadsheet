@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.author = "Hannes F. Wyss, Masaomi Hatakeyama, Zeno R.R. Davatz"
   spec.email = "hannes.wyss@gmail.com, mhatakeyama@ywesee.com, zdavatz@ywesee.com"
   spec.platform = Gem::Platform::RUBY
+  spec.required_ruby_version = '>= 2.4'
   spec.license = "GPL-3.0"
   spec.files = Dir.glob("{bin,lib,test}/**/*") + Dir.glob("*.txt")
   spec.test_file = "test/suite.rb"
