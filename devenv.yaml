@@ -1,6 +1,6 @@
 inputs:
   nixpkgs:
-    url: github:NixOS/nixpkgs/nixos-23.11
+    url: github:NixOS/nixpkgs/nixos-24.11
   nixpkgs-ruby:
     url: github:bobvanderlinden/nixpkgs-ruby
     inputs:

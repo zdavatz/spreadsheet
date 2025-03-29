@@ -1,1 +1,1 @@
-require 'spreadsheet/excel/writer/workbook'
+require "spreadsheet/excel/writer/workbook"

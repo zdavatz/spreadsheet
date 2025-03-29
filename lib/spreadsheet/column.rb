@@ -1,4 +1,4 @@
-require 'spreadsheet/datatypes'
+require "spreadsheet/datatypes"
 
 module Spreadsheet
   ##
@@ -22,9 +22,9 @@ module Spreadsheet
         keys.each do |key|
           unless instance_methods.include? "unupdated_#{key}="
             alias_method :"unupdated_#{key}=", :"#{key}="
-            define_method "#{key}=" do |value|
-              send "unupdated_#{key}=", value
-              @worksheet.column_updated @idx, self if @worksheet
+            define_method :"#{key}=" do |value|
+              send :"unupdated_#{key}=", value
+              @worksheet&.column_updated @idx, self
               value
             end
           end
@@ -38,23 +38,24 @@ module Spreadsheet
     boolean :hidden, :collapsed
     enum :outline_level, 0, Integer
     updater :collapsed, :hidden, :outline_level, :width
-    def initialize idx, format, opts={}
+    def initialize idx, format, opts = {}
       @worksheet = nil
       @idx = idx
       opts[:width] ||= 10
       opts.each do |key, value|
-        self.send "#{key}=", value
+        send :"#{key}=", value
       end
       self.default_format = format
     end
+
     ##
     # Set the default Format for Cells in this Column.
     def default_format= format
-      @worksheet.add_format format if @worksheet
+      @worksheet&.add_format format
       @default_format = format
-      @worksheet.column_updated @idx, self if @worksheet
-      format
+      @worksheet&.column_updated @idx, self
     end
+
     ##
     # Iterate over all cells in this column.
     def each
@@ -62,6 +63,7 @@ module Spreadsheet
         yield row[idx]
       end
     end
+
     def == other # :nodoc:
       other.is_a?(Column) && default_format == other.default_format \
         && width == other.width && hidden == other.hidden \

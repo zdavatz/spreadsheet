@@ -1,4 +1,4 @@
-require 'spreadsheet/encodings'
+require "spreadsheet/encodings"
 
 module Spreadsheet
   ##
@@ -10,14 +10,14 @@ module Spreadsheet
   # #author  :: The name of the author who wrote the note
   class Note
     include Encodings
-    attr_accessor :author, :length, :objID, :row, :col, :text
+    attr_accessor :author, :length, :obj_id, :row, :col, :text
     def initialize
       @author = nil
       @length = 0
-      @objID  = nil
-      @row    = -1
-      @col    = -1
-      @text   = ""
+      @obj_id = nil
+      @row = -1
+      @col = -1
+      @text = ""
     end
   end
 end

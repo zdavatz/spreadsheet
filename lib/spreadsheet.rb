@@ -1,4 +1,3 @@
-
 ### Spreadsheet - A Library for reading and writing Spreadsheet Documents.
 #
 #   Copyright (C) 2008-2010 ywesee GmbH
@@ -25,12 +24,12 @@
 #             8006 Zürich
 ###           Switzerland
 
-require 'spreadsheet/version'
-require 'spreadsheet/errors'
+require "spreadsheet/version"
+require "spreadsheet/errors"
 
-require 'spreadsheet/excel/workbook'
-require 'spreadsheet/excel/reader'
-require 'spreadsheet/excel/rgb'
+require "spreadsheet/excel/workbook"
+require "spreadsheet/excel/reader"
+require "spreadsheet/excel/rgb"
 
 # = Synopsis
 # The Spreadsheet Library is designed to read and write Spreadsheet Documents.
@@ -44,38 +43,36 @@ require 'spreadsheet/excel/rgb'
 #  sheet = book.worksheet 0
 #  sheet.each do |row| puts row[0] end
 module Spreadsheet
-
   ##
   # Default client Encoding. Change this value if your application uses a
   # different Encoding:
   # Spreadsheet.client_encoding = 'ISO-LATIN-1//TRANSLIT//IGNORE'
-  @client_encoding = 'UTF-8'
-  @enc_translit = 'TRANSLIT'
-  @enc_ignore = 'IGNORE'
+  @client_encoding = "UTF-8"
+  @enc_translit = "TRANSLIT"
+  @enc_ignore = "IGNORE"
 
   class << self
-
     attr_accessor :client_encoding, :enc_translit, :enc_ignore
 
     ##
     # Parses a Spreadsheet Document and returns a Workbook object. At present,
     # only Excel-Documents can be read.
-    def open io_or_path, mode="rb+"
+    def open io_or_path, mode = "rb+"
       if io_or_path.respond_to? :seek
         Excel::Workbook.open(io_or_path)
       elsif block_given?
         File.open(io_or_path, mode) do |fh|
-          yield open(fh)
+          yield open(fh) # standard:disable Security/Open
         end
       else
-        open File.open(io_or_path, mode)
+        open File.open(io_or_path, mode) # standard:disable Security/Open
       end
     end
 
     ##
     # Returns a Writer object for the specified path. At present, only the
     # Excel-Writer is available.
-    def writer io_or_path, type=Excel
+    def writer io_or_path, type = Excel
       Excel::Writer::Workbook.new io_or_path
     end
   end

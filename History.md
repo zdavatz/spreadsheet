@@ -1,3 +1,20 @@
+### 1.3.4 29.03.2025
+Author: Niklaus Giger <niklaus.giger@member.fsf.org>
+* Formatted using standardrb
+* Fixes for Ruby 3.4
+* Bumped minimal Ruby version to 2.6
+
+### 1.3.3 20.11.2024
+
+commit 6464ab51195eb3593fbc2feed7436d0b6b057f73
+Author: Edouard Brière <edouard.briere@gmail.com>
+* Remove trailing slash from spec.homepage
+
+### 1.3.2 15.1.2024
+commit a2f54fec58339818c54e4193eed21fbb72aceff9
+Author: Andrew Nesbitt <andrewnez@gmail.com>
+*  Add funding_uri to gemspec
+
 ### 1.3.1 15.1.2024
 commit dd69d23f00427066cda8d2b30355e044b8c07eff
 Author: Mark Young <mark.young@atg.auto>

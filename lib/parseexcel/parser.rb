@@ -1,4 +1,4 @@
-require 'parseexcel'
+require "parseexcel"
 
 module Spreadsheet
   module ParseExcel # :nodoc: all

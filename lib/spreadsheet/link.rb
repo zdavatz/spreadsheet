@@ -1,5 +1,5 @@
-require 'uri'
-require 'spreadsheet/encodings'
+require "uri"
+require "spreadsheet/encodings"
 
 module Spreadsheet
   ##
@@ -20,20 +20,22 @@ module Spreadsheet
   class Link < String
     include Encodings
     attr_accessor :target_frame, :url, :dos, :fragment
-    def initialize url='', description=url, fragment=nil
-      super description
+    def initialize url = "", description = url, fragment = nil
+      super(description)
       @url = url
       @fragment = fragment
     end
+
     ##
     # The Url with the fragment appended if present.
     def href
       href = (@url || @dos).to_s.dup
       if @fragment
-        href << client('#', 'UTF-8') << @fragment
+        href << client("#", "UTF-8") << @fragment
       end
       href
     end
+
     ##
     # Attempts to parse the output of href. May raise a URI::InvalidURIError
     def to_uri

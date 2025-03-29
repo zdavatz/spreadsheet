@@ -24,4 +24,4 @@
 #             8006 Zürich
 ###           Switzerland
 
-require 'parseexcel/parseexcel'
+require "parseexcel/parseexcel"
