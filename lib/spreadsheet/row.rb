@@ -25,7 +25,7 @@ module Spreadsheet
             alias_method :"unupdated_#{key}=", :"#{key}="
             define_method :"#{key}=" do |value|
               send :"unupdated_#{key}=", value
-              @worksheet.row_updated @idx, self if @worksheet
+              @worksheet&.row_updated @idx, self
               value
             end
           end
@@ -42,7 +42,7 @@ module Spreadsheet
           class_eval <<-SRC, __FILE__, __LINE__ + 1
             def #{key}(*args)
               res = super(*args)
-              @worksheet.row_updated @idx, self if @worksheet
+              @worksheet&.row_updated @idx, self
               res
             end
           SRC
@@ -70,14 +70,14 @@ module Spreadsheet
     # The default Format of this Row, if you have set one.
     # Returns the Worksheet's default or the Workbook's default Format otherwise.
     def default_format
-      @default_format || @worksheet.default_format || @workbook.default_format
+      @default_format || @worksheet&.default_format || @workbook.default_format
     end
 
     ##
     # Set the default Format used when writing a Cell if no explicit Format is
     # stored for the cell.
     def default_format= format
-      @worksheet.add_format format if @worksheet
+      @worksheet&.add_format format
       @default_format = format
     end
     format_updater :default_format
@@ -133,8 +133,8 @@ module Spreadsheet
     # Set the Format for the Cell at _idx_ (0-based).
     def set_format idx, fmt
       @formats[idx] = fmt
-      @worksheet.add_format fmt
-      @worksheet.row_updated @idx, self if @worksheet
+      @worksheet&.add_format fmt
+      @worksheet&.row_updated @idx, self
       fmt
     end
 
@@ -146,14 +146,14 @@ module Spreadsheet
         fmt.font = fmt.font.clone
         @formats[idx] = fmt.update_format(opts)
       end
-      @worksheet.add_format @formats[idx]
-      @worksheet.row_updated @idx, self if @worksheet
+      @worksheet&.add_format @formats[idx]
+      @worksheet&.row_updated @idx, self
     end
 
     private
 
     def index_of_first ary # :nodoc:
-      if first = ary.find { |elm| !elm.nil? }
+      if (first = ary.find { |elm| !elm.nil? })
         ary.index first
       end
     end

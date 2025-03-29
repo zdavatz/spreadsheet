@@ -61,7 +61,7 @@ module Spreadsheet
     end
 
     def internal string, internal = "UTF-16LE"
-      string.split("").zip(Array.new(string.size, 0.chr)).join
+      string.chars.zip(Array.new(string.size, 0.chr)).join
     end
   end
 end

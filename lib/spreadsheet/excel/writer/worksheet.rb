@@ -54,7 +54,7 @@ module Spreadsheet
           end
           base = @workbook.date_base
           value = date - base
-          if LEAP_ERROR > base
+          if base < LEAP_ERROR
             value += 1
           end
           value
@@ -68,7 +68,7 @@ module Spreadsheet
           cent = 0
           int = 2
           higher = value * 100
-          if (higher.is_a?(Rational) or higher.is_a?(BigDecimal) or higher.is_a?(Float)) && higher < 0xfffffffc
+          if (higher.is_a?(Rational) || higher.is_a?(BigDecimal) || higher.is_a?(Float)) && higher < 0xfffffffc
             cent = 1
             value = if higher == higher.to_i
               higher.to_i
@@ -96,7 +96,7 @@ module Spreadsheet
         def need_number? cell
           if cell.is_a?(Numeric) && cell.abs > 0x1fffffff
             true
-          elsif cell.is_a?(Rational) or ((cell.is_a?(BigDecimal) or cell.is_a?(Float)) and !cell.nan?)
+          elsif cell.is_a?(Rational) || ((cell.is_a?(BigDecimal) || cell.is_a?(Float)) && !cell.nan?)
             higher = cell * 100
             if higher == higher.to_i
               need_number? higher.to_i
@@ -161,7 +161,7 @@ module Spreadsheet
         end
 
         ##
-        # Write a cell with a Boolean or Error value
+        # Write a cell with a Boolean || Error value
         def write_boolerr row, idx
           value = row[idx]
           type = 0
@@ -173,7 +173,7 @@ module Spreadsheet
             numval = 1
           end
           data = [
-            numval, # Boolean or error value (type depends on the following byte)
+            numval, # Boolean || error value (type depends on the following byte)
             type    # 0 = Boolean value; 1 = Error code
           ]
           write_cell :boolerr, row, idx, *data
@@ -379,7 +379,7 @@ module Spreadsheet
           else
             data2 = [
               0x02,       # (identifier for an error value)
-              0x2a,       # Error code: #N/A! Argument or function not available
+              0x2a,       # Error code: #N/A! Argument || function not available
               0xffff
             ].pack "CxCx3v"
           end
@@ -471,8 +471,8 @@ module Spreadsheet
           data = [
             0,  # Width of the area to display row outlines (left of the sheet), in pixel
             0,  # Height of the area to display column outlines (above the sheet), in pixel
-            row_outline_level + 1, # Number of visible row outline levels (used row levels+1; or 0,if not used)
-            col_outline_level + 1  # Number of visible column outline levels (used column levels+1; or 0,if not used)
+            row_outline_level + 1, # Number of visible row outline levels (used row levels+1; || 0,if not used)
+            col_outline_level + 1  # Number of visible column outline levels (used column levels+1; || 0,if not used)
           ]
           # write record
           write_op opcode(:guts), data.pack("v4")
@@ -501,16 +501,16 @@ module Spreadsheet
             opts     # Option flags
             #     Bit  Mask        Contents
             #       0  0x00000001  0 = No link extant
-            #                      1 = File link or URL
+            #                      1 = File link || URL
             #       1  0x00000002  0 = Relative file path
-            #                      1 = Absolute path or URL
+            #                      1 = Absolute path || URL
             # 2 and 4  0x00000014  0 = No description
             #                      1 (both bits) = Description
             #       3  0x00000008  0 = No text mark
             #                      1 = Text mark
             #       7  0x00000080  0 = No target frame
             #                      1 = Target frame
-            #       8  0x00000100  0 = File link or URL
+            #       8  0x00000100  0 = File link || URL
             #                      1 = UNC path (incl. server name)
           ].pack("V2")
           tail = []
@@ -527,7 +527,7 @@ module Spreadsheet
           url = internal(link.url).dup << nullstr
           tail.push [
             # 6.53.2 Hyperlink containing a URL (Uniform Resource Locator)
-            # These data fields occur for links which are not local files or files
+            # These data fields occur for links which are not local files || files
             # in the local network (for instance HTTP and FTP links and e-mail
             # addresses). The lower 9 bits of the option flags field must be
             # 0.x00x.xx112 (x means optional, depending on hyperlink content). The
@@ -644,15 +644,15 @@ module Spreadsheet
 
         def write_refmode
           # • The “RC” mode uses numeric indexes for rows and columns, for example
-          #   “R(1)C(-1)”, or “R1C1:R2C2”.
+          #   “R(1)C(-1)”, || “R1C1:R2C2”.
           # • The “A1” mode uses characters for columns and numbers for rows, for
-          #   example “B1”, or “$A$1:$B$2”.
+          #   example “B1”, || “$A$1:$B$2”.
           mode = 1 # 0 = RC mode; 1 = A1 mode
           write_op 0x000f, [mode].pack("v")
         end
 
         ##
-        # Write a cell with a Numeric or Date value.
+        # Write a cell with a Numeric || Date value.
         def write_rk row, idx
           write_cell :rk, row, idx, encode_rk(row[idx])
         end
@@ -676,12 +676,12 @@ module Spreadsheet
           #     12     4  Option flags and default row formatting:
           #                  Bit  Mask        Contents
           #                  2-0  0x00000007  Outline level of the row
-          #                    4  0x00000010  1 = Outline group starts or ends here
+          #                    4  0x00000010  1 = Outline group starts || ends here
           #                                       (depending on where the outline
           #                                       buttons are located, see WSBOOL
           #                                       record, ➜ 6.113), and is collapsed
-          #                    5  0x00000020  1 = Row is hidden (manually, or by a
-          #                                       filter or outline group)
+          #                    5  0x00000020  1 = Row is hidden (manually, || by a
+          #                                       filter || outline group)
           #                    6  0x00000040  1 = Row height and default font height
           #                                       do not match
           #                    7  0x00000080  1 = Row has explicit default format (fl)
@@ -691,7 +691,7 @@ module Spreadsheet
           #                   28  0x10000000  1 = Additional space above the row.
           #                                       This flag is set, if the upper
           #                                       border of at least one cell in this
-          #                                       row or if the lower border of at
+          #                                       row || if the lower border of at
           #                                       least one cell in the row above is
           #                                       formatted with a thick line style.
           #                                       Thin and medium line styles are not
@@ -699,9 +699,9 @@ module Spreadsheet
           #                   29  0x20000000  1 = Additional space below the row.
           #                                       This flag is set, if the lower
           #                                       border of at least one cell in this
-          #                                       row or if the upper border of at
+          #                                       row || if the upper border of at
           #                                       least one cell in the row below is
-          #                                       formatted with a medium or thick
+          #                                       formatted with a medium || thick
           #                                       line style. Thin line styles are
           #                                       not taken into account.
           height = row.height || ROW_HEIGHT
@@ -709,7 +709,7 @@ module Spreadsheet
           opts |= 0x00000010 if row.collapsed?
           opts |= 0x00000020 if row.hidden?
           opts |= 0x00000040 if height != ROW_HEIGHT
-          if fmt = row.default_format
+          if (fmt = row.default_format)
             xf_idx = @workbook.xf_index @worksheet.workbook, fmt
             opts |= 0x00000080
             opts |= xf_idx << 16
@@ -761,7 +761,7 @@ module Spreadsheet
 
         def write_window2
           # This record contains additional settings for the document window
-          # (BIFF2-BIFF4) or for the window of a specific worksheet (BIFF5-BIFF8).
+          # (BIFF2-BIFF4) || for the window of a specific worksheet (BIFF5-BIFF8).
           # It is part of the Sheet View Settings Block (➜ 4.5).
           # Offset  Size  Contents
           #      0     2  Option flags:

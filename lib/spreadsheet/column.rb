@@ -24,7 +24,7 @@ module Spreadsheet
             alias_method :"unupdated_#{key}=", :"#{key}="
             define_method :"#{key}=" do |value|
               send :"unupdated_#{key}=", value
-              @worksheet.column_updated @idx, self if @worksheet
+              @worksheet&.column_updated @idx, self
               value
             end
           end
@@ -51,9 +51,9 @@ module Spreadsheet
     ##
     # Set the default Format for Cells in this Column.
     def default_format= format
-      @worksheet.add_format format if @worksheet
+      @worksheet&.add_format format
       @default_format = format
-      @worksheet.column_updated @idx, self if @worksheet
+      @worksheet&.column_updated @idx, self
     end
 
     ##

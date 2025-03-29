@@ -8,9 +8,9 @@ module Spreadsheet
   #
   class NoteObject
     include Encodings
-    attr_accessor :objID, :text
+    attr_accessor :obj_id, :text
     def initialize
-      @objID = -1
+      @obj_id = -1
       @text = ""
     end
   end

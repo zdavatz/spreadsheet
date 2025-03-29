@@ -219,7 +219,7 @@ module Spreadsheet
           size = font.size * TWIPS
           color = SEDOC_ROLOC[font.color] || SEDOC_ROLOC[:text]
           weight = FONT_WEIGHTS.fetch(font.weight, font.weight)
-          weight = [[weight, 1000].min, 100].max
+          weight = weight.clamp(100, 1000)
           esc = SEPYT_TNEMEPACSE.fetch(font.escapement, 0)
           underline = SEPYT_ENILREDNU.fetch(font.underline, 0)
           family = SEILIMAF_TNOF.fetch(font.family, 0)

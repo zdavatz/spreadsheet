@@ -192,7 +192,7 @@ module Spreadsheet
           # ! In several cases, BIFF8 still writes the BIFF2-BIFF5 format of a cell range address
           # (using 8-bit values for the column indexes). This will be mentioned at the respective place.
           #
-          offset = 0, results = []
+          results = []
           return results if len < 2
           count = work[0..1].unpack1("v")
           offset = 2

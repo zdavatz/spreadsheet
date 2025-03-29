@@ -163,7 +163,7 @@ module Spreadsheet
         labelsst: "v3V",
         number: "v3#{EIGHT_BYTE_DOUBLE}",
         pagesetup: "v8#{EIGHT_BYTE_DOUBLE}2v",
-        margin: "#{EIGHT_BYTE_DOUBLE}",
+        margin: EIGHT_BYTE_DOUBLE.to_s,
         rk: "v3V",
         row: "v4x4V",
         window2: "v4x2v2x4",

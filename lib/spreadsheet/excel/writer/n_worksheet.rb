@@ -53,7 +53,7 @@ module Spreadsheet
           end
           base = @workbook.date_base
           value = date - base
-          if LEAP_ERROR > base
+          if base < LEAP_ERROR
             value += 1
           end
           value
@@ -95,7 +95,7 @@ module Spreadsheet
         def need_number? cell
           if cell.is_a?(Numeric) && cell.abs > 0x1fffffff
             true
-          elsif cell.is_a?(Float) and !cell.nan?
+          elsif cell.is_a?(Float) && !cell.nan?
             higher = cell * 100
             if higher == higher.to_i
               need_number? higher.to_i
@@ -704,7 +704,7 @@ module Spreadsheet
           opts |= 0x00000010 if row.collapsed?
           opts |= 0x00000020 if row.hidden?
           opts |= 0x00000040 if height != ROW_HEIGHT
-          if fmt = row.default_format
+          if (fmt = row.default_format)
             xf_idx = @workbook.xf_index @worksheet.workbook, fmt
             opts |= 0x00000080
             opts |= xf_idx << 16

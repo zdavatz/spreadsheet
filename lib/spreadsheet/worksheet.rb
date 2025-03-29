@@ -307,7 +307,7 @@ module Spreadsheet
     ##
     # Updates the Row at _idx_ with the following arguments.
     def update_row idx, *cells
-      res = if row = @rows[idx]
+      res = if (row = @rows[idx])
         row[0, cells.size] = cells
         row
       else
@@ -369,9 +369,9 @@ module Spreadsheet
           if row(row_size).empty? || row(row_size).compact.join("").empty?
             row_size = @dimensions[1] + (((row_size - @dimensions[1]) + 1) / 2).to_i
           else
-            _i = ((row_size - @dimensions[1]) / 2).to_i + 1
+            idx = ((row_size - @dimensions[1]) / 2).to_i + 1
             @dimensions[1] = row_size
-            row_size += _i
+            row_size += idx
           end
         end
         @dimensions[1] = row_size + 1
@@ -391,7 +391,7 @@ module Spreadsheet
           break unless (@dimensions[0]..@dimensions[1]).inject(true) { |t, j| t && row(j)[i].to_s.empty? }
           @dimensions[3] = i
         end
-        @dimensions[3] = @dimensions[3]
+        @dimensions[3]
       end
     end
 

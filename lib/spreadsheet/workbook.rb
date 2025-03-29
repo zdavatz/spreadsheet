@@ -21,7 +21,7 @@ module Spreadsheet
       @palette = {}
       @formats = []
       @formats_set = {}
-      if @default_format = opts[:default_format]
+      if (@default_format = opts[:default_format])
         add_format @default_format
       end
     end
@@ -62,7 +62,7 @@ module Spreadsheet
     ##
     # Change the RGB components of the elements in the colour palette.
     def set_custom_color idx, red, green, blue
-      raise "Invalid format" if [red, green, blue].find { |c| !(0..255).include?(c) }
+      raise "Invalid format" if [red, green, blue].find { |c| !(0..255).cover?(c) }
 
       @palette[idx] = [red, green, blue]
     end

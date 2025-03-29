@@ -26,6 +26,10 @@ module Spreadsheet
             @idx, @first_used, @first_unused, @height, @outline_level = 0, 0, 0, 0, 1
           end
 
+          def respond_to_missing? *args
+            super
+          end
+
           def method_missing name, *args
             nil
           end

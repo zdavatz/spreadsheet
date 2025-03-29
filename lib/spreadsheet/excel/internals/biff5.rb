@@ -9,7 +9,7 @@ module Spreadsheet
           dimensions: "v5"
         }
         def binfmt key # :nodoc:
-          BINARY_FORMATS.fetch key do super end
+          BINARY_FORMATS.fetch key do super end # standard:disable BlockSingleLineBraces
         end
       end
     end

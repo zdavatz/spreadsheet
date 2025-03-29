@@ -62,10 +62,10 @@ module Spreadsheet
         Excel::Workbook.open(io_or_path)
       elsif block_given?
         File.open(io_or_path, mode) do |fh|
-          yield open(fh)
+          yield open(fh) # standard:disable Security/Open
         end
       else
-        open File.open(io_or_path, mode)
+        open File.open(io_or_path, mode) # standard:disable Security/Open
       end
     end
 

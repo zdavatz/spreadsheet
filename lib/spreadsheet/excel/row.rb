@@ -13,13 +13,13 @@ module Spreadsheet
       ##
       # Force convert the cell at _idx_ to a Date
       def date idx
-        _date at(idx)
+        set_date at(idx)
       end
 
       ##
       # Force convert the cell at _idx_ to a DateTime
       def datetime idx
-        _datetime at(idx)
+        set_datetime at(idx)
       end
 
       def each
@@ -55,13 +55,13 @@ module Spreadsheet
 
       private
 
-      def _date data # :nodoc:
+      def set_date data # :nodoc:
         return data if data.is_a?(Date)
-        datetime = _datetime data
+        datetime = set_datetime data
         Date.new datetime.year, datetime.month, datetime.day
       end
 
-      def _datetime data # :nodoc:
+      def set_datetime data # :nodoc:
         return data if data.is_a?(DateTime)
         base = @worksheet.date_base
         date = base + data.to_f
@@ -82,7 +82,7 @@ module Spreadsheet
           hour = 0
           date += 1
         end
-        if LEAP_ERROR > base
+        if base < LEAP_ERROR
           date -= 1
         end
         DateTime.new(date.year, date.month, date.day, hour, min, sec)
@@ -90,13 +90,13 @@ module Spreadsheet
 
       def enriched_data idx, data # :nodoc:
         res = nil
-        if link = @worksheet.links[[@idx, idx]]
+        if (link = @worksheet.links[[@idx, idx]])
           res = link
-        elsif data.is_a?(Numeric) && fmt = format(idx)
+        elsif data.is_a?(Numeric) && (fmt = format(idx))
           res = if fmt.datetime? || fmt.time?
-            _datetime data
+            set_datetime data
           elsif fmt.date?
-            _date data
+            set_date data
           end
         end
         res || data

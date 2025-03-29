@@ -232,7 +232,7 @@ module Spreadsheet
           rot = @format.rotation
           if @format.rotation_stacked?
             rot = 255
-          elsif rot >= -90 or rotation <= 90
+          elsif rot >= -90 || rotation <= 90
             rot = -rot + 90 if rot < 0
           else
             warn "rotation outside -90..90; rotation set to 0"

@@ -13,7 +13,7 @@ module Spreadsheet
     class Rgb
       attr_accessor :r, :g, :b
 
-      @@RGB_MAP = {
+      @@rgb_map = {
         xls_color_0: 0x000000,
         xls_color_1: 0xffffff,
         xls_color_2: 0xff0000,
@@ -99,7 +99,7 @@ module Spreadsheet
       }
 
       def self.to_rgb color_symbol
-        col = @@RGB_MAP[color_symbol]
+        col = @@rgb_map[color_symbol]
         return Rgb.new(col >> 16, (col & 0xff00) >> 8, col & 0xff) if col
         nil
       end

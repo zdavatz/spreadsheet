@@ -58,13 +58,13 @@ module Spreadsheet
         return if @row_addresses
         @dimensions = nil
         @row_addresses = []
-        @reader.read_worksheet self, @offset if @reader
+        @reader&.read_worksheet self, @offset
       end
 
       def row idx
         @rows[idx] or begin
           ensure_rows_read
-          if addr = @row_addresses[idx]
+          if (addr = @row_addresses[idx])
             row = @reader.read_row self, addr
             [:default_format, :height, :outline_level, :hidden].each do |key|
               row.send :"unupdated_#{key}=", addr[key]

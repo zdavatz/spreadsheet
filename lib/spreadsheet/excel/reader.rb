@@ -97,7 +97,7 @@ module Spreadsheet
             work = @data[@pos, len]
             @pos += len
             code = SEDOCPO.fetch(op, op)
-            if io = @opts[:print_opcodes]
+            if (io = @opts[:print_opcodes])
               io.puts sprintf("0x%04x/%-16s %5i: %s",
                 op, code.inspect, len, work.inspect)
             end
@@ -131,8 +131,8 @@ module Spreadsheet
         # We now have a lot of Note and NoteObjects, but they're not linked
         # So link the noteObject(text) to the note (with author, position)
         # TODO
-        @noteList.each do |i|
-          matching_objs = @noteObjList.select { |j| j.objID == i.objID }
+        @note_list.each do |i|
+          matching_objs = @note_ob_list.select { |j| j.obj_id == i.obj_id }
           if matching_objs.length > 1
             puts "ERROR - more than one matching object ID!"
           end
@@ -211,7 +211,7 @@ module Spreadsheet
         #                           8-bit string length (➜ 3.3)
         #                           BIFF8: Unicode string, 8-bit string length (➜ 3.4)
         offset, visibility, _ = work.unpack("VC2")
-        name = client read_string(work[6..-1]), @workbook.encoding
+        name = client read_string(work[6..]), @workbook.encoding
         if @boundsheets
           @boundsheets[0] += 1
           @boundsheets[2] += len
@@ -322,7 +322,7 @@ module Spreadsheet
         #     14  var.  Font name:
         #               BIFF5/BIFF7: Byte string, 8-bit string length (➜ 3.3)
         #               BIFF8: Unicode string, 8-bit string length (➜ 3.4)
-        name = client read_string(work[14..-1]), @workbook.encoding
+        name = client read_string(work[14..]), @workbook.encoding
         font = Font.new name
         size, opts, color, font.weight, escapement, underline,
           family, encoding = work.unpack binfmt(:font)
@@ -345,7 +345,7 @@ module Spreadsheet
         #      2  var.  Number format string
         #               (Unicode string, 16-bit string length, ➜ 3.4)
         idx, = work.unpack "v"
-        value = read_string work[2..-1], 2
+        value = read_string work[2..], 2
         @formats.store idx, client(value, @workbook.encoding)
       end
 
@@ -408,7 +408,7 @@ module Spreadsheet
         row, column, xf, rtype, rval, rcheck, opts = work.unpack "v3CxCx3v2"
         formula = Formula.new
         formula.shared = (opts & 0x08) > 0
-        formula.data = work[20..-1]
+        formula.data = work[20..]
         if rcheck != 0xffff || rtype > 3
           value, = work.unpack "x6E"
           unless value
@@ -439,7 +439,7 @@ module Spreadsheet
         set_cell worksheet, row, column, xf, formula
       end
 
-      def read_hlink worksheet, work, pos, len
+      def read_hlink worksheet, work, pos_unused, len
         # 6.53.1 Common Record Contents
         # Offset  Size  Contents
         #      0     8  Cell range address of all cells containing this hyperlink
@@ -633,7 +633,7 @@ module Spreadsheet
         #      4     2  Index to XF record (➜ 6.115)
         #      6  var.  Unicode string, 16-bit string length (➜ 3.4)
         row, column, xf = work.unpack "v3"
-        value = client read_string(work[6..-1], 2), @workbook.encoding
+        value = client read_string(work[6..], 2), @workbook.encoding
         set_cell worksheet, row, column, xf, value
       end
 
@@ -702,7 +702,7 @@ module Spreadsheet
           cells = @current_row_block[[worksheet, row]] = Row.new(nil, row)
           @pos = addr[:offset]
           found = false
-          while tuple = get_next_chunk
+          while (tuple = get_next_chunk)
             pos, op, _, work = tuple
             case op
             when :eof      # ●  EOF ➜ 6.36 - we should only get here if there is just
@@ -763,7 +763,7 @@ module Spreadsheet
         #   6+sz     2  Number of Rich-Text formatting runs (rt)
         #   8+sz  4·rt  List of rt formatting runs (➜ 3.2)
         row, column, xf = work.unpack "v3"
-        value = client read_string(work[6..-1], 2), @workbook.encoding
+        value = client read_string(work[6..], 2), @workbook.encoding
         set_cell worksheet, row, column, xf, value
       end
 
@@ -834,7 +834,7 @@ module Spreadsheet
 
       def read_workbook
         previous_op = nil
-        while tuple = get_next_chunk
+        while (tuple = get_next_chunk)
           pos, op, len, work = tuple
           case op
           when @bof, :bof  # ●  BOF Type = worksheet (➜ 6.8)
@@ -881,11 +881,11 @@ module Spreadsheet
       def read_worksheet worksheet, offset
         @pos = offset
         @detected_rows = {}
-        @noteObjList = []
-        @noteList = []
-        @noteObject = nil
+        @note_ob_list = []
+        @note_list = []
+        @note_object = nil
         previous = nil
-        while tuple = get_next_chunk
+        while (tuple = get_next_chunk)
           pos, op, len, work = tuple
           if (offset = @current_row_block_offset) && !in_row_block?(op, previous)
             @current_row_block_offset = nil
@@ -924,11 +924,11 @@ module Spreadsheet
           when :note # a note references an :obj
             read_note worksheet, work, pos, len
           when :obj # it contains the author in the NTS structure
-            _ft, _cb, _ot, _objID = work.unpack("v4")
-            if _ot == 0x19
+            _ft, _cb, ot, obj_id = work.unpack("v4")
+            if ot == 0x19
               # puts "\nDEBUG: found Note Obj record"
-              @noteObject = NoteObject.new
-              @noteObject.objID = _objID
+              @note_object = NoteObject.new
+              @note_object.obj_id = obj_id
             end
             # p work
           when :drawing # this can be followed by txo in case of a note
@@ -942,20 +942,20 @@ module Spreadsheet
               # p work
             end
           when :continue # this contains the actual note text
-            if previous == :txo && @noteObject
+            if previous == :txo && @note_object
               # puts "\nDEBUG: found Continue record"
-              continueFmt = work.unpack("C")
-              if continueFmt.first == 0
+              continue_fmt = work.unpack("C")
+              if continue_fmt.first == 0
                 # puts "Picking compressed charset"
                 # Skip to offset due to 'v5C' used above
-                _text = work.unpack("@1C*")
-                @noteObject.text = _text.pack("C*")
-              elsif continueFmt.first == 1
+                text = work.unpack("@1C*")
+                @note_object.text = text.pack("C*")
+              elsif continue_fmt.first == 1
                 # puts "Picking uncompressed charset"
-                _text = work.unpack("@1S*")
-                @noteObject.text = _text.pack("U*")
+                text = work.unpack("@1S*")
+                @note_object.text = text.pack("U*")
               end
-              @noteObjList << @noteObject
+              @note_ob_list << @note_object
             end
           when :pagesetup
             read_pagesetup(worksheet, work, pos, len)
@@ -1034,10 +1034,10 @@ module Spreadsheet
         xf = @workbook.format xf_idx
         builtin = flags & 0x8000
         if builtin == 0
-          xf.name = client read_string(work[2..-1], 2), @workbook.encoding
+          xf.name = client read_string(work[2..], 2), @workbook.encoding
         else
           id, level = work.unpack "x2C2"
-          if name = BUILTIN_STYLES[id]
+          if (name = BUILTIN_STYLES[id])
             name.sub "_lv", "_#{level}"
             xf.name = client name, "UTF-8"
           end
@@ -1183,28 +1183,28 @@ module Spreadsheet
 
       def read_note worksheet, work, pos, len
         # puts "\nDEBUG: found a note record in read_worksheet\n"
-        row, col, _, _objID, _objAuthLen, _objAuthLenFmt = work.unpack("v5C")
-        if _objAuthLen > 0
-          if _objAuthLenFmt == 0
+        row, col, _, obj_id, obj_auth_en, obj_auth_len_fmt = work.unpack("v5C")
+        if obj_auth_en > 0
+          if obj_auth_len_fmt == 0
             # puts "Picking compressed charset"
             # Skip to offset due to 'v5C' used above
-            _objAuth = work.unpack("@11C" + (_objAuthLen - 1).to_s + "C")
-          elsif _objAuthLenFmt == 1
+            obj_auth = work.unpack("@11C" + (obj_auth_en - 1).to_s + "C")
+          elsif obj_auth_len_fmt == 1
             # puts "Picking uncompressed charset"
-            _objAuth = work.unpack("@11S" + (_objAuthLen - 1).to_s + "S")
+            obj_auth = work.unpack("@11S" + (obj_auth_en - 1).to_s + "S")
           end
-          _objAuth = _objAuth.pack("C*")
+          obj_auth = obj_auth.pack("C*")
         else
-          _objAuth = ""
+          obj_auth = ""
         end
         @note = Note.new
         @note.length = len
         @note.row = row
         @note.col = col
-        @note.author = _objAuth
-        @note.objID = _objID
+        @note.author = obj_auth
+        @note.obj_id = obj_id
         # Pop it on the list to be sorted in postread_worksheet
-        @noteList << @note
+        @note_list << @note
       end
 
       def read_sheet_protection worksheet, op, data

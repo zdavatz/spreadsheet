@@ -25,7 +25,7 @@ module Spreadsheet
           # 4       1     Index to first column
           # 5       1     Index to last column
           #
-          offset = 0, results = []
+          results = []
           return results if len < 2
           count = work[0..1].unpack1("v")
           offset = 2
