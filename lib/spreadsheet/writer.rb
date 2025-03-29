@@ -6,6 +6,7 @@ module Spreadsheet
     def initialize io_or_path
       @io_or_path = io_or_path
     end
+
     def write workbook
       if @io_or_path.respond_to? :seek
         @io_or_path.binmode
@@ -16,7 +17,9 @@ module Spreadsheet
         end
       end
     end
+
     private
+
     def write_workbook workbook, io
       reader = workbook.io
       unless io == reader

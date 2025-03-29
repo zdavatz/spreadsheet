@@ -1,4 +1,4 @@
-require 'spreadsheet/encodings'
+require "spreadsheet/encodings"
 
 module Spreadsheet
   ##
@@ -14,10 +14,10 @@ module Spreadsheet
     def initialize
       @author = nil
       @length = 0
-      @objID  = nil
-      @row    = -1
-      @col    = -1
-      @text   = ""
+      @objID = nil
+      @row = -1
+      @col = -1
+      @text = ""
     end
   end
 end

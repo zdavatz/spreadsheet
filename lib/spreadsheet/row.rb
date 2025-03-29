@@ -1,4 +1,4 @@
-require 'spreadsheet/helpers'
+require "spreadsheet/helpers"
 
 module Spreadsheet
   ##
@@ -23,14 +23,15 @@ module Spreadsheet
         keys.each do |key|
           unless instance_methods.include? "unupdated_#{key}="
             alias_method :"unupdated_#{key}=", :"#{key}="
-            define_method "#{key}=" do |value|
-              send "unupdated_#{key}=", value
+            define_method :"#{key}=" do |value|
+              send :"unupdated_#{key}=", value
               @worksheet.row_updated @idx, self if @worksheet
               value
             end
           end
         end
       end
+
       def updater *keys
         keys.each do |key|
           ## Passing blocks to methods defined with define_method is not possible
@@ -38,7 +39,7 @@ module Spreadsheet
           #  http://groups.google.com/group/ruby-talk-google/msg/778184912b769e5f
           #  use class_eval as suggested by someone else in
           #  http://rubyforge.org/tracker/index.php?func=detail&aid=25732&group_id=678&atid=2677
-          class_eval <<-SRC, __FILE__, __LINE__
+          class_eval <<-SRC, __FILE__, __LINE__ + 1
             def #{key}(*args)
               res = super(*args)
               @worksheet.row_updated @idx, self if @worksheet
@@ -53,23 +54,25 @@ module Spreadsheet
     boolean :hidden, :collapsed
     enum :outline_level, 0, Integer
     updater :[]=, :clear, :concat, :delete, :delete_if, :fill, :insert, :map!,
-            :pop, :push, :reject!, :replace, :reverse!, :shift, :slice!,
-            :sort!, :uniq!, :unshift
+      :pop, :push, :reject!, :replace, :reverse!, :shift, :slice!,
+      :sort!, :uniq!, :unshift
     format_updater :collapsed, :height, :hidden, :outline_level
-    def initialize worksheet, idx, cells=[]
+    def initialize worksheet, idx, cells = []
       @default_format = nil
       @worksheet = worksheet
       @idx = idx
-      super cells
+      super(cells)
       @formats = []
       @height = 12.1
     end
+
     ##
     # The default Format of this Row, if you have set one.
     # Returns the Worksheet's default or the Workbook's default Format otherwise.
     def default_format
       @default_format || @worksheet.default_format || @workbook.default_format
     end
+
     ##
     # Set the default Format used when writing a Cell if no explicit Format is
     # stored for the cell.
@@ -81,15 +84,19 @@ module Spreadsheet
     ##
     # #first_used the 0-based index of the first non-blank Cell.
     def first_used
-      [ index_of_first(self), index_of_first(@formats) ].compact.min
+      [index_of_first(self), index_of_first(@formats)].compact.min
     end
+
     ##
     # The Format for the Cell at _idx_ (0-based), or the first valid Format in
     # Row#default_format, Column#default_format and Worksheet#default_format.
     def format idx
-      @formats[idx] || @default_format \
-        || @worksheet.column(idx).default_format if @worksheet
+      if @worksheet
+        @formats[idx] || @default_format \
+          || @worksheet.column(idx).default_format
+      end
     end
+
     ##
     # Returns a copy of self with nil-values appended for empty cells that have
     # an associated Format.
@@ -102,24 +109,26 @@ module Spreadsheet
       end
       copy
     end
+
     ##
     # Same as Row#size, but takes into account formatted empty cells
     def formatted_size
       Helpers.rcompact(@formats)
       sz = size
       fs = @formats.size
-      fs > sz ? fs : sz
+      (fs > sz) ? fs : sz
     end
     ##
     # #first_unused (really last used + 1) - the 0-based index of the first of
     # all remaining contiguous blank Cells.
-    alias :first_unused :formatted_size
+    alias_method :first_unused, :formatted_size
     def inspect
       variables = instance_variables.collect do |name|
         "%s=%s" % [name, instance_variable_get(name)]
-      end.join(' ')
+      end.join(" ")
       sprintf "#<%s:0x%014x %s %s>", self.class, object_id, variables, super
     end
+
     ##
     # Set the Format for the Cell at _idx_ (0-based).
     def set_format idx, fmt
@@ -142,8 +151,9 @@ module Spreadsheet
     end
 
     private
+
     def index_of_first ary # :nodoc:
-      if first = ary.find do |elm| !elm.nil? end
+      if first = ary.find { |elm| !elm.nil? }
         ary.index first
       end
     end

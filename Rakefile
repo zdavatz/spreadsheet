@@ -1,5 +1,4 @@
 # -*- ruby -*-
-require 'bundler'
-require_relative './lib/spreadsheet.rb'
-Bundler::GemHelper.install_tasks
+require "bundler/gem_tasks"
+require "standard/rake"
 # vim: syntax=Ruby

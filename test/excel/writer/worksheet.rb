@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # Excel::Writer::TestWorksheet -- Spreadheet -- 21.11.2007 -- hwyss@ywesee.com
 
-require 'test/unit'
-require 'spreadsheet/excel/writer/worksheet'
+require "test/unit"
+require "spreadsheet/excel/writer/worksheet"
 
 module Spreadsheet
   module Excel
@@ -23,7 +23,7 @@ module Spreadsheet
           attr_accessor :idx, :first_used, :first_unused, :height, :outline_level
 
           def initialize
-            @idx, @first_used, @first_unused, @height, @outline_level = 0,0,0,0,1
+            @idx, @first_used, @first_unused, @height, @outline_level = 0, 0, 0, 0, 1
           end
 
           def method_missing name, *args
@@ -38,7 +38,7 @@ module Spreadsheet
 
           sheet.write_row row
 
-          assert_equal '', sheet.data
+          assert_equal "", sheet.data
         end
 
         def test_write_row_should_write_if_any_column_is_used
@@ -61,20 +61,18 @@ module Spreadsheet
             writer.strings
           )
 
-          sheet.row(rowi+=1).concat(["Hello", "World"])
+          sheet.row(rowi += 1).concat(["Hello", "World"])
           assert_equal(
             {"Hello" => 1, "World" => 1},
             writer.strings
           )
 
-          sheet.row(rowi+=1).concat(["Goodbye", "Cruel", "World", 2012])
+          sheet.row(rowi + 1).concat(["Goodbye", "Cruel", "World", 2012])
           assert_equal(
             {"Hello" => 1, "Goodbye" => 1, "Cruel" => 1, "World" => 2},
             writer.strings
           )
-
         end
-
       end
     end
   end
