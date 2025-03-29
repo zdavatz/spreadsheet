@@ -15,6 +15,6 @@ $: << here
 Find.find(here) do |file|
   next if File.basename(file) == "suite.rb"
   if /\.rb$/o.match?(file)
-    require file[here.size + 1..-1]
+    require file[here.size + 1..]
   end
 end

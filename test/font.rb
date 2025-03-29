@@ -28,7 +28,7 @@ module Spreadsheet
       assert_equal :apple_roman, @font.encoding
       @font.encoding = "Chinese Simplified"
       assert_equal :chinese_simplified, @font.encoding
-      assert_raises ArgumentError do @font.size = "ascii" end
+      assert_raises ArgumentError do @font.size = "ascii" end # standard:disable BlockSingleLineBraces
       assert_equal :chinese_simplified, @font.encoding
       @font.encoding = nil
       assert_equal :default, @font.encoding
@@ -40,7 +40,7 @@ module Spreadsheet
       assert_equal :roman, @font.family
       @font.family = "Swiss"
       assert_equal :swiss, @font.family
-      assert_raises ArgumentError do @font.size = :greek end
+      assert_raises ArgumentError do @font.size = :greek end # standard:disable BlockSingleLineBraces
       assert_equal :swiss, @font.family
       @font.family = nil
       assert_equal :none, @font.family
@@ -68,7 +68,7 @@ module Spreadsheet
       assert_equal :superscript, @font.escapement
       @font.escapement = "sub"
       assert_equal :subscript, @font.escapement
-      assert_raises ArgumentError do @font.size = "upwards" end
+      assert_raises ArgumentError do @font.size = "upwards" end # standard:disable BlockSingleLineBraces
       assert_equal :subscript, @font.escapement
       @font.escapement = nil
       assert_equal :normal, @font.escapement
@@ -90,7 +90,7 @@ module Spreadsheet
       assert_equal 12, @font.size
       @font.size = 11.2
       assert_equal 11.2, @font.size
-      assert_raises ArgumentError do @font.size = "123" end
+      assert_raises ArgumentError do @font.size = "123" end # standard:disable BlockSingleLineBraces
     end
 
     def test_strikeout
@@ -109,7 +109,7 @@ module Spreadsheet
       assert_equal :single, @font.underline
       @font.underline = "double accounting"
       assert_equal :double_accounting, @font.underline
-      assert_raises ArgumentError do @font.size = :triple end
+      assert_raises ArgumentError do @font.size = :triple end # standard:disable BlockSingleLineBraces
       assert_equal :double_accounting, @font.underline
       @font.underline = nil
       assert_equal :none, @font.underline
@@ -123,7 +123,7 @@ module Spreadsheet
       assert_equal :bold, @font.weight
       @font.weight = 100
       assert_equal 100, @font.weight
-      assert_raises ArgumentError do @font.weight = Object.new end
+      assert_raises ArgumentError do @font.weight = Object.new end # standard:disable BlockSingleLineBraces
       assert_equal 100, @font.weight
       @font.weight = "bold"
       assert_equal :bold, @font.weight

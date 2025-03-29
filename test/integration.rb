@@ -852,7 +852,7 @@ module Spreadsheet
       name.force_encoding "UTF-16LE" if name.respond_to?(:force_encoding)
       assert_equal name, sheet.name
       assert_not_nil sheet.offset
-      assert_not_nil col = sheet.column(1)
+      assert_not_nil(col = sheet.column(1))
       assert_equal true, col.default_format.font.italic?
       assert_equal :blue, col.default_format.font.color
       assert_equal 20, col.width
