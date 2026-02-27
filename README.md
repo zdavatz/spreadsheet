@@ -51,14 +51,13 @@ it does **not** support XLSX format.
 * Write-Support: BIFF5
 * Remove backward compatibility code
 
-Note: Spreadsheet is tested against all minor ruby versions through: 1.8.7 - 2.6.3
-
-You will get a deprecated warning about iconv when using spreadsheet with Ruby
-1.9.3. So replacing iconv is on the Roadmap as well ;).
+Note: Spreadsheet requires Ruby 2.6+ and is tested against Ruby 2.6 through 3.4, JRuby, and ruby-head.
 
 ## Dependencies
 
-* [ruby-ole](http://code.google.com/p/ruby-ole/)
+* [ruby-ole](https://github.com/aquasync/ruby-ole)
+* [logger](https://github.com/ruby/logger)
+* [bigdecimal](https://github.com/ruby/bigdecimal)
 
 
 ## Examples
@@ -83,10 +82,9 @@ The gem package is built in pkg directory.
 
 ## Testing
 
-Bundler support added.
 Running tests:
 * `bundle install`
-* ./test/suite.rb
+* `bundle exec ruby test/suite.rb`
 
 ## Authors
 

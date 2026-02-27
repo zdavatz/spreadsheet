@@ -52,7 +52,7 @@ There is no way to run a single test file independently — all tests are loaded
 - Test files in `test/` mirror the lib structure
 - `test/integration.rb` is the main integration test suite (~1500 lines)
 - Test data (sample XLS files) in `test/data/`
-- SimpleCov enabled for coverage
+- SimpleCov enabled for coverage (requires >= 0.22 for Ruby 3.3+ compatibility)
 
 ## Code Style
 
