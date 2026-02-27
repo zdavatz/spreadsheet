@@ -7,6 +7,7 @@ module Spreadsheet
   class Font
     include Spreadsheet::Datatypes
     include Spreadsheet::Encodings
+
     attr_accessor :name
     ##
     # You can set the following boolean Font attributes

@@ -14,6 +14,7 @@ module Spreadsheet
         include Spreadsheet::Excel::Writer::Biff8
         include Spreadsheet::Excel::Internals
         include Spreadsheet::Excel::Internals::Biff8
+
         attr_reader :worksheet
         def initialize workbook, worksheet
           @workbook = workbook

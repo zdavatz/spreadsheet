@@ -10,6 +10,7 @@ module Spreadsheet
     # to use any of these.
     class Worksheet < Spreadsheet::Worksheet
       include Spreadsheet::Excel::Offset
+
       offset :dimensions
       attr_reader :offset, :ole, :links, :guts, :notes
       def initialize opts = {}

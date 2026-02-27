@@ -19,6 +19,7 @@ module Spreadsheet
   #                  but if you do, here is where you can find it.
   class Link < String
     include Encodings
+
     attr_accessor :target_frame, :url, :dos, :fragment
     def initialize url = "", description = url, fragment = nil
       super(description)

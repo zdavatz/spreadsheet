@@ -32,7 +32,7 @@ module Spreadsheet
   end
 
   class Worksheet
-    unless instance_methods.include? "new_format_column"
+    unless method_defined?(:new_format_column)
       alias_method :new_format_column, :format_column
       def format_column column, width = nil, format = nil
         if width.is_a? Format

@@ -17,6 +17,7 @@ module Spreadsheet
       class Workbook < Spreadsheet::Writer
         include Spreadsheet::Excel::Writer::Biff8
         include Spreadsheet::Excel::Internals
+
         attr_reader :fonts, :date_base
         def initialize *args
           super

@@ -18,6 +18,7 @@ module Spreadsheet
     class Reader
       include Spreadsheet::Encodings
       include Spreadsheet::Excel::Internals
+
       ROW_BLOCK_OPS = {
         blank: true, boolerr: true, dbcell: true, formula: true,
         label: true, labelsst: true, mulblank: true, mulrk: true,
@@ -1345,6 +1346,7 @@ module Spreadsheet
       def extend_internals version
         require "spreadsheet/excel/internals/biff%i" % version
         extend Internals.const_get("Biff%i" % version)
+
         ## spreadsheets may not include a codepage record.
         @workbook.encoding = encoding 850 if version < 8
       rescue LoadError

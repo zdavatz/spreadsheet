@@ -11,6 +11,7 @@ module Spreadsheet
     class Workbook < Spreadsheet::Workbook
       include Spreadsheet::Encodings
       include Spreadsheet::Excel::Offset
+
       BIFF_VERSIONS = {
         0x000 => 2,
         0x007 => 2,

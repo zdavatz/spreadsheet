@@ -28,6 +28,7 @@ module Spreadsheet
     include Spreadsheet::Encodings
     include Spreadsheet::Datatypes
     include Enumerable
+
     attr_accessor :name, :selected, :workbook, :password_hash
     attr_reader :rows, :columns, :merged_cells, :margins, :pagesetup
     attr_reader :froze_top, :froze_left

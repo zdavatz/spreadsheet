@@ -7,6 +7,7 @@ module Spreadsheet
     # Considered internal and subject to change without notice.
     module Offset
       include Compatibility
+
       attr_reader :changes, :offsets
       def initialize *args
         super
@@ -19,9 +20,10 @@ module Spreadsheet
         mod.module_eval do
           class << self
             include Compatibility
+
             def offset *keys
               keys.each do |key|
-                attr_reader key unless instance_methods.include? method_name(key)
+                attr_reader key unless method_defined?(method_name(key))
                 define_method :"#{key}=" do |value|
                   @changes.store key, true
                   instance_variable_set ivar_name(key), value

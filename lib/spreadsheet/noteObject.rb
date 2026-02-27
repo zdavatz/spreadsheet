@@ -8,6 +8,7 @@ module Spreadsheet
   #
   class NoteObject
     include Encodings
+
     attr_accessor :obj_id, :text
     def initialize
       @obj_id = -1

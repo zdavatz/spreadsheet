@@ -8,6 +8,7 @@ module Spreadsheet
   class Format
     include Spreadsheet::Datatypes
     include Spreadsheet::Encodings
+
     ##
     # You can set the following boolean attributes:
     # #cross_down::       Draws a Line from the top-left to the bottom-right

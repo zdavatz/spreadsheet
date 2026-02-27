@@ -7,6 +7,7 @@ module Spreadsheet
       # of Excel grows and methods get moved here for disambiguation.
       module Biff8
         include Spreadsheet::Excel::Internals
+
         ##
         # When a String is too long for one Opcode, it is continued in a Continue
         # Opcode. Excel may reconsider compressing the remainder of the string.

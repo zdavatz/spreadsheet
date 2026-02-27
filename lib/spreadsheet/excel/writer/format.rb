@@ -9,6 +9,7 @@ module Spreadsheet
       # This class encapsulates everything that is needed to write an XF record.
       class Format < DelegateClass Spreadsheet::Format
         include Spreadsheet::Excel::Internals
+
         def self.boolean *args
           args.each do |key|
             define_method key do

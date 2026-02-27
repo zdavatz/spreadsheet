@@ -18,10 +18,11 @@ module Spreadsheet
   # #height::         The height of this Row in points (defaults to 12).
   class Row < Array
     include Datatypes
+
     class << self
       def format_updater *keys
         keys.each do |key|
-          unless instance_methods.include? "unupdated_#{key}="
+          unless method_defined?("unupdated_#{key}=")
             alias_method :"unupdated_#{key}=", :"#{key}="
             define_method :"#{key}=" do |value|
               send :"unupdated_#{key}=", value

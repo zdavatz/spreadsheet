@@ -20,7 +20,7 @@ module Spreadsheet
     class << self
       def updater *keys
         keys.each do |key|
-          unless instance_methods.include? "unupdated_#{key}="
+          unless method_defined?("unupdated_#{key}=")
             alias_method :"unupdated_#{key}=", :"#{key}="
             define_method :"#{key}=" do |value|
               send :"unupdated_#{key}=", value
@@ -33,6 +33,7 @@ module Spreadsheet
     end
     include Datatypes
     include Enumerable
+
     attr_accessor :width, :worksheet
     attr_reader :default_format, :idx
     boolean :hidden, :collapsed

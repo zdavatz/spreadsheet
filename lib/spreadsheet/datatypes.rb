@@ -6,6 +6,7 @@ module Spreadsheet
   # attributes (boolean, colors and enumerations)
   module Datatypes
     include Compatibility
+
     def self.append_features mod
       super
       mod.module_eval do
@@ -142,7 +143,7 @@ module Spreadsheet
             define_method :"#{key}=" do |arg|
               if arg
                 arg = aliases.fetch arg do
-                  aliases.fetch arg.to_s.downcase.gsub(/[ \-]/, "_").to_sym, arg
+                  aliases.fetch arg.to_s.downcase.gsub(/[ -]/, "_").to_sym, arg
                 end
                 if values.any? { |val| val === arg }
                   instance_variable_set(ivar_name(key), arg)
