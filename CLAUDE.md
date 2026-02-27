@@ -56,6 +56,6 @@ There is no way to run a single test file independently — all tests are loaded
 
 ## Code Style
 
-- **StandardRB** — no custom RuboCop config. Run `bundle exec rake standard` to check.
+- **StandardRB** — configured via `.standard.yml` (ignores `bin/`, `pkg/`, `vendor/`). Run `bundle exec rake standard` to check.
 - Ruby 2.6+ minimum (uses `[x..]` syntax). Ruby 3.3.0 in `.ruby-version`.
 - CI tests against Ruby 2.6 through 3.4, JRuby, and ruby-head.

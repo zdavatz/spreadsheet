@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "test-unit"
   spec.add_development_dependency "simplecov"
-  spec.add_development_dependency "debug" unless RUBY_ENGINE.eql?('jruby')
+  spec.add_development_dependency "debug" unless RUBY_ENGINE.eql?("jruby")
   spec.add_development_dependency "standard"
 
   spec.metadata["changelog_uri"] = spec.homepage + "/blob/master/History.md"

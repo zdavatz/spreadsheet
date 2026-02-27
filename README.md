@@ -86,6 +86,10 @@ Running tests:
 * `bundle install`
 * `bundle exec ruby test/suite.rb`
 
+Linting:
+* `bundle exec rake standard`
+* `bundle exec standardrb --fix` to auto-fix issues
+
 ## Authors
 
 Original Code:
