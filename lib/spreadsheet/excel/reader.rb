@@ -1309,6 +1309,15 @@ module Spreadsheet
           xf = (flags & 0x0fff0000) >> 16
           attrs.store :default_format, @workbook.format(xf)
         end
+        # When a ROW record claims no cells (`first_used` == `first_unused`) but
+        # `set_missing_row_address` already recorded a valid offset from cell
+        # records found earlier in the stream, preserve the original offset.
+        # Some XLS writers emit ROW records after cell data with zeroed column
+        # ranges; without this fix, `read_row` would seek to the wrong position.
+        if first_used == first_unused && (existing = worksheet.row_addresses[index])
+          attrs[:offset] = existing[:offset]
+          attrs[:row_block] = existing[:row_block]
+        end
         # TODO: Row spacing
         worksheet.set_row_address index, attrs
       end
