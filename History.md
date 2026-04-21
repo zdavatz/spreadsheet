@@ -1,3 +1,7 @@
+### 1.3.5 21.04.2026
+Author: Elliot Crosby-McCullough <elliot@dexory.com>
+* Add a patch to handle badly formed XLS files (PR #281)
+
 ### 1.3.4 29.03.2025
 Author: Niklaus Giger <niklaus.giger@member.fsf.org>
 * Formatted using standardrb
