@@ -1217,6 +1217,20 @@ module Spreadsheet
       assert_not_nil sheet[2, 1]
     end
 
+    def test_row_record_with_empty_cell_range
+      # Some XLS writers emit ROW records with `first_used` == `first_unused` (claiming
+      # no cells) even though cell records (e.g. `LABELSST`) exist for that row
+      # earlier in the stream. Previously this caused `read_row` to seek to the wrong
+      # offset, returning an empty row despite valid cell data being present.
+      path = File.join @data, "test_row_record_empty_range.xls"
+      book = Spreadsheet.open path
+      sheet = book.worksheet 0
+      row0 = sheet.row(0).to_a.compact
+      assert_operator row0.length, :>, 0, "Row 0 should not be empty"
+      assert_equal "Name", row0[0]
+      assert_equal ["Name", "Code", "Description", "Reference", "Date", "Quantity"], row0
+    end
+
     def test_changes
       path = File.join @data, "test_changes.xls"
       book = Spreadsheet.open path

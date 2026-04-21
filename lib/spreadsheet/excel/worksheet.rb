@@ -12,7 +12,7 @@ module Spreadsheet
       include Spreadsheet::Excel::Offset
 
       offset :dimensions
-      attr_reader :offset, :ole, :links, :guts, :notes
+      attr_reader :offset, :ole, :links, :guts, :notes, :row_addresses
       def initialize opts = {}
         @row_addresses = nil
         super
